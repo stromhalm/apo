@@ -8,13 +8,15 @@ before_script:
   - npm install grunt-cli -g
 before_deploy:
   - "grunt prod"
-  - "ls | grep -v 'dist' | xargs rm -rf"
   - "git config --global user.email 'adrian.jagusch@uni-oldenburg.de'"
   - "git config --global user.name 'Adrian Jagusch'"
-  - "git checkout HEAD"
-  - "git add . --all --force"
-  - "git commit -m \"Skip Cleanup Commit\""
-  - "git push --force --quiet https://$AZURE_WA_USERNAME:$AZURE_WA_PASSWORD@$AZURE_WA_SITE.scm.azurewebsites.net:443/$AZURE_WA_SITE.git HEAD:refs/heads/master"
+  - "git clone https://$AZURE_WA_USERNAME:$AZURE_WA_PASSWORD@$AZURE_WA_SITE.scm.azurewebsites.net:443/$AZURE_WA_SITE.git"
+  - "mv dist apo/dist"
+  - "cd apo"
+  - "git add *"
+  - "git commit "Push to Azure"
+  - "git push"
+
 deploy:
   provider: azure_web_apps
   skip_cleanup: true

@@ -14,9 +14,8 @@ before_deploy:
   - "mv dist apo/dist"
   - "cd apo"
   - "git add *"
-  - "git commit "Push to Azure"
+  - "git commit -a -m 'Push to Azure'"
   - "git push"
-
 deploy:
   provider: azure_web_apps
   skip_cleanup: true

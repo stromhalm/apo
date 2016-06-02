@@ -42,7 +42,7 @@
 					</form>
 
 					<ul ng-hide="!controller.people.length">
-						<li class="row" ng-repeat="person in controller.people track by person.id | orderBy:'name'">
+						<li class="row" ng-repeat="person in controller.people track by person.id">
 							<a ng-href="#/people/{{person.id}}" ng-bind="person.name"></a>
 						</li>
 					</ul>

@@ -9,6 +9,8 @@ before_script:
 before_deploy:
   - "grunt prod"
   - "ls | grep -v 'dist' | xargs rm -rf"
+  - "git config --global user.email 'adrian.jagusch@uni-oldenburg.de'"
+  - "git config --global user.name 'Adrian Jagusch'"
   - "git checkout HEAD"
   - "git add . --all --force"
   - "git commit -m \"Skip Cleanup Commit\""

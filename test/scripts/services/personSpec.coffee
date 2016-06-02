@@ -9,7 +9,7 @@ describe 'personService', ->
 
 					{pass}
 
-	### 
+
 	it 'should get people', inject ['$httpBackend', 'personService', ($httpBackend, personService) ->
 		expected = [{name: 'foo'}]
 		notExpected = [{name: 'bar'}]
@@ -62,4 +62,3 @@ describe 'personService', ->
 		$httpBackend.flush()
 
 	]
-	###

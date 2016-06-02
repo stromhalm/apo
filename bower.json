@@ -1,45 +1,48 @@
 {
-	"name": "APT-Online",
-	"version": "0.1.1",
-	"dependencies": {
-		"angular": "1.3.8",
-		"angular-animate": "1.3.8",
-		"angular-mocks": "1.3.8",
-		"angular-route": "1.3.8",
-		"bootstrap": "3.3.1",
-		"html5shiv": "3.7.2",
-		"json3": "3.3.2",
-		"requirejs": "2.1.15"
-	},
-	"exportsOverride": {
-		"angular": {
-			"scripts/libs": "angular.min.js{,.map}"
-		},
-		"angular-animate": {
-			"scripts/libs": "angular-animate.min.js{,.map}"
-		},
-		"angular-mocks": {
-			"scripts/libs": "angular-mocks.js"
-		},
-		"angular-route": {
-			"scripts/libs": "angular-route.min.js{,.map}"
-		},
-		"bootstrap": {
-			"fonts": "dist/fonts/*.{eot,svg,ttf,woff}",
-			"styles": "less/*.less",
-			"styles/mixins": "less/mixins/*.less"
-		},
-		"html5shiv": {
-			"scripts/libs": "dist/html5shiv-printshiv.min.js"
-		},
-		"jquery": {
-			"scripts/libs": "none"
-		},
-		"json3": {
-			"scripts/libs": "lib/json3.min.js"
-		},
-		"requirejs": {
-			"scripts/libs": "require.js"
-		}
-	}
+  "name": "APT-Online",
+  "version": "0.1.1",
+  "dependencies": {
+    "angular": "1.5.x",
+    "angular-animate": "1.5.x",
+    "angular-mocks": "1.5.x",
+    "angular-route": "1.5.x",
+    "angular-material": "0.11.x",
+    "html5shiv": "3.7.2",
+    "json3": "3.3.2",
+    "requirejs": "2.1.15"
+  },
+  "exportsOverride": {
+    "angular": {
+      "scripts/libs": "angular.min.js{,.map}"
+    },
+    "angular-animate": {
+      "scripts/libs": "angular-animate.min.js{,.map}"
+    },
+    "angular-mocks": {
+      "scripts/libs": "angular-mocks.js"
+    },
+    "angular-route": {
+      "scripts/libs": "angular-route.min.js{,.map}"
+    },
+    "bootstrap": {
+      "fonts": "dist/fonts/*.{eot,svg,ttf,woff}",
+      "styles": "less/*.less",
+      "styles/mixins": "less/mixins/*.less"
+    },
+    "html5shiv": {
+      "scripts/libs": "dist/html5shiv-printshiv.min.js"
+    },
+    "jquery": {
+      "scripts/libs": "none"
+    },
+    "json3": {
+      "scripts/libs": "lib/json3.min.js"
+    },
+    "requirejs": {
+      "scripts/libs": "require.js"
+    }
+  },
+  "resolutions": {
+    "angular": "1.5.x"
+  }
 }

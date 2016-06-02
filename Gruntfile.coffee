@@ -175,25 +175,6 @@ module.exports = (grunt) ->
 				options:
 					optimizationLevel: 7
 
-		# Compiles jade templates
-		jade:
-			views:
-				cwd: '<%= settings.tempDirectory %>'
-				src: '**/*.jade'
-				dest: '<%= settings.tempDirectory %>'
-				expand: true
-				ext: '.html'
-				options:
-					pretty: true
-			spa:
-				cwd: '<%= settings.tempDirectory %>'
-				src: 'index.jade'
-				dest: '<%= settings.tempDirectory %>'
-				expand: true
-				ext: '.html'
-				options:
-					pretty: true
-
 		# Runs unit tests using karma
 		karma:
 			unit:
@@ -207,7 +188,7 @@ module.exports = (grunt) ->
 						'dist/scripts/libs/angular.min.js'
 						'dist/scripts/libs/angular-animate.min.js'
 						'dist/scripts/libs/angular-route.min.js'
-						'.components/scripts/libs/angular-mocks.js'
+						#'.components/scripts/libs/angular-mocks.js'
 						'dist/**/*.js'
 						'test/**/*.{coffee,js}'
 					]
@@ -392,7 +373,6 @@ module.exports = (grunt) ->
 			indexDev:
 				files:
 					'.temp/index.html': '.temp/index.html'
-					'.temp/index.jade': '.temp/index.jade'
 			index:
 				files: '<%= template.indexDev.files %>'
 				environment: 'prod'
@@ -439,17 +419,6 @@ module.exports = (grunt) ->
 				options:
 					livereload: true
 					nospawn: true
-			jade:
-				files: 'src/views/**/*.jade'
-				tasks: [
-					'copy:app'
-					'jade:views'
-					'copy:dev'
-					'karma'
-				]
-				options:
-					livereload: true
-					nospawn: true
 			less:
 				files: 'src/styles/**/*.less'
 				tasks: [
@@ -465,18 +434,6 @@ module.exports = (grunt) ->
 				tasks: [
 					'copy:app'
 					'template:indexDev'
-					'copy:dev'
-					'karma'
-				]
-				options:
-					livereload: true
-					nospawn: true
-			spaJade:
-				files: 'src/index.jade'
-				tasks: [
-					'copy:app'
-					'template:indexDev'
-					'jade:spa'
 					'copy:dev'
 					'karma'
 				]
@@ -531,16 +488,6 @@ module.exports = (grunt) ->
 			grunt.config ['coffee', 'app', 'files'], coffeeConfig
 			grunt.config ['coffeelint', 'app', 'files'], coffeeLintConfig
 
-		if key is 'spaJade'
-			copyDevConfig.src = path.join(dirname, "#{basename}.{jade,html}")
-
-		if key is 'jade'
-			copyDevConfig.src = path.join(dirname, "#{basename}.{jade,html}")
-			jadeConfig = grunt.config ['jade', 'views']
-			jadeConfig.src = file
-
-			grunt.config ['jade', 'views'], jadeConfig
-
 		if key is 'less'
 			copyDevConfig.src = [
 				path.join(dirname, "#{basename}.{less,css}")
@@ -558,7 +505,6 @@ module.exports = (grunt) ->
 		'bower:install'
 		'coffeelint'
 		'copy:app'
-		'jade'
 		'shimmer:dev'
 		'ngClassify'
 		'coffee:app'
@@ -599,7 +545,6 @@ module.exports = (grunt) ->
 		'bower:install'
 		'coffeelint'
 		'copy:app'
-		'jade:views'
 		'ngTemplateCache'
 		'shimmer:prod'
 		'ngClassify'
@@ -612,7 +557,6 @@ module.exports = (grunt) ->
 		'hash:scripts'
 		'hash:styles'
 		'template:index'
-		'jade:spa'
 		'minifyHtml'
 		'copy:prod'
 	]

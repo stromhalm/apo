@@ -4,6 +4,12 @@ node_js:
 notifications:
   email:
     on_success: always
+before_script:
+  - npm install grunt-cli -g
+before_deploy:
+  - "grunt prod"
+  - "ls | grep -v 'dist' | xargs rm -rf"
+  - "git push origin master:refs/heads/master"
 deploy:
   provider: azure_web_apps
   skip_cleanup: true

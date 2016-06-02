@@ -9,9 +9,9 @@ before_script:
 before_deploy:
   - "grunt prod"
   - "ls | grep -v 'dist' | xargs rm -rf"
-  - echo "Adding refs/heads/master for Azure deployment to work"
-  - git checkout --no-track -b master || true
-  - git show-ref
+  - "git checkout HEAD"
+  - "git add . --all --force"
+  - "git commit -m \"Skip Cleanup Commit\""
 deploy:
   provider: azure_web_apps
   skip_cleanup: true

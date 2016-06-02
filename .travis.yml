@@ -8,7 +8,7 @@ before_script:
   - npm install grunt-cli -g
 before_deploy:
   - "grunt prod"
-  - "ls | grep -v 'dist' | xargs rm"
+  - "ls | grep -v 'dist' | xargs rm -rf"
 deploy:
   skip_cleanup: true
   provider: azure_web_apps

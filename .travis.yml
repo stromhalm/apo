@@ -4,6 +4,7 @@ node_js:
 notifications:
   email:
     on_success: always
+before_deploy: "grunt prod"
 deploy:
   provider: azure_web_apps
   username: azure_deployment_user       # If AZURE_WA_USERNAME isn't set

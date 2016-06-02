@@ -10,12 +10,13 @@ before_deploy:
   - "grunt prod"
   - "git config --global user.email 'adrian.jagusch@uni-oldenburg.de'"
   - "git config --global user.name 'Adrian Jagusch'"
-  - "git clone https://$AZURE_WA_USERNAME:$AZURE_WA_PASSWORD@$AZURE_WA_SITE.scm.azurewebsites.net:443/$AZURE_WA_SITE.git"
+  - "git clone https://$AZURE_WA_USERNAME:$AZURE_WA_PASSWORD@$AZURE_WA_SITE.scm.azurewebsites.net:443/$AZURE_WA_SITE.git" # clone existing repository from Azure
+  - "rm -rf apo/dist" # replace all the compiled files
   - "mv dist apo/dist"
   - "cd apo"
   - "git add *"
   - "git commit -a -m 'Push to Azure'"
-  - "git push"
+  - "git push" # push everything to the azure sever
 deploy:
   provider: azure_web_apps
   skip_cleanup: true

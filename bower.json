@@ -7,6 +7,7 @@
     "angular-mocks": "1.5.x",
     "angular-route": "1.5.x",
     "angular-material": "0.11.x",
+	 "bootstrap": "3.3.x",
     "html5shiv": "3.7.2",
     "json3": "3.3.2",
     "requirejs": "2.1.15"

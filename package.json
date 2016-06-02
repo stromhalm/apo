@@ -12,7 +12,7 @@
 		"url": "https://github.com/stromhalm/apo"
 	},
 	"engines": {
-		"node": "0.10.25"
+		"node": ">=0.10.0"
 	},
 	"private": true,
 	"dependencies": {

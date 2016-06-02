@@ -1,23 +1,12 @@
 {
-	"name": "AngularFun",
-	"version": "2.3.2",
+	"name": "APT Online",
+	"version": "0.2",
 	"description": "AngularJS Reference Architecture",
 	"author": {
-		"name": "Cary Landholt",
-		"email": "cary@landholt.com",
-		"url": "https://github.com/CaryLandholt"
+		"name": "Adrian Jagusch",
+		"email": "adrian.jagusch@uni-oldenburg.de",
+		"url": "https://adrian-jagusch.de"
 	},
-	"contributors": [
-		{
-			"name": "David Bochenski",
-			"email": "david@bochenski.co.uk",
-			"url": "https://github.com/Bochenski"
-		}, {
-			"name": "Jan Philipp",
-			"email": "knallisworld@googlemail.com",
-			"url": "https://github.com/knalli"
-		}
-	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/CaryLandholt/AngularFun"

@@ -13,5 +13,3 @@ deploy:
   provider: azure_web_apps
   skip_cleanup: true
   verbose: true
-after_deploy:
-  - "git push origin master:refs/heads/master"

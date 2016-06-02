@@ -4,6 +4,8 @@ node_js:
 notifications:
   email:
     on_success: always
+before_script:
+  - npm install grunt-cli -g
 before_deploy: "grunt prod"
 deploy:
   provider: azure_web_apps

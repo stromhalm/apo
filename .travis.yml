@@ -14,7 +14,7 @@ before_deploy:
   - "git checkout HEAD"
   - "git add . --all --force"
   - "git commit -m \"Skip Cleanup Commit\""
-  - "git push --force --quiet https://$AZURE_WA_USERNAME:$AZURE_WA_PASSWORD@$AZURE_WA_SITE.scm.azurewebsites.net:443/$AZURE_WA_SITE.git HEAD:master"
+  - "git push --force --quiet https://$AZURE_WA_USERNAME:$AZURE_WA_PASSWORD@$AZURE_WA_SITE.scm.azurewebsites.net:443/$AZURE_WA_SITE.git HEAD:refs/heads/master"
 deploy:
   provider: azure_web_apps
   skip_cleanup: true

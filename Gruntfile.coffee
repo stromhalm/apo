@@ -44,14 +44,6 @@ module.exports = (grunt) ->
 				'<%= settings.tempDirectory %>'
 				'<%= settings.distDirectory %>'
 			]
-			# Used for those that desire plain old JavaScript
-			jslove: [
-				'**/*.coffee'
-				'!**/.components/**'
-				'!**/.temp/**'
-				'!**/bower_components/**'
-				'!**/node_modules/**'
-			]
 
 		# Compiles CoffeeScript (.coffee) files to JavaScript (.js)
 		coffee:
@@ -255,25 +247,6 @@ module.exports = (grunt) ->
 					'.temp/scripts/views.js': '.temp/**/*.html'
 				options:
 					trim: '<%= settings.tempDirectory %>'
-
-		prompt:
-			jslove:
-				options:
-					questions: [
-						{
-							config: 'coffee.jslove.compile'
-							type: 'input'
-							message: 'Are you sure you wish to convert all CoffeeScript (.coffee) files to JavaScript (.js)?' + '\n' + 'This cannot be undone.'.red + ': (y/N)'
-							default: false
-							filter: (input) ->
-								confirmed = /^y(es)?/i.test input
-
-								if not confirmed
-									grunt.fatal 'exiting jslove'
-
-								return confirmed
-						}
-					]
 
 		# RequireJS optimizer configuration for both scripts and styles
 		# This configuration is only used in the 'prod' build
@@ -585,14 +558,4 @@ module.exports = (grunt) ->
 	grunt.registerTask 'test', [
 		'build'
 		'karma'
-	]
-
-	# Compiles all CoffeeScript files in the project to JavaScript then deletes all CoffeeScript files
-	# Used for those that desire plain old JavaScript
-	# Enter the following command at the command line to execute this build task:
-	# grunt jslove
-	grunt.registerTask 'jslove', [
-		'prompt:jslove'
-		'coffee:jslove'
-		'clean:jslove'
 	]

@@ -14,8 +14,7 @@ before_deploy:
   - "rm -rf apo/dist" # replace all the compiled files
   - "mv dist apo/dist"
   - "cd apo"
-  - DATE="`date +%m`_`date +%d`_`date +%y`" # force Azure to push the directory
-  - DATE > date.txt  # even if nothing changed, so that the tests can succeed 
+  - echo "`date +%s`" > date.txt # force Azure to push the directory even if nothing changed, so that the tests can succeed 
   - "git add *"
   - "git commit -a -m 'Push to Azure'"
   - "git push" # push everything to the azure sever

@@ -6,8 +6,9 @@
     "angular-animate": "1.5.x",
     "angular-mocks": "1.5.x",
     "angular-route": "1.5.x",
-    "angular-material": "0.11.x",
-	 "bootstrap": "3.3.x",
+    "angular-material": "1.0.x",
+    "angular-ui-router": "0.2.x",
+    "bootstrap": "3.3.x",
     "html5shiv": "3.7.2",
     "json3": "3.3.2",
     "requirejs": "2.1.15"
@@ -24,6 +25,15 @@
     },
     "angular-route": {
       "scripts/libs": "angular-route.min.js{,.map}"
+    },
+    "angular-material": {
+      "scripts/libs": "angular-material.min.js{,.map}"
+    },
+    "angular-ui-router": {
+      "scripts/libs": "release/angular-ui-router.min.js{,.map}"
+    },
+    "angular-aria": {
+      "scripts/libs": "angular-aria.min.js{,.map}"
     },
     "bootstrap": {
       "fonts": "dist/fonts/*.{eot,svg,ttf,woff}",

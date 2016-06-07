@@ -1,0 +1,17 @@
+<md-list>
+   <img src="https://github.com/CvO-Theory/apt/blob/master/data/logo.png?raw=true" class="logo"/>
+   <md-subheader class="md-no-sticky">Your Petri Nets</md-subheader>
+   <md-list-item ng-click="goToNet(net)" ng-class="isNet(net) ? 'active' : ''" ng-repeat="(id, net) in nets">
+      <p>{{ net.name }}</p>
+      <ng-md-icon class="md-secondary" ng-click="deleteNet(id, $event)" icon="delete" style="fill: rgba(0, 0, 0, .87)" size="22"></ng-md-icon>
+   </md-list-item>
+   <md-list-item class="list-form-item">
+      <form ng-submit="createNewNet(newName, $event)">
+         <md-input-container>
+            <label>Create New</label>
+            <input ng-model="newName">
+         </md-input-container>
+      </form>
+      <ng-md-icon class="md-secondary submit-form" ng-click="createNewNet(newName, $event)" icon="add" style="fill: rgba(0, 0, 0, .87)" size="22"></ng-md-icon>
+   </md-list-item>
+</md-list>

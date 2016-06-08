@@ -28,12 +28,6 @@ module.exports = (grunt) ->
                copy: false
                install: false
 
-      # Creates changelog
-      changelog:
-         options:
-            repository: pkg.repository.url
-            version: pkg.version
-
       # Deletes dist and .temp directories
       # The .temp directory is used during the build process
       # The dist directory contains the artifacts of the build
@@ -57,15 +51,6 @@ module.exports = (grunt) ->
             ]
             options:
                sourceMap: true
-         # Used for those that desire plain old JavaScript
-         jslove:
-            files: [
-               cwd: ''
-               src: '<%= clean.jslove %>'
-               dest: ''
-               expand: true
-               ext: '.js'
-            ]
 
       # Lints CoffeeScript files
       coffeelint:
@@ -179,10 +164,18 @@ module.exports = (grunt) ->
                captureTimeout: 5000
                colors: true
                files: [
-                  'dist/scripts/libs/angular.min.js'
-                  'dist/scripts/libs/angular-animate.min.js'
-                  'dist/scripts/libs/angular-route.min.js'
-                  #'.components/scripts/libs/angular-mocks.js'
+                  'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js'
+                  'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js'
+                  'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js'
+                  'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js'
+                  'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js'
+                  'http://ajax.googleapis.com/ajax/libs/angular_material/1.0.7/angular-material.min.js'
+                  'http://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js'
+                  'https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js'
+                  'https://d3js.org/d3.v3.min.js'
+                  'http://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'
+                  'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-mocks.js'
+                  'dist/**/main.js'
                   'dist/**/*.js'
                   'test/**/*.{coffee,js}'
                ]
@@ -272,13 +265,13 @@ module.exports = (grunt) ->
                   return '' if shouldExcludeModule
 
                   contents
-               optimize: 'uglify2'
+               #optimize: 'uglify2'
                out: '.temp/scripts/scripts.min.js'
                preserveLicenseComments: false
                skipModuleInsertion: true
                uglify:
                   # Let uglifier replace variables to further reduce file size
-                  no_mangle: false
+                  no_mangle: true # false
                useStrict: true
                wrap:
                   start: '(function(){\'use strict\';'
@@ -303,6 +296,7 @@ module.exports = (grunt) ->
                '!libs/angular-material.{coffee,js}'
                '!libs/angular-aria.{coffee,js}'
                '!libs/angular-ui-router.{coffee,js}'
+               '!libs/ngStorage.{coffee,js}'
                '!libs/html5shiv-printshiv.{coffee,js}'
                '!libs/json3.min.{coffee,js}'
                '!libs/require.{coffee,js}'
@@ -315,6 +309,7 @@ module.exports = (grunt) ->
                   'ngRoute': 'libs/angular-route.min.js'
                   'ngMaterial': 'libs/angular-material.min.js'
                   'ui.router': 'libs/angular-ui-router.min.js'
+                  'ngStorage': 'libs/ngStorage.min.js'
             ]
             require: 'NGBOOTSTRAP'
          prod:
@@ -328,6 +323,7 @@ module.exports = (grunt) ->
                '!libs/angular-material.{coffee,js}'
                '!libs/angular-aria.{coffee,js}'
                '!libs/angular-ui-router.{coffee,js}'
+               '!libs/ngStorage.{coffee,js}'
                '!libs/html5shiv-printshiv.{coffee,js}'
                '!libs/json3.min.{coffee,js}'
                '!libs/require.{coffee,js}'
@@ -340,6 +336,7 @@ module.exports = (grunt) ->
                   'ngRoute': 'libs/angular-route.min.js'
                   'ngMaterial': 'libs/angular-material.min.js'
                   'ui.router': 'libs/angular-ui-router.min.js'
+                  'ngStorage': 'libs/ngStorage.min.js'
             ]
             require: '<%= shimmer.dev.require %>'
 
@@ -395,7 +392,7 @@ module.exports = (grunt) ->
                'clean:working'
                'coffeelint'
                'copy:app'
-               'shimmer:dev'
+               #'shimmer:dev'
                'ngClassify:app'
                'coffee:app'
                'copy:dev'
@@ -490,7 +487,7 @@ module.exports = (grunt) ->
       'bower:install'
       'coffeelint'
       'copy:app'
-      'shimmer:dev'
+      #'shimmer:dev'
       'ngClassify'
       'coffee:app'
       'less'
@@ -531,14 +528,14 @@ module.exports = (grunt) ->
       'coffeelint'
       'copy:app'
       'ngTemplateCache'
-      'shimmer:prod'
+      #'shimmer:prod'
       'ngClassify'
       'coffee:app'
       'imagemin'
       'hash:images'
       'less'
-      'requirejs'
-      'uglify'
+      #'requirejs'
+      #'uglify'
       'hash:scripts'
       'hash:styles'
       'template:index'

@@ -1,3 +1,17 @@
+`angular.module('app').config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+
+   $locationProvider.html5Mode(true).hashPrefix('!');
+   $urlRouterProvider.otherwise('/0');
+   $stateProvider
+      .state('editor', {
+         url: "/:name",
+         templateUrl: "editor/Editor.html",
+         controller: "EditorController"
+      });
+});`
+
+
+###
 class Config
 	constructor: ($routeProvider) ->
 		$routeProvider
@@ -7,3 +21,4 @@ class Config
 			redirectTo: '/github'
 
 angular.module('app').config ['$routeProvider', Config]
+###

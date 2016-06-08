@@ -18,50 +18,38 @@
 			<link rel="stylesheet" href="/styles/styles.css" />
 		<% } %>
 
-		<!-- ClickJacking Defense begin (https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet) -->
-		<style id="antiClickjack">
-			body {
-				display: none !important;
-			}
-		</style>
-
-		<script>
-			(function (w) {
-				if (w.top === w.self) {
-					var a = w.document.getElementById('antiClickjack');
-
-					a.parentNode.removeChild(a);
-				} else {
-					w.top.location = w.self.location;
-				}
-			}(window));
-		</script>
-		<!-- ClickJacking Defense end -->
-
-		<!-- When you load angular at the bottom, you need to create the "ng-cloak" rules yourself -->
-		<style>
-			[ng\:cloak],
-			[ng-cloak],
-			[data-ng-cloak],
-			[x-ng-cloak],
-			.ng-cloak,
-			.x-ng-cloak {
-				display: none;
-			}
-
-			ng\:form {
-				display: block;
-			}
-		</style>
-	</head>
-	<body ng-cloak class="ng-cloak">
+	<body ng-app="app">
 		<ng:view></ng:view>
 		<ng:include src="'/views/site.html'"></ng:include>
+
+		<!-- Angular Material requires Angular.js Libraries -->
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+
+      <!-- Angular UI Router -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
+
+      <!-- Angular Material Library -->
+      <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.7/angular-material.min.js"></script>
+
+      <!-- Material Design Icons -->
+      <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script>
+
+      <!-- Local Storage Module -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+
+      <!-- D3.js -->
+      <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
 		<% if (config.environment && config.environment === 'prod') { %>
 			<script src="<%= config.getHashedFile('./.temp/scripts/scripts.min.js', {trim: './.temp'}) %>"></script>
 		<% } else { %>
-			<script data-main="/scripts/main.js" src="/scripts/libs/require.js"></script>
+
+         <script src="/scripts/main.js"></script>
+
+			<!-- <script data-main="/scripts/main.js" src="/scripts/libs/require.js"></script> -->
 		<% } %>
 	</body>
 </html>

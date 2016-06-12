@@ -1,5 +1,5 @@
-`angular.module('app').directive('menubar', function() {
-   return {
-      templateUrl: '/views/directives/menubar.html'
-   }
-});`
+class Menubar extends Directive
+	constructor: ->
+		return {
+			templateUrl: "/views/directives/menubar.html"
+		}

@@ -1,47 +1,31 @@
-`angular.module('app').factory("NetStorage", function($localStorage, Net) {
+class NetStorage extends Factory
+	constructor: ($localStorage, Net) ->
 
-   var storage = $localStorage.$default({
-      nets: [ new Net({
-         name: "Sample Net",
-         nodes: [],
-         edges: []
-      }) ]
-   });
+		storage = $localStorage.$default
+			nets: [ new Net
+				name: "Sample Net"
+				nodes: []
+				edges: []
+			]
 
-	console.log(storage);
+		return {
 
-   var getNets = function() {
-      return storage.nets;
-   }
+			getNets: -> storage.nets
 
-   // returns false if net with this name alreade exists
-   var addNet = function(name) {
-      if (getNetByName(name)) return false;
-      storage.nets.push( new Net({
-         name: name,
-         nodes: [],
-         edges: []
-      }));
-   }
+			addNet: (name) ->
+				if (@getNetByName(name))
+					return false
+				storage.nets.push(
+					new Net(
+						name: name
+						nodes: []
+						edges: []
+					)
+				)
 
-   var deleteNet = function(id) {
-      storage.nets.splice(id, 1);
-   }
+			deleteNet: (id) -> storage.nets.splice(id, 1)
 
-   var getNetByName = function(name) {
-      for(i = 0; i < storage.nets.length; i++) {
-         if (storage.nets[i].name === name) {
-            return storage.nets[i];
-         }
-      }
-      return false;
-   }
-
-   var interface = {
-      getNets: getNets,
-      addNet: addNet,
-      deleteNet: deleteNet,
-      getNetByName: getNetByName
-   }
-   return interface;
-});`
+			getNetByName: (name) ->
+				return net for net in storage.nets when net.name is name
+				return false
+		}

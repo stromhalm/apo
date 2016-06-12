@@ -37,7 +37,6 @@ class SidenavController extends Controller
 			.then ->
 				NetStorage.deleteNet(id)
 		@nets = NetStorage.getNets()
-		console.log @nets
 
 
 class Sidenav extends Directive

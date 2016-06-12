@@ -1,8 +1,8 @@
 class NetStorage extends Factory
-	constructor: ($localStorage, Net) ->
+	constructor: ($localStorage, NetFactory) ->
 
 		storage = $localStorage.$default
-			nets: [ new Net
+			nets: [ new NetFactory
 				name: "Sample Net"
 				nodes: []
 				edges: []
@@ -16,7 +16,7 @@ class NetStorage extends Factory
 				if (@getNetByName(name))
 					return false
 				storage.nets.push(
-					new Net(
+					new NetFactory(
 						name: name
 						nodes: []
 						edges: []

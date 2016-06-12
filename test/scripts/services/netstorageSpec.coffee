@@ -9,7 +9,7 @@ describe 'NetStorage', ->
 
 					{pass}
 
-	it "should create and find a net", inject ['NetStorage', (NetStorage) ->
+	it "should create and find a transition system", inject ['NetStorage', (NetStorage) ->
 		netName = "foo"
 		NetStorage.addNet(netName)
 		expect(NetStorage.getNetByName(netName).name).toEqualData netName

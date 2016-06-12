@@ -3,12 +3,7 @@
 	It consists of nodes and edges.
 ###
 
-class NetFactory extends Factory
-	constructor: ->
-		return Net
-
-
-class Net
+class @Net
 	constructor: (netObject) ->
 		@name = netObject.name
 		@nodes = netObject.nodes

@@ -1,9 +1,9 @@
 class Editor extends Controller
 
-	constructor: ($scope, $stateParams, $timeout, $state, NetStorage, NetFactory) ->
+	constructor: ($scope, $stateParams, $timeout, $state, NetStorage, TransitionSystemFactory) ->
 
 		# Get selected net from storage
-		net = new NetFactory(NetStorage.getNetByName(decodeURI($stateParams.name)))
+		net = new TransitionSystemFactory(NetStorage.getNetByName(decodeURI($stateParams.name)))
 		$scope.name = net.name
 		# Go to first net if not found
 		if !net

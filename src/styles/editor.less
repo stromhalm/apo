@@ -1,59 +1,77 @@
+.main-content {
+   width: 100%;
+   overflow: hidden;
+}
+
+.main-layout {
+   height: 100%;
+}
+
+md-sidenav {
+   height: 100%;
+   z-index: 1000;
+
+   .logo {
+      width: 80%;
+      margin: 10%;
+   }
+}
+
+md-list md-list-item {
+   &.list-form-item {
+      padding-right: 27px;
+      margin-left: -4px;
+      border-left: 0 !important;
+
+      .md-secondary-container {
+         margin-top: -17px !important;
+      }
+   }
+
+   &:hover {
+      border-left: 3px solid rgba(158, 158, 158, 0.5);
+   }
+
+   &.active, &:active {
+      background-color: rgba(63, 81, 181, 0.1);
+      border-left: 3px solid rgb(63, 81, 181);
+
+      button {
+         color: rgb(63, 81, 181);
+      }
+   }
+
+   &.active, &:hover {
+      .md-no-style {
+         padding-left: 13px;
+      }
+   }
+}
+
+md-menu-content {
+
+   overflow: hidden;
+
+   md-menu-item {
+      ng-md-icon {
+         position: absolute;
+         top: 7px;
+      }
+   }
+}
+
+
 #main-canvas {
-   svg {
+   position: absolute;
+   top: 0;
+   height: 100%;
+   width: 100%;
+}
 
-      background-color: #FFF;
-      cursor: default;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      -o-user-select: none;
-      user-select: none;
-   }
+.file-toolbar {
+   background-color: rgba(158, 158, 158, 0.1) !important;
+}
 
-   svg:not(.active):not(.ctrl) {
-     cursor: crosshair;
-   }
-
-   path.link {
-     fill: none;
-     stroke: #000;
-     stroke-width: 4px;
-     cursor: default;
-   }
-
-   svg:not(.active):not(.ctrl) path.link {
-     cursor: pointer;
-   }
-
-   path.link.selected {
-     stroke-dasharray: 10,2;
-   }
-
-   path.link.dragline {
-     pointer-events: none;
-   }
-
-   path.link.hidden {
-     stroke-width: 0;
-   }
-
-   circle.node {
-     stroke-width: 1.5px;
-     cursor: pointer;
-   }
-
-   circle.node.reflexive {
-     stroke: #000 !important;
-     stroke-width: 2.5px;
-   }
-
-   text {
-     font: 12px sans-serif;
-     pointer-events: none;
-   }
-
-   text.id {
-     text-anchor: middle;
-     font-weight: bold;
-   }
+.editor-layout {
+   height: 100%;
 }

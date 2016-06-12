@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" xmlns:ng="http://angularjs.org" xmlns:app="ignored"> <![endif]-->
-<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" xmlns:ng="http://angularjs.org" xmlns:app="ignored"> <![endif]-->
-<!--[if IE 8]> <html class="no-js lt-ie9" xmlns:ng="http://angularjs.org" xmlns:app="ignored"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" xmlns:ng="http://angularjs.org" xmlns:app="ignored"> <!--<![endif]-->
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>APT Online</title>
 		<meta name="description" content="AngularJS Reference Architecture" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<base href="/">
 
 		<!--[if lte IE 8]> <script src="/scripts/libs/json3.min.js"></script> <script src="/scripts/libs/html5shiv-printshiv.min.js"></script> <![endif]-->
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.7/angular-material.min.css" />
 
 		<% if (config.environment && config.environment === 'prod') { %>
 			<link rel="stylesheet" href="<%= config.getHashedFile('./.temp/styles/styles.min.css', {trim: './.temp'}) %>" />
@@ -19,35 +17,48 @@
 		<% } %>
 
 	<body ng-app="app">
-		<ng:view></ng:view>
-		<ng:include src="'/views/site.html'"></ng:include>
+		<div layout="row" class="main-layout">
+		   <md-sidenav md-component-id="left-menu" class="md-sidenav-left md-whiteframe-z1" md-is-locked-open="$mdMedia('gt-sm')">
+		      <sidenav></sidenav>
+		   </md-sidenav>
+		   <md-content class="main-content">
+		      <div layout="column" layout-fill class="net-editor" ui-view></div>
+		   </md-content>
+		</div>
 
-		<!-- Angular Material requires Angular.js Libraries -->
+		<!-- Load Angular.js Libraries -->
       <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
       <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
       <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
       <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
 
-      <!-- Angular UI Router -->
+      <!-- Load Angular UI Router -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
 
-      <!-- Angular Material Library -->
+      <!-- Load Angular Material Library -->
       <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.7/angular-material.min.js"></script>
 
-      <!-- Material Design Icons -->
+      <!-- Load Material Design Icons -->
       <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script>
 
-      <!-- Local Storage Module -->
+      <!-- Load Local Storage Module -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
 
-      <!-- D3.js -->
+      <!-- Load D3.js -->
       <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
 		<% if (config.environment && config.environment === 'prod') { %>
 			<script src="<%= config.getHashedFile('./.temp/scripts/scripts.min.js', {trim: './.temp'}) %>"></script>
 		<% } else { %>
 
-         <script src="/scripts/main.js"></script>
+      <script src="scripts/main.js"></script>
+		<script src="scripts/routes.js"></script>
+      <script src="scripts/services/NetStorage.js"></script>
+		<script src="scripts/services/net.js"></script>
+      <script src="scripts/directives/sidenav.js"></script>
+      <script src="scripts/controllers/editorController.js"></script>
+      <script src="scripts/directives/topbar.js"></script>
+      <script src="scripts/directives/menubar.js"></script>
 
 			<!-- <script data-main="/scripts/main.js" src="/scripts/libs/require.js"></script> -->
 		<% } %>

@@ -1,11 +1,11 @@
 `angular.module('app').config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
-   $locationProvider.html5Mode(true).hashPrefix('!');
+   $locationProvider.html5Mode(false).hashPrefix('!');
    $urlRouterProvider.otherwise('/0');
    $stateProvider
       .state('editor', {
          url: "/:name",
-         templateUrl: "editor/Editor.html",
+         templateUrl: "views/directives/editor.html",
          controller: "EditorController"
       });
 });`

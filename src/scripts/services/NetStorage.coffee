@@ -8,6 +8,8 @@
       }) ]
    });
 
+	console.log(storage);
+
    var getNets = function() {
       return storage.nets;
    }

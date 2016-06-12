@@ -538,7 +538,7 @@ module.exports = (grunt) ->
       #'uglify'
       'hash:scripts'
       'hash:styles'
-      'template:index'
+      #'template:index'
       'minifyHtml'
       'copy:prod'
    ]

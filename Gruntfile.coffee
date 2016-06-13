@@ -103,20 +103,6 @@ module.exports = (grunt) ->
 					expand: true
 				]
 
-		# Renames files based on their hashed content
-		# When the files contents change, the hash value changes
-		# Used as a cache buster, ensuring browsers load the correct static resources
-		#
-		# glyphicons-halflings.png -> glyphicons-halflings.6c8829cc6f.png
-		# scripts.min.js -> scripts.min.6c355e03ee.js
-		hash:
-			images: '.temp/**/*.{gif,jpeg,jpg,png,svg,webp}'
-			scripts:
-				cwd: '.temp'
-				src: ['scripts/scripts.min.js']
-				expand: true
-			styles: '.temp/styles/styles.min.css'
-
 		# Compresses image files
 		imagemin:
 			images:

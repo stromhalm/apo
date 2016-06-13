@@ -41,19 +41,22 @@
       <!-- Load D3.js -->
       <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
-      <script src="scripts/main.js"></script>
-		<script src="scripts/routes.js"></script>
-      <script src="scripts/services/netStorage.js"></script>
-		<script src="scripts/models/net.js"></script>
-		<script src="scripts/models/transitionSystem.js"></script>
-		<script src="scripts/models/petriNet.js"></script>
-		<script src="scripts/services/netStorage.js"></script>
-		<script src="scripts/services/petriNetFactory.js"></script>
-		<script src="scripts/services/transitionSystemFactory.js"></script>
-      <script src="scripts/directives/sidenav.js"></script>
-      <script src="scripts/controllers/editorController.js"></script>
-      <script src="scripts/directives/topbar.js"></script>
-      <script src="scripts/directives/menubar.js"></script>
+		<% if (config.environment === 'prod') { %>
+			<script src="scripts/scripts.min.js"></script>
+		<% } else { %>
+			<script src="scripts/main.js"></script>
+			<script src="scripts/routes.js"></script>
+	      <script src="scripts/services/netStorage.js"></script>
+			<script src="scripts/models/net.js"></script>
+			<script src="scripts/models/transitionSystem.js"></script>
+			<script src="scripts/models/petriNet.js"></script>
+			<script src="scripts/services/netStorage.js"></script>
+	      <script src="scripts/directives/sidenav.js"></script>
+	      <script src="scripts/controllers/editorController.js"></script>
+	      <script src="scripts/directives/topbar.js"></script>
+	      <script src="scripts/directives/menubar.js"></script>
+		<% } %>
+
 
 	</body>
 </html>

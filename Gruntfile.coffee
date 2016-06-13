@@ -265,7 +265,7 @@ module.exports = (grunt) ->
                   return '' if shouldExcludeModule
 
                   contents
-               #optimize: 'uglify2'
+               optimize: 'uglify2'
                out: '.temp/scripts/scripts.min.js'
                preserveLicenseComments: false
                skipModuleInsertion: true
@@ -290,55 +290,12 @@ module.exports = (grunt) ->
             cwd: '.temp/scripts'
             src: [
                '**/*.{coffee,js}'
-               '!libs/angular.{coffee,js}'
-               '!libs/angular-animate.{coffee,js}'
-               '!libs/angular-route.{coffee,js}'
-               '!libs/angular-material.{coffee,js}'
-               '!libs/angular-aria.{coffee,js}'
-               '!libs/angular-ui-router.{coffee,js}'
-               '!libs/ngStorage.{coffee,js}'
-               '!libs/html5shiv-printshiv.{coffee,js}'
-               '!libs/json3.min.{coffee,js}'
-               '!libs/require.{coffee,js}'
             ]
-            order: [
-               'libs/angular.min.js'
-               'NGAPP':
-                  'ngAnimate': 'libs/angular-animate.min.js'
-                  'ngMockE2E': 'libs/angular-mocks.js'
-                  'ngRoute': 'libs/angular-route.min.js'
-                  'ngMaterial': 'libs/angular-material.min.js'
-                  'ui.router': 'libs/angular-ui-router.min.js'
-                  'ngStorage': 'libs/ngStorage.min.js'
-            ]
-            require: 'NGBOOTSTRAP'
          prod:
             cwd: '<%= shimmer.dev.cwd %>'
             src: [
                '**/*.{coffee,js}'
-               '!libs/angular.{coffee,js}'
-               '!libs/angular-animate.{coffee,js}'
-               '!libs/angular-mocks.{coffee,js}'
-               '!libs/angular-route.{coffee,js}'
-               '!libs/angular-material.{coffee,js}'
-               '!libs/angular-aria.{coffee,js}'
-               '!libs/angular-ui-router.{coffee,js}'
-               '!libs/ngStorage.{coffee,js}'
-               '!libs/html5shiv-printshiv.{coffee,js}'
-               '!libs/json3.min.{coffee,js}'
-               '!libs/require.{coffee,js}'
-               '!backend/**/*.*'
             ]
-            order: [
-               'libs/angular.min.js'
-               'NGAPP':
-                  'ngAnimate': 'libs/angular-animate.min.js'
-                  'ngRoute': 'libs/angular-route.min.js'
-                  'ngMaterial': 'libs/angular-material.min.js'
-                  'ui.router': 'libs/angular-ui-router.min.js'
-                  'ngStorage': 'libs/ngStorage.min.js'
-            ]
-            require: '<%= shimmer.dev.require %>'
 
       # Compiles underscore expressions
       #
@@ -392,7 +349,7 @@ module.exports = (grunt) ->
                'clean:working'
                'coffeelint'
                'copy:app'
-               #'shimmer:dev'
+               'shimmer:dev'
                'ngClassify:app'
                'coffee:app'
                'copy:dev'
@@ -528,7 +485,7 @@ module.exports = (grunt) ->
       'coffeelint'
       'copy:app'
       'ngTemplateCache'
-      'shimmer:prod'
+      #'shimmer:prod'
       'ngClassify'
       'coffee:app'
       'imagemin'

@@ -172,6 +172,20 @@ module.exports = (grunt) ->
 					expand: true
 				]
 
+		cacheBust:
+			taskName:
+				options:
+					assets: ['.temp/scripts/**/*.js']
+					deleteOriginals: true
+				src: []
+
+		includeSource:
+			options:
+				basePath: '.temp'
+			myTarget:
+				files:
+					'.temp/index.html': '.temp/index.html'
+
 		# Run tasks when monitored files change
 		watch:
 			basic:
@@ -196,10 +210,10 @@ module.exports = (grunt) ->
 					'clean:working'
 					'coffeelint'
 					'copy:app'
-					'shimmer:dev'
 					'ngClassify:app'
 					'coffee:app'
 					'copy:dev'
+					'includeSource'
 					'karma'
 				]
 				options:
@@ -282,6 +296,7 @@ module.exports = (grunt) ->
 		'ngClassify'
 		'coffee:app'
 		'less'
+		'includeSource'
 		'copy:dev'
 	]
 
@@ -320,6 +335,8 @@ module.exports = (grunt) ->
 		'coffee:app'
 		'imagemin'
 		'less'
+		'cacheBust'
+		'includeSource'
 		'copy:prod'
 	]
 

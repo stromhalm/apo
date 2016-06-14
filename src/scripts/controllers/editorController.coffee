@@ -3,11 +3,12 @@ class Editor extends Controller
 	constructor: ($scope, $stateParams, $timeout, $state, NetStorage, TransitionSystemFactory) ->
 
 		# Get selected net from storage
-		net = new TransitionSystemFactory(NetStorage.getNetByName(decodeURI($stateParams.name)))
+		net = NetStorage.getNetByName(decodeURI($stateParams.name))
 		$scope.name = net.name
+
 		# Go to first net if not found
-		if !net
-			$state.go 'editor', name: NetStorage.getNets()[0].current.name
+		if not net
+			$state.go 'editor', name: NetStorage.getNets()[0].name
 
 		svg = d3.select('#main-canvas svg')
 		force = d3.layout.force()
@@ -15,6 +16,7 @@ class Editor extends Controller
 		drag_line = svg.select('svg .dragline')
 		allPathes = svg.append('svg:g').selectAll('path')
 		allCircles = svg.append('svg:g').selectAll('g')
+
 		# mouse event vars
 		selected_node = null
 		selected_link = null
@@ -88,6 +90,7 @@ class Editor extends Controller
 				selected_node = null
 				restart()
 				return
+
 			# remove old links
 			allPathes.exit().remove()
 			# circle (node) group
@@ -246,15 +249,14 @@ class Editor extends Controller
 			window.innerHeight + 80
 		]).linkDistance(150).charge(-500).on('tick', tick)
 		# fix lost references to nodes
-		i = 0
-		while i < net.edges.length
-			net.edges[i].source = net.nodes.filter((node) ->
-				node.id == net.edges[i].source.id
+		for edge in net.edges
+			edge.source = net.nodes.filter((node) ->
+				node.id == edge.source.id
 			)[0]
-			net.edges[i].target = net.nodes.filter((node) ->
-				node.id == net.edges[i].target.id
+			edge.target = net.nodes.filter((node) ->
+				node.id == edge.target.id
 			)[0]
-			i++
+
 		# app starts here
 		svg.on('mousedown', mousedown).on('mousemove', mousemove).on 'mouseup', mouseup
 		restart()

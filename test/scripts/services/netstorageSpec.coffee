@@ -9,8 +9,16 @@ describe 'NetStorage', ->
 
 					{pass}
 
-	it "should create and find a transition system", inject ['NetStorage', (NetStorage) ->
+	it "should store and find a transition system", inject ['NetStorage', (NetStorage) ->
 		netName = "foo"
-		NetStorage.addNet(netName)
+		NetStorage.addTransitionSystem(netName)
 		expect(NetStorage.getNetByName(netName).name).toEqualData netName
+		expect(NetStorage.getNetByName(netName).type).toEqualData "lts"
+	]
+
+	it "should store and find a petri net", inject ['NetStorage', (NetStorage) ->
+		netName = "foo"
+		NetStorage.addPetriNet(netName)
+		expect(NetStorage.getNetByName(netName).name).toEqualData netName
+		expect(NetStorage.getNetByName(netName).type).toEqualData "pn"
 	]

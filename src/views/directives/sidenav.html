@@ -1,6 +1,6 @@
 <md-list>
    <img src="https://github.com/CvO-Theory/apt/blob/master/data/logo.png?raw=true" class="logo"/>
-   <md-subheader class="md-no-sticky">Your Petri Nets</md-subheader>
+   <md-subheader class="md-no-sticky">Your Nets</md-subheader>
    <md-list-item ng-click="sn.goToNet(net)" ng-class="sn.isNet(net) ? 'active' : ''" ng-repeat="(id, net) in sn.nets">
       <p>{{ net.name }}</p>
       <ng-md-icon class="md-secondary" ng-click="sn.deleteNet(id, $event)" icon="delete" style="fill: rgba(0, 0, 0, .87)" size="22"></ng-md-icon>

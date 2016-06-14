@@ -13,10 +13,10 @@ class SidenavController extends Controller
 
 		@createNewNet = (name, $event) ->
 			if (!name)
-			else if NetStorage.addNet(name) == false
+			else if NetStorage.addTransitionSystem(name) == false
 				alert = $mdDialog.alert
-					title: "Can Not Create Petri Net"
-					textContent: "A petri net with the name #{name} already exists!"
+					title: "Can Not Create Transition System"
+					textContent: "A transition system with the name #{name} already exists!"
 					ok: "OK"
 					targetEvent: $event # To animate the dialog to/from the click
 				$mdDialog.show(alert).finally ->

@@ -1,5 +1,5 @@
 class NetStorage extends Factory
-	constructor: ($localStorage, TransitionSystemFactory) ->
+	constructor: ($localStorage, TransitionSystemFactory, PetriNetFactory) ->
 
 		storage = $localStorage.$default
 			nets: [ new TransitionSystemFactory
@@ -8,10 +8,19 @@ class NetStorage extends Factory
 				edges: []
 			]
 
-		return {
-			getNets: -> storage.nets
+		getNetFromStorageObject = (storageObject) ->
+			switch storageObject.type
+				when "lts" then return new TransitionSystemFactory(storageObject)
+				when "pn" then return new PetriNetFactory(storageObject)
 
-			addNet: (name) ->
+		return {
+			getNets: ->
+				allNets = []
+				for net in storage.nets
+					allNets.push(getNetFromStorageObject(net))
+				allNets
+
+			addTransitionSystem: (name) ->
 				if (@getNetByName(name))
 					return false
 				storage.nets.push(
@@ -22,9 +31,20 @@ class NetStorage extends Factory
 					)
 				)
 
+			addPetriNet: (name) ->
+				if (@getNetByName(name))
+					return false
+				storage.nets.push(
+					new PetriNetFactory(
+						name: name
+						nodes: []
+						edges: []
+					)
+				)
+
 			deleteNet: (id) -> storage.nets.splice(id, 1)
 
 			getNetByName: (name) ->
-				return net for net in storage.nets when net.name is name
+				return getNetFromStorageObject(net) for net in storage.nets when net.name is name
 				return false
 		}

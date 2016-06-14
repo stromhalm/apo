@@ -1,14 +1,9 @@
 class Editor extends Controller
 
-	constructor: ($scope, $stateParams, $timeout, $state, NetStorage, TransitionSystemFactory) ->
+	constructor: ($scope, $stateParams, $timeout, NetStorage, TransitionSystemFactory) ->
 
-		# Get selected net from storage
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
 		$scope.name = net.name
-
-		# Go to first net if not found
-		if not net
-			$state.go 'editor', name: NetStorage.getNets()[0].name
 
 		svg = d3.select('#main-canvas svg')
 		force = d3.layout.force()

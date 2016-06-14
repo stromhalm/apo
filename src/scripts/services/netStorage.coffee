@@ -12,8 +12,16 @@ class NetStorage extends Factory
 			switch storageObject.type
 				when "lts" then return new TransitionSystemFactory(storageObject)
 				when "pn" then return new PetriNetFactory(storageObject)
+				else return new TransitionSystemFactory(storageObject)
+
+		getNetIdByName = (name) ->
+			return id for net, id in storage.nets when net.name is name
+			return false
 
 		return {
+
+			storageObjects: storage.nets
+
 			getNets: ->
 				allNets = []
 				for net in storage.nets
@@ -42,7 +50,8 @@ class NetStorage extends Factory
 					)
 				)
 
-			deleteNet: (id) -> storage.nets.splice(id, 1)
+			deleteNet: (name) ->
+				storage.nets.splice(getNetIdByName(name), 1)
 
 			getNetByName: (name) ->
 				return getNetFromStorageObject(net) for net in storage.nets when net.name is name

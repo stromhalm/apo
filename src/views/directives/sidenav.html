@@ -3,7 +3,7 @@
    <md-subheader class="md-no-sticky">Your Nets</md-subheader>
    <md-list-item ng-click="sn.goToNet(net)" ng-class="sn.isNet(net) ? 'active' : ''" ng-repeat="(id, net) in sn.nets">
       <p>{{ net.name }}</p>
-      <ng-md-icon class="md-secondary" ng-click="sn.deleteNet(id, $event)" icon="delete" style="fill: rgba(0, 0, 0, .87)" size="22"></ng-md-icon>
+      <ng-md-icon class="md-secondary" ng-click="sn.deleteNet(net, $event)" icon="delete" style="fill: rgba(0, 0, 0, .87)" size="22"></ng-md-icon>
    </md-list-item>
    <md-list-item class="list-form-item">
       <form ng-submit="sn.createNewNet(sn.newName, $event)">

@@ -35,6 +35,8 @@
 		"grunt-include-source": "1.0.x",
 		"grunt-hash": "0.5.x",
 		"grunt-cache-bust": "1.3.x",
+		"grunt-angular-templates": "1.0.x",
+		"grunt-contrib-uglify": "1.0.x",
 		"karma-coffee-preprocessor": "0.2.1",
 		"karma-jasmine": "~0.2.0",
 		"karma-junit-reporter": "0.2.2",

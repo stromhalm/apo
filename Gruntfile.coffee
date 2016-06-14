@@ -186,6 +186,27 @@ module.exports = (grunt) ->
 				files:
 					'.temp/index.html': '.temp/index.html'
 
+		ngtemplates:
+			app:
+				cwd: '.temp',
+				src: 'views/**/*.html',
+				dest: '.temp/scripts/app.templates.js'
+				options:
+					htmlmin:
+						collapseBooleanAttributes:      true
+						collapseWhitespace:             true
+						removeAttributeQuotes:          true
+						removeComments:                 true
+						removeEmptyAttributes:          true
+						removeRedundantAttributes:      true
+						removeScriptTypeAttributes:     true
+						removeStyleLinkTypeAttributes:  true
+
+		uglify:
+			my_target:
+				files:
+					'.temp/scripts/scripts.min.js': '.temp/scripts/**/*.js'
+
 		# Run tasks when monitored files change
 		watch:
 			basic:
@@ -335,6 +356,8 @@ module.exports = (grunt) ->
 		'coffee:app'
 		'imagemin'
 		'less'
+		#'uglify'
+		'ngtemplates'
 		'cacheBust'
 		'includeSource'
 		'copy:prod'

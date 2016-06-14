@@ -21,22 +21,26 @@ class SidenavController extends Controller
 			$state.go "editor", name: net.name
 			$mdSidenav("left-menu").close()
 
-		@createNewNet = (name, $event) ->
-			if (!name)
-			else if NetStorage.addTransitionSystem(name) == false
-				alert = $mdDialog.alert
-					title: "Can Not Create Transition System"
-					textContent: "A transition system with the name '#{name}' already exists!"
-					ok: "OK"
-					targetEvent: $event # To animate the dialog to/from the click
-				$mdDialog.show(alert).finally ->
-					alert = undefined
-			@newName = ""
+		@createNewNet = (name, type, $event) ->
+			if (!name or !type)
+			else
+				if type="PN" then success = NetStorage.addPetriNet(name)
+				else if type="LTS" then success = NetStorage.addTransitionSystem(name)
+				if not success
+					alert = $mdDialog.alert
+						title: "Can Not Create Net"
+						textContent: "A net with the name '#{name}' already exists!"
+						ok: "OK"
+						targetEvent: $event # To animate the dialog to/from the click
+					$mdDialog.show(alert).finally ->
+						alert = undefined
+				@newName = ""
+				@newType = ""
 
 		@deleteNet = (net, $event) ->
 			prompt = $mdDialog.confirm
-				title: "Delete Petri Net"
-				textContent: "Do you really want to delete the petri net '#{net.name}'?"
+				title: "Delete Net"
+				textContent: "Do you really want to delete the net '#{net.name}'?"
 				ok: "Delete"
 				cancel: "Cancel"
 				targetEvent: $event # To animate the dialog to/from the click

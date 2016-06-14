@@ -7,19 +7,32 @@
    height: 100%;
 }
 
-md-sidenav {
+.md-sidenav-left {
    height: 100%;
-   z-index: 1000;
 
    .logo {
       width: 80%;
       margin: 10%;
    }
+
+	.md-subheader-inner {
+		padding-bottom: 10px;
+	}
+
+	.md-list-item-text {
+		font-size: 0.8em;
+		h3 {
+			margin: 0
+		}
+		p {
+			margin: -18px 0 0 0;
+		}
+	}
 }
 
 md-list md-list-item {
    &.list-form-item {
-      padding-right: 27px;
+      padding-right: 62px;
       margin-left: -4px;
       border-left: 0 !important;
 
@@ -49,7 +62,6 @@ md-list md-list-item {
 }
 
 md-menu-content {
-
    overflow: hidden;
 
    md-menu-item {

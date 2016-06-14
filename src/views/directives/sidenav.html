@@ -2,16 +2,31 @@
    <img src="https://github.com/CvO-Theory/apt/blob/master/data/logo.png?raw=true" class="logo"/>
    <md-subheader class="md-no-sticky">Your Nets</md-subheader>
    <md-list-item ng-click="sn.goToNet(net)" ng-class="sn.isNet(net) ? 'active' : ''" ng-repeat="(id, net) in sn.nets">
-      <p>{{ net.name }}</p>
+		<div class="md-list-item-text" layout="column">
+      	<h3>{{ net.name }}</h3>
+			<p ng-if="net.type == 'pn'">petri net</p>
+			<p ng-if="net.type == 'lts'">transition system</p>
+		</div>
       <ng-md-icon class="md-secondary" ng-click="sn.deleteNet(net, $event)" icon="delete" style="fill: rgba(0, 0, 0, .87)" size="22"></ng-md-icon>
    </md-list-item>
    <md-list-item class="list-form-item">
-      <form ng-submit="sn.createNewNet(sn.newName, $event)">
+      <form ng-submit="sn.createNewNet(sn.newName, sn.newType, $event)" layout="row">
          <md-input-container>
             <label>Create New</label>
             <input ng-model="sn.newName">
          </md-input-container>
+			<md-input-container>
+				<label>Type</label>
+				<md-select ng-model="sn.newType">
+					<md-option value="PN">
+						PN
+					</md-option>
+					<md-option value="LTS">
+						LTS
+					</md-option>
+				</md-select>
+			</md-input-container>
+			<ng-md-icon class="md-secondary submit-form" ng-click="sn.createNewNet(sn.newName, sn.newType, $event)" icon="add" style="fill: rgba(0, 0, 0, .87)" size="22"></ng-md-icon>
       </form>
-      <ng-md-icon class="md-secondary submit-form" ng-click="sn.createNewNet(newName, $event)" icon="add" style="fill: rgba(0, 0, 0, .87)" size="22"></ng-md-icon>
-   </md-list-item>
+	</md-list-item>
 </md-list>

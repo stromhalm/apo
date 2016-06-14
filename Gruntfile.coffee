@@ -67,7 +67,7 @@ module.exports = (grunt) ->
 						modRewrite = require 'connect-modrewrite'
 						middlewares.unshift(modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png$ /index.html [L]']));
 						return middlewares;
-						
+
 					open: true
 					port: 0
 
@@ -217,6 +217,8 @@ module.exports = (grunt) ->
 				]
 				tasks: [
 					'copy:app'
+					'less'
+					'includeSource'
 					'copy:dev'
 					'karma'
 				]
@@ -231,8 +233,9 @@ module.exports = (grunt) ->
 					'copy:app'
 					'ngClassify:app'
 					'coffee:app'
-					'copy:dev'
+					'less'
 					'includeSource'
+					'copy:dev'
 					'karma'
 				]
 				options:
@@ -243,6 +246,7 @@ module.exports = (grunt) ->
 				tasks: [
 					'copy:app'
 					'less'
+					'includeSource'
 					'copy:dev'
 				]
 				options:
@@ -259,50 +263,6 @@ module.exports = (grunt) ->
 				options:
 					livereload: true
 
-	# ensure only tasks are executed for the changed file
-	# without this, the tasks for all files matching the original pattern are executed
-	grunt.event.on 'watch', (action, filepath, key) ->
-		file = filepath.substr(4) # trim "src/" from the beginning.  I don't like what I'm doing here, need a better way of handling paths.
-		dirname = path.dirname file
-		ext = path.extname file
-		basename = path.basename file, ext
-
-		grunt.config ['copy', 'app'],
-			cwd: 'src/'
-			src: file
-			dest: '.temp/'
-			expand: true
-
-		copyDevConfig = grunt.config ['copy', 'dev']
-		copyDevConfig.src = file
-
-		if key is 'coffee'
-			# delete associated temp file prior to performing remaining tasks
-			# without doing so, shimmer may fail
-			grunt.config ['clean', 'working'], [
-				path.join('.temp', dirname, "#{basename}.{coffee,js,js.map}")
-			]
-
-			copyDevConfig.src = [
-				path.join(dirname, "#{basename}.{coffee,js,js.map}")
-				'scripts/main.{coffee,js,js.map}'
-			]
-
-			coffeeConfig = grunt.config ['coffee', 'app', 'files']
-			coffeeConfig.src = file
-			coffeeLintConfig = grunt.config ['coffeelint', 'app', 'files']
-			coffeeLintConfig = filepath
-
-			grunt.config ['coffee', 'app', 'files'], coffeeConfig
-			grunt.config ['coffeelint', 'app', 'files'], coffeeLintConfig
-
-		if key is 'less'
-			copyDevConfig.src = [
-				path.join(dirname, "#{basename}.{less,css}")
-				path.join(dirname, 'styles.css')
-			]
-
-		grunt.config ['copy', 'dev'], copyDevConfig
 
 	# Compiles the app with non-optimized build settings
 	# Places the build artifacts in the dist directory

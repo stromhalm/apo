@@ -160,7 +160,7 @@ module.exports = (grunt) ->
 		less:
 			app:
 				files:
-					'.temp/styles/styles.css': '.temp/styles/styles.less'
+					'.temp/styles/style.css': '.temp/styles/**.less'
 
 		# Convert CoffeeScript classes to AngularJS modules
 		ngClassify:

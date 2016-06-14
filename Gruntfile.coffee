@@ -62,14 +62,12 @@ module.exports = (grunt) ->
 					hostname: 'localhost'
 					livereload: true
 					middleware: (connect, options, middlewares) ->
-						express = require 'express'
-						routes = require './routes'
-						app = express()
 
-						app.use express.static String(options.base)
-						routes app, options
-						middlewares.unshift app
-						middlewares
+						# enable Angular's HTML5 mode
+						modRewrite = require 'connect-modrewrite'
+						middlewares.unshift(modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png$ /index.html [L]']));
+						return middlewares;
+						
 					open: true
 					port: 0
 
@@ -97,7 +95,7 @@ module.exports = (grunt) ->
 					cwd: '<%= settings.tempDirectory %>'
 					src: [
 						'**/*.{gif,jpeg,jpg,png,svg,webp}'
-						'**/*.{css,js,html,map}'
+						'**/*.{css,js,html,map,config}'
 						]
 					dest: '<%= settings.distDirectory %>'
 					expand: true

@@ -1,6 +1,6 @@
 class Editor extends Controller
 
-	constructor: ($scope, $stateParams, $timeout, NetStorage, TransitionSystemFactory) ->
+	constructor: ($scope, $stateParams, $timeout, NetStorage) ->
 
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
 		$scope.name = net.name
@@ -9,22 +9,22 @@ class Editor extends Controller
 		force = d3.layout.force()
 		colors = d3.scale.category10()
 		drag_line = svg.select('svg .dragline')
-		allPathes = svg.append('svg:g').selectAll('path')
-		allCircles = svg.append('svg:g').selectAll('g')
+		edges = svg.append('svg:g').selectAll('path')
+		nodes = svg.append('svg:g').selectAll('g')
 
 		# mouse event vars
-		selected_node = null
-		selected_link = null
-		mousedown_link = null
-		mousedown_node = null
-		mouseup_node = null
+		selectedNode = null
+		selectedEdge = null
+		mouseDownEdge = null
+		mouseDownNode = null
+		mouseUpNode = null
 
 		resetMouseVars = ->
-			mousedown_node = null
-			mouseup_node = null
-			mousedown_link = null
-			return
+			mouseDownNode = null
+			mouseUpNode = null
+			mouseDownEdge = null
 
+		# Adjust SVG canvas on window resize
 		resize = ->
 			width = if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
 			height = window.innerHeight
@@ -33,231 +33,158 @@ class Editor extends Controller
 				width
 				height + 80
 			]).resume()
-			return
+		resize()
+		d3.select(window).on 'resize', resize
 
-		# update force layout (called automatically each iteration)
+		# update net positions (called each iteration)
 		tick = ->
 			# draw directed edges with proper padding from node centers
-			allPathes.attr 'd', (d) ->
-				deltaX = d.target.x - (d.source.x)
-				deltaY = d.target.y - (d.source.y)
-				dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-				normX = deltaX / dist
-				normY = deltaY / dist
-				sourcePadding = if d.left then 17 else 12
-				targetPadding = if d.right then 17 else 12
-				sourceX = d.source.x + sourcePadding * normX
-				sourceY = d.source.y + sourcePadding * normY
-				targetX = d.target.x - (targetPadding * normX)
-				targetY = d.target.y - (targetPadding * normY)
-				'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY
-			allCircles.attr 'transform', (d) ->
+			edges.attr 'd', (edge) ->
+				edge = new Edge(edge)
+				edge.getPath()
+			nodes.attr 'transform', (d) ->
 				'translate(' + d.x + ',' + d.y + ')'
-			return
 
-		# update graph (called when needed)
+		# update graph layout (called when needed)
 		restart = ->
-			# path (link) group
-			allPathes = allPathes.data(net.edges)
+			edges = edges.data(net.edges)
+
 			# update existing links
-			allPathes.classed('selected', (d) ->
-				d == selected_link
-			).style('marker-start', (d) ->
-				if d.left then 'url(#start-arrow)' else ''
-			).style 'marker-end', (d) ->
-				if d.right then 'url(#end-arrow)' else ''
+			edges.classed('selected', (edge) -> edge == selectedEdge)
+				.style('marker-start', (edge) -> if edge.left then 'url(#start-arrow)' else '')
+				.style('marker-end', (edge) -> if edge.right then 'url(#end-arrow)' else '')
+
 			# add new links
-			allPathes.enter().append('svg:path').attr('class', 'link').classed('selected', (d) ->
-				d == selected_link
-			).style('marker-start', (d) ->
-				if d.left then 'url(#start-arrow)' else ''
-			).style('marker-end', (d) ->
-				if d.right then 'url(#end-arrow)' else ''
-			).on 'mousedown', (d) ->
-				if d3.event.ctrlKey
-					return
-				# select link
-				mousedown_link = d
-				if mousedown_link == selected_link
-					selected_link = null
-				else
-					selected_link = mousedown_link
-				selected_node = null
-				restart()
-				return
+			edges.enter().append('svg:path').attr('class', 'link').classed('selected', (edge) -> edge == selectedEdge)
+				.style('marker-start', (edge) -> if edge.left then 'url(#start-arrow)' else '')
+				.style('marker-end', (edge) -> if edge.right then 'url(#end-arrow)' else '')
+				.on 'mousedown', (edge) ->
+					# select link
+					mouseDownEdge = edge
+					selectedEdge = if mouseDownEdge == selectedEdge then null else mouseDownEdge
+					selectedNode = null
+					restart()
 
 			# remove old links
-			allPathes.exit().remove()
-			# circle (node) group
-			# NB: the function arg is crucial here! nodes are known by id, not by index!
-			allCircles = allCircles.data(net.nodes, (d) ->
-				d.id
-			)
-			# update existing nodes (reflexive & selected visual states)
-			allCircles.selectAll('circle').style('fill', (d) ->
-				if d == selected_node then d3.rgb(colors(d.id)).brighter().toString() else colors(d.id)
-			).classed 'reflexive', (d) ->
-				d.reflexive
+			edges.exit().remove()
+
+			nodes = nodes.data(net.nodes, (node) -> node.id)
+
+			# update existing nodes
+			nodes.selectAll('.node')
+			.style('fill', (node) -> if node == selectedNode then d3.rgb(colors(node.id)).brighter().toString() else colors(node.id))
+			.classed('reflexive', (node) -> node.reflexive)
+
 			# add new nodes
-			g = allCircles.enter().append('svg:g')
-			g.append('svg:circle').attr('class', 'node').attr('r', 12).style('fill', (d) ->
-				if d == selected_node then d3.rgb(colors(d.id)).brighter().toString() else colors(d.id)
-			).style('stroke', (d) ->
-				d3.rgb(colors(d.id)).darker().toString()
-			).classed('reflexive', (d) ->
-				d.reflexive
-			).on('mouseover', (d) ->
-				if !mousedown_node or d == mousedown_node
-					return
-				# enlarge target node
-				d3.select(this).attr 'transform', 'scale(1.1)'
-				return
-			).on('mouseout', (d) ->
-				if !mousedown_node or d == mousedown_node
-					return
-				# unenlarge target node
-				d3.select(this).attr 'transform', ''
-				return
-			).on('mousedown', (d) ->
-				if d3.event.ctrlKey
-					return
+			newNodes = nodes.enter().append('svg:g')
+			newNodes.append('svg:circle').attr('class', 'node').attr('r', 12)
+			.style('fill', (node) -> if node == selectedNode then d3.rgb(colors(node.id)).brighter().toString() else colors(node.id))
+			.style('stroke', (node) -> d3.rgb(colors(node.id)).darker().toString())
+			.classed('reflexive', (node) -> node.reflexive)
+			.on 'mouseover', (node) ->
+				return if !mouseDownNode or node == mouseDownNode
+				d3.select(this).attr 'transform', 'scale(1.1)' # enlarge target node
+
+			.on 'mouseout', (node) ->
+				return if !mouseDownNode or node == mouseDownNode
+				d3.select(this).attr 'transform', '' # unenlarge target node
+
+			.on 'mousedown', (node) ->
 				# select node
-				mousedown_node = d
-				if mousedown_node == selected_node
-					selected_node = null
+				mouseDownNode = node
+				if mouseDownNode == selectedNode
+					selectedNode = null
 				else
-					selected_node = mousedown_node
-				selected_link = null
+					selectedNode = mouseDownNode
+				selectedEdge = null
+
 				# reposition drag line
-				drag_line.style('marker-end', 'url(#end-arrow)').classed('hidden', false).attr 'd', 'M' + mousedown_node.x + ',' + mousedown_node.y + 'L' + mousedown_node.x + ',' + mousedown_node.y
+				drag_line.style('marker-end', 'url(#end-arrow)').classed('hidden', false).attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + mouseDownNode.x + ',' + mouseDownNode.y)
 				restart()
-				return
-			).on 'mouseup', (d) ->
-				if !mousedown_node
-					return
-				# needed by FF
-				drag_line.classed('hidden', true).style 'marker-end', ''
+
+			.on 'mouseup', (node) ->
+				mouseUpNode = node
+				return if not mouseDownNode
+
+				drag_line.classed('hidden', true).style('marker-end', '') # needed by FF
+
 				# check for drag-to-self
-				mouseup_node = d
-				if mouseup_node == mousedown_node
+				if mouseUpNode == mouseDownNode
 					resetMouseVars()
 					return
+
 				# unenlarge target node
 				d3.select(this).attr 'transform', ''
+
 				# add link to graph (update if exists)
-				# NB: links are strictly source < target; arrows separately specified by booleans
-				source = undefined
-				target = undefined
-				direction = undefined
-				if mousedown_node.id < mouseup_node.id
-					source = mousedown_node
-					target = mouseup_node
+				if mouseDownNode.id < mouseUpNode.id
+					source = mouseDownNode
+					target = mouseUpNode
 					direction = 'right'
 				else
-					source = mouseup_node
-					target = mousedown_node
+					source = mouseUpNode
+					target = mouseDownNode
 					direction = 'left'
-				link = undefined
-				link = net.edges.filter((l) ->
-					l.source == source and l.target == target
-				)[0]
-				if link
-					link[direction] = true
+				edge = net.edges.filter((edge) -> edge.source == source and edge.target == target)[0]
+				if edge
+					edge[direction] = true
 				else
-					link =
-						source: source
-						target: target
-						left: false
-						right: false
-					link[direction] = true
-					net.edges.push link
+					edge = new Edge({source: source, target: target})
+					edge[direction] = true
+					net.addEdge(edge)
 					$scope.$apply() # Quick save net to storage
+
 				# select new link
-				selected_link = link
-				selected_node = null
+				selectedEdge = edge
+				selectedNode = null
 				restart()
-				return
+
 			# show node IDs
-			g.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'id').text (d) ->
-				d.id
-			# remove old nodes
-			allCircles.exit().remove()
-			# set the graph in motion
-			force.start()
-			return
+			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'id').text((node) -> node.id)
+
+			nodes.exit().remove() # remove old nodes
+			force.start() # set the graph in motion
 
 		mousedown = ->
-			# because :active only works in WebKit?
 			svg.classed 'active', true
-			if d3.event.ctrlKey or mousedown_node or mousedown_link
-				return
-			# insert new node at point
-			point = d3.mouse(this)
-			point = new Point(point[0], point[1])
+			return if d3.event.ctrlKey or mouseDownNode or mouseDownEdge
 
+			# insert new node at point
+			point = new Point(d3.mouse(this)[0], d3.mouse(this)[1])
 			if net.type is "pn"
 				net.addTransition(point)
 			else
 				net.addState(point)
 
-			$scope.$apply()
-			# Quick save net to storage
+			$scope.$apply() # Quick save net to storage
 			restart()
-			return
 
 		mousemove = ->
-			if !mousedown_node
-				return
+			return if not mouseDownNode
+
 			# update drag line
-			drag_line.attr 'd', 'M' + mousedown_node.x + ',' + mousedown_node.y + 'L' + d3.mouse(this)[0] + ',' + d3.mouse(this)[1]
+			drag_line.attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + d3.mouse(this)[0] + ',' + d3.mouse(this)[1])
 			restart()
-			return
 
 		mouseup = ->
-			if mousedown_node
-				# hide drag line
-				drag_line.classed('hidden', true).style 'marker-end', ''
-			# because :active only works in WebKit?
-			svg.classed 'active', false
-			# clear mouse event vars
+			drag_line.classed('hidden', true).style('marker-end', '') if mouseDownNode # hide drag line
+			svg.classed('active', false)
 			resetMouseVars()
-			return
 
-		spliceLinksForNode = (node) ->
-			toSplice = net.edges.filter((l) ->
-				l.source == node or l.target == node
-			)
-			toSplice.map (l) ->
-				net.edges.splice net.edges.indexOf(l), 1
-				return
-			return
-
-		$scope.undo = ->
-			net = net.undo()
-			restart()
-			return
-
-		$scope.redo = ->
-			net.redo()
-			return
-
-		resize()
-		d3.select(window).on 'resize', resize
 		# init D3 force layout
 		force = force.nodes(net.nodes).links(net.edges).size([
 			if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
 			window.innerHeight + 80
-		]).linkDistance(150).charge(-500).on('tick', tick)
+		])
+		.linkDistance(150)
+		.charge(-500)
+		.on('tick', tick)
+
 		# fix lost references to nodes
 		for edge in net.edges
-			edge.source = net.nodes.filter((node) ->
-				node.id == edge.source.id
-			)[0]
-			edge.target = net.nodes.filter((node) ->
-				node.id == edge.target.id
-			)[0]
+			edge.source = net.nodes.filter((node) -> node.id == edge.source.id)[0]
+			edge.target = net.nodes.filter((node) -> node.id == edge.target.id)[0]
 
-		# app starts here
+		# motion starts here
 		svg.on('mousedown', mousedown).on('mousemove', mousemove).on 'mouseup', mouseup
 		restart()
-		return

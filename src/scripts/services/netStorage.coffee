@@ -1,8 +1,8 @@
 class NetStorage extends Factory
-	constructor: ($localStorage, TransitionSystemFactory, PetriNetFactory) ->
+	constructor: ($localStorage) ->
 
 		storage = $localStorage.$default
-			nets: [ new TransitionSystemFactory
+			nets: [ new TransitionSystem
 				name: "Sample Net"
 				nodes: []
 				edges: []
@@ -10,9 +10,9 @@ class NetStorage extends Factory
 
 		getNetFromStorageObject = (storageObject) ->
 			switch storageObject.type
-				when "lts" then return new TransitionSystemFactory(storageObject)
-				when "pn" then return new PetriNetFactory(storageObject)
-				else return new TransitionSystemFactory(storageObject)
+				when "lts" then return new TransitionSystem(storageObject)
+				when "pn" then return new PetriNet(storageObject)
+				else return new TransitionSystem(storageObject)
 
 		getNetIdByName = (name) ->
 			return id for net, id in storage.nets when net.name is name
@@ -32,7 +32,7 @@ class NetStorage extends Factory
 				if (@getNetByName(name))
 					return false
 				storage.nets.push(
-					new TransitionSystemFactory(
+					new TransitionSystem(
 						name: name
 						nodes: []
 						edges: []
@@ -43,7 +43,7 @@ class NetStorage extends Factory
 				if (@getNetByName(name))
 					return false
 				storage.nets.push(
-					new PetriNetFactory(
+					new PetriNet(
 						name: name
 						nodes: []
 						edges: []

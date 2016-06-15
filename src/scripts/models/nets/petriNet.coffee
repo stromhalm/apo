@@ -10,8 +10,3 @@ class @PetriNet extends @Net
 	addPlace: (point) ->
 		place = new Place(point)
 		@addNode(place)
-
-
-class PetriNetFactory extends Factory
-	constructor: ->
-		return PetriNet

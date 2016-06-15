@@ -5,10 +5,11 @@
 
 class @Net
 	constructor: (netObject) ->
-		@name = netObject.name
-		@nodes = netObject.nodes
-		@edges = netObject.edges
+		{@name, @nodes, @edges} = netObject
 
 	addNode: (node) ->
 		node.setId(@nodes.length)
 		@nodes.push(node)
+
+	addEdge: (edge) ->
+		@edges.push(edge)

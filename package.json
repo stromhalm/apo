@@ -4,7 +4,7 @@
 	"description": "Application for online petri net design and analysis",
 	"author": {
 		"name": "Adrian Jagusch",
-		"email": "adrian.jagusch@noreply.github.com",
+		"email": "adrian.jagusch@uni-oldenburg.de",
 		"url": "https://adrian-jagusch.de"
 	},
 	"repository": {
@@ -18,16 +18,16 @@
 	"dependencies": {
 		"coffee-script": "^1.7.1",
 		"express": "^4.6.1",
-		"grunt": "0.4.x",
+		"grunt": "0.4.5",
 		"grunt-bower-task": "0.4.0",
-		"grunt-coffeelint": ">=0.0.16",
-		"grunt-contrib-clean": "1.0.x",
-		"grunt-contrib-coffee": "1.0.x",
-		"grunt-contrib-connect": "1.0.x",
-		"grunt-contrib-copy": "1.0.x",
-		"grunt-contrib-imagemin": "1.0.x",
+		"grunt-coffeelint": "0.0.13",
+		"grunt-contrib-clean": "0.6.0",
+		"grunt-contrib-coffee": "0.12.0",
+		"grunt-contrib-connect": "0.9.0",
+		"grunt-contrib-copy": "0.7.0",
+		"grunt-contrib-imagemin": "0.9.2",
 		"grunt-contrib-less": "1.3.x",
-		"grunt-contrib-watch": "1.0.x",
+		"grunt-contrib-watch": "0.6.1",
 		"grunt-karma": "~2.0.0",
 		"grunt-ng-classify": "^2.1.0",
 		"grunt-prompt": "^1.1.0",
@@ -35,7 +35,6 @@
 		"grunt-include-source": "1.0.x",
 		"grunt-hash": "0.5.x",
 		"grunt-cache-bust": "1.3.x",
-		"grunt-angular-templates": "1.0.x",
 		"grunt-contrib-uglify": "1.0.x",
 		"karma-coffee-preprocessor": "0.2.1",
 		"connect-modrewrite": "0.9.x",
@@ -49,5 +48,9 @@
 	},
 	"scripts": {
     "test": "grunt test"
+	},
+	"devDependencies": {
+	 "grunt-contrib-jshint": "~0.6.0",
+	 "grunt-contrib-nodeunit": "~0.2.0"
 	}
 }

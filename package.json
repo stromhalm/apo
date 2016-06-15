@@ -4,7 +4,7 @@
 	"description": "Application for online petri net design and analysis",
 	"author": {
 		"name": "Adrian Jagusch",
-		"email": "adrian.jagusch@uni-oldenburg.de",
+		"email": "adrian.jagusch@noreply.github.com",
 		"url": "https://adrian-jagusch.de"
 	},
 	"repository": {
@@ -49,9 +49,5 @@
 	},
 	"scripts": {
     "test": "grunt test"
-	},
-	"devDependencies": {
-	 "grunt-contrib-jshint": "~0.6.0",
-	 "grunt-contrib-nodeunit": "~0.2.0"
 	}
 }

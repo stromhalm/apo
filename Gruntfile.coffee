@@ -188,7 +188,7 @@ module.exports = (grunt) ->
 			app:
 				cwd: '.temp',
 				src: 'views/**/*.html',
-				dest: '.temp/scripts/app.templates.js'
+				dest: '.temp/scripts/templates.js'
 				options:
 					htmlmin:
 						collapseBooleanAttributes:      true

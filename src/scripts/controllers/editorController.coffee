@@ -171,8 +171,7 @@ class Editor extends Controller
 						right: false
 					link[direction] = true
 					net.edges.push link
-					$scope.$apply()
-					# Quick save net to storage
+					$scope.$apply() # Quick save net to storage
 				# select new link
 				selected_link = link
 				selected_node = null

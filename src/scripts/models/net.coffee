@@ -9,10 +9,6 @@ class @Net
 		@nodes = netObject.nodes
 		@edges = netObject.edges
 
-		@addNode = (point) ->
-			node =
-				id: @nodes.length
-				reflexive: false
-				x: point[0]
-				y: point[1]
-			@nodes.push(node)
+	addNode: (node) ->
+		node.setId(@nodes.length)
+		@nodes.push(node)

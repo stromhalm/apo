@@ -194,7 +194,13 @@ class Editor extends Controller
 				return
 			# insert new node at point
 			point = d3.mouse(this)
-			net.addNode point
+			point = new Point(point[0], point[1])
+
+			if net.type is "pn"
+				net.addTransition(point)
+			else
+				net.addState(point)
+
 			$scope.$apply()
 			# Quick save net to storage
 			restart()

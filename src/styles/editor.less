@@ -28,37 +28,46 @@
 			margin: -18px 0 0 0;
 		}
 	}
-}
 
-md-list md-list-item {
-   &.list-form-item {
-      padding-right: 62px;
-      margin-left: -4px;
-      border-left: 0 !important;
+	md-list md-list-item {
 
-      .md-secondary-container {
-         margin-top: -17px !important;
-      }
-   }
+		svg {
+			fill: rgba(0, 0, 0, 0.8);
+		}
 
-   &:hover {
-      border-left: 3px solid rgba(158, 158, 158, 0.5);
-   }
+	   &.list-form-item {
+	      padding-right: 44px;
+	      margin-left: -4px;
+	      border-left: 0 !important;
 
-   &.active, &:active {
-      background-color: rgba(63, 81, 181, 0.1);
-      border-left: 3px solid rgb(63, 81, 181);
+	      .md-secondary-container {
+	         margin-top: -17px !important;
+	      }
 
-      button {
-         color: rgb(63, 81, 181);
-      }
-   }
+			.net-type-input {
+				min-width: 70px;
+			}
+	   }
 
-   &.active, &:hover {
-      .md-no-style {
-         padding-left: 13px;
-      }
-   }
+	   &:hover {
+	      border-left: 3px solid rgba(158, 158, 158, 0.5);
+	   }
+
+	   &.active, &:active {
+	      background-color: rgba(63, 81, 181, 0.1);
+	      border-left: 3px solid rgb(63, 81, 181);
+
+	      button {
+	         color: rgb(63, 81, 181);
+	      }
+	   }
+
+	   &.active, &:hover {
+	      .md-no-style {
+	         padding-left: 13px;
+	      }
+	   }
+	}
 }
 
 md-menu-content {
@@ -72,6 +81,10 @@ md-menu-content {
    }
 }
 
+md-toolbar {
+	min-height: 0;
+}
+
 #main-canvas {
    position: absolute;
    top: 0;
@@ -79,8 +92,27 @@ md-menu-content {
    width: 100%;
 }
 
+.file-menubar {
+	background-color: rgba(158, 158, 158, 0.1) !important;
+	border-bottom: 1px solid rgba(78, 78, 78, 0.1);
+}
+
 .file-toolbar {
    background-color: rgba(158, 158, 158, 0.1) !important;
+	border-bottom: 1px solid rgba(78, 78, 78, 0.1);
+	padding-left: 15px;
+
+	.toolbar-button {
+		svg {
+			fill: rgba(0, 0, 0, 0.65);
+		}
+
+		&.active {
+			svg {
+				fill: rgb(63, 81, 181);
+			}
+		}
+	}
 }
 
 .editor-layout {

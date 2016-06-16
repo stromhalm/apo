@@ -6,3 +6,5 @@ class @Transition extends @Node
 		@shape = "rect"
 		@width = 35
 		@height = 35
+
+	getText: -> "t#{@id}"

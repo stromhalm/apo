@@ -3,7 +3,7 @@ class Editor extends Controller
 	constructor: ($timeout, $scope, $stateParams, NetStorage) ->
 
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
-		$scope.name = net.name
+		$scope.net = net
 
 		svg = d3.select('#main-canvas svg')
 		force = d3.layout.force()
@@ -147,14 +147,11 @@ class Editor extends Controller
 
 		mousedown = ->
 			svg.classed 'active', true
-			return if d3.event.ctrlKey or mouseDownNode or mouseDownEdge
+			return if mouseDownNode or mouseDownEdge
 
 			# insert new node at point
 			point = new Point(d3.mouse(this)[0], d3.mouse(this)[1])
-			if net.type is "pn"
-				net.addTransition(point)
-			else
-				net.addState(point)
+			net.toolAddNew(point)
 
 			$scope.$apply() # Quick save net to storage
 			restart()

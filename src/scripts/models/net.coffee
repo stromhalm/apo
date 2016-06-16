@@ -6,10 +6,14 @@
 class @Net
 	constructor: (netObject) ->
 		{@name, @nodes, @edges} = netObject
+		@tools = []
+
+	addTool: (tool) ->
+		@tools.push(tool)
+		@activeTool = @tools[0].name if not @activeTool
+
+	addEdge: (edge) -> @edges.push(edge)
 
 	addNode: (node) ->
 		node.setId(@nodes.length)
 		@nodes.push(node)
-
-	addEdge: (edge) ->
-		@edges.push(edge)

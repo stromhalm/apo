@@ -1,0 +1,11 @@
+<md-toolbar class="md-menu-toolbar" ng-if="net.tools.length > 0">
+	<div layout="row" class="file-toolbar">
+		<md-button
+			ng-repeat="tool in net.tools"
+			ng-attr-title="{{tool.name}}"
+			ng-class="tool.name == net.activeTool ? 'active md-icon-button toolbar-button' : 'md-icon-button toolbar-button'"
+			ng-click="net.activeTool = tool.name">
+			<ng-md-icon icon="{{tool.icon}}" size="24"></ng-md-icon>
+		</md-button>
+	</div>
+</md-toolbar>

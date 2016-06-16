@@ -1,6 +1,6 @@
 class Editor extends Controller
 
-	constructor: ($scope, $stateParams, $timeout, NetStorage) ->
+	constructor: ($timeout, $scope, $stateParams, NetStorage) ->
 
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
 		$scope.name = net.name
@@ -51,13 +51,13 @@ class Editor extends Controller
 
 			# update existing links
 			edges.classed('selected', (edge) -> edge == selectedEdge)
-				.style('marker-start', (edge) -> if edge.left then 'url(#start-arrow)' else '')
-				.style('marker-end', (edge) -> if edge.right then 'url(#end-arrow)' else '')
+				.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
+				.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
 
 			# add new links
 			edges.enter().append('svg:path').attr('class', 'link').classed('selected', (edge) -> edge == selectedEdge)
-				.style('marker-start', (edge) -> if edge.left then 'url(#start-arrow)' else '')
-				.style('marker-end', (edge) -> if edge.right then 'url(#end-arrow)' else '')
+				.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
+				.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
 				.on 'mousedown', (edge) ->
 					# select link
 					mouseDownEdge = edge
@@ -72,14 +72,13 @@ class Editor extends Controller
 
 			# update existing nodes
 			nodes.selectAll('.node')
-			.style('fill', (node) -> if node == selectedNode then d3.rgb(colors(node.id)).brighter().toString() else colors(node.id))
 			.classed('reflexive', (node) -> node.reflexive)
 
 			# add new nodes
 			newNodes = nodes.enter().append('svg:g')
 			newNodes.append('svg:circle').attr('class', 'node').attr('r', 12)
-			.style('fill', (node) -> if node == selectedNode then d3.rgb(colors(node.id)).brighter().toString() else colors(node.id))
-			.style('stroke', (node) -> d3.rgb(colors(node.id)).darker().toString())
+			.style('fill', (node) -> NetStorage.getNodeFromData(node).getColor(node == selectedNode))
+			.style('stroke', (node) -> NetStorage.getNodeFromData(node).getStrokeColor())
 			.classed('reflexive', (node) -> node.reflexive)
 			.on 'mouseover', (node) ->
 				return if !mouseDownNode or node == mouseDownNode
@@ -99,7 +98,7 @@ class Editor extends Controller
 				selectedEdge = null
 
 				# reposition drag line
-				drag_line.style('marker-end', 'url(#end-arrow)').classed('hidden', false).attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + mouseDownNode.x + ',' + mouseDownNode.y)
+				drag_line.style('marker-end', 'url(#endArrow)').classed('hidden', false).attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + mouseDownNode.x + ',' + mouseDownNode.y)
 				restart()
 
 			.on 'mouseup', (node) ->
@@ -140,7 +139,7 @@ class Editor extends Controller
 				restart()
 
 			# show node IDs
-			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'id').text((node) -> node.id)
+			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'id').text((node) -> NetStorage.getNodeFromData(node).getText())
 
 			nodes.exit().remove() # remove old nodes
 			force.start() # set the graph in motion

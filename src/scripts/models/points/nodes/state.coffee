@@ -1,4 +1,4 @@
 class @State extends @Node
-	constructor: (point) ->
+	constructor: (node) ->
 		@type = "state"
-		super(false, point)
+		super(node)

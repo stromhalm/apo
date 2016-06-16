@@ -8,12 +8,6 @@ class NetStorage extends Factory
 				edges: []
 			]
 
-		getNetFromStorageObject = (storageObject) ->
-			switch storageObject.type
-				when "lts" then return new TransitionSystem(storageObject)
-				when "pn" then return new PetriNet(storageObject)
-				else return new TransitionSystem(storageObject)
-
 		getNetIdByName = (name) ->
 			return id for net, id in storage.nets when net.name is name
 			return false
@@ -25,7 +19,7 @@ class NetStorage extends Factory
 			getNets: ->
 				allNets = []
 				for net in storage.nets
-					allNets.push(getNetFromStorageObject(net))
+					allNets.push(@getNetFromData(net))
 				allNets
 
 			addTransitionSystem: (name) ->
@@ -54,6 +48,18 @@ class NetStorage extends Factory
 				storage.nets.splice(getNetIdByName(name), 1)
 
 			getNetByName: (name) ->
-				return getNetFromStorageObject(net) for net in storage.nets when net.name is name
+				return @getNetFromData(net) for net in storage.nets when net.name is name
 				return false
+
+			getNetFromData: (netData) ->
+				switch netData.type
+					when "lts" then return new TransitionSystem(netData)
+					when "pn" then return new PetriNet(netData)
+					else return new TransitionSystem(netData)
+
+			getNodeFromData: (nodeData) ->
+				switch nodeData.type
+					when "transition" then return new Transition(nodeData)
+					when "place" then return new Place(nodeData)
+					when "state" then return new State(nodeData)
 		}

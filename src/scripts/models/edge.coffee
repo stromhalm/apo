@@ -6,15 +6,24 @@ class @Edge
 	setArrowRight: (boolean) -> @right = boolean
 
 	getPath: ->
-		deltaX = @target.x - (@source.x)
-		deltaY = @target.y - (@source.y)
+		deltaX = @target.x - @source.x
+		deltaY = @target.y - @source.y
 		dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
 		normX = deltaX / dist
 		normY = deltaY / dist
-		sourcePadding = if @left then 17 else 12
-		targetPadding = if @right then 17 else 12
+
+		if @source.shape is 'rect'
+			sourcePadding = if @left then @source.radius + 5 else @source.radius
+		else
+			sourcePadding = if @left then @source.radius + 5 else @source.radius
+
+		if @target.shape is 'rect'
+			targetPadding = if @right then @target.radius + 5 else @target.radius
+		else
+			targetPadding = if @right then @target.radius + 5 else @target.radius
+
 		sourceX = @source.x + sourcePadding * normX
 		sourceY = @source.y + sourcePadding * normY
-		targetX = @target.x - (targetPadding * normX)
-		targetY = @target.y - (targetPadding * normY)
+		targetX = @target.x - targetPadding * normX
+		targetY = @target.y - targetPadding * normY
 		'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY

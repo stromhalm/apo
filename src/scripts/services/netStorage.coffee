@@ -26,7 +26,8 @@ class NetStorage extends Factory
 				if (@getNetByName(name))
 					return false
 				storage.nets.push(
-					new TransitionSystem(
+
+					net = new TransitionSystem(
 						name: name
 						nodes: []
 						edges: []

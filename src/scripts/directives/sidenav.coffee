@@ -24,8 +24,8 @@ class SidenavController extends Controller
 		@createNewNet = (name, type, $event) ->
 			if (!name or !type)
 			else
-				if type="PN" then success = NetStorage.addPetriNet(name)
-				else if type="LTS" then success = NetStorage.addTransitionSystem(name)
+				if type is "PN" then success = NetStorage.addPetriNet(name)
+				else if type is "LTS" then success = NetStorage.addTransitionSystem(name)
 				if not success
 					alert = $mdDialog.alert
 						title: "Can Not Create Net"

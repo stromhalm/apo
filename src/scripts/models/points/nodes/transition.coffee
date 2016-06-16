@@ -3,3 +3,6 @@ class @Transition extends @Node
 		super(point)
 		@type = "transition"
 		@reflexive = false
+		@shape = "rect"
+		@width = 35
+		@height = 35

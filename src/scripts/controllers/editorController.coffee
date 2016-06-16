@@ -76,10 +76,11 @@ class Editor extends Controller
 
 			# add new nodes
 			newNodes = nodes.enter().append('svg:g')
-			newNodes.append('svg:circle').attr('class', 'node').attr('r', 12)
-			.style('fill', (node) -> NetStorage.getNodeFromData(node).getColor(node == selectedNode))
-			.style('stroke', (node) -> NetStorage.getNodeFromData(node).getStrokeColor())
-			.classed('reflexive', (node) -> node.reflexive)
+			newNodes.append((node) -> document.createElementNS("http://www.w3.org/2000/svg", NetStorage.getNodeFromData(node).shape))
+			.attr('class', (node) -> NetStorage.getNodeFromData(node).type + ' node')
+			.attr('r', (node) -> NetStorage.getNodeFromData(node).radius)
+			.attr('width', (node) -> NetStorage.getNodeFromData(node).width)
+			.attr('height', (node) -> NetStorage.getNodeFromData(node).height)
 			.on 'mouseover', (node) ->
 				return if !mouseDownNode or node == mouseDownNode
 				d3.select(this).attr 'transform', 'scale(1.1)' # enlarge target node

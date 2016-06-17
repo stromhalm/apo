@@ -1,16 +1,15 @@
 class NetStorage extends Factory
 	constructor: ($localStorage) ->
 
-		storage = $localStorage.$default
-			nets: [ new TransitionSystem
-				name: "Sample Net"
-				nodes: []
-				edges: []
-			]
+		getDefaultNet = ->
+			new TransitionSystem({name: "Sample Net"})
 
 		getNetIdByName = (name) ->
 			return id for net, id in storage.nets when net.name is name
 			return false
+
+		storage = $localStorage.$default
+			nets: [getDefaultNet()]
 
 		return {
 
@@ -22,28 +21,10 @@ class NetStorage extends Factory
 					allNets.push(@getNetFromData(net))
 				allNets
 
-			addTransitionSystem: (name) ->
-				if (@getNetByName(name))
+			addNet: (net) ->
+				if (@getNetByName(net.name))
 					return false
-				storage.nets.push(
-
-					net = new TransitionSystem(
-						name: name
-						nodes: []
-						edges: []
-					)
-				)
-
-			addPetriNet: (name) ->
-				if (@getNetByName(name))
-					return false
-				storage.nets.push(
-					new PetriNet(
-						name: name
-						nodes: []
-						edges: []
-					)
-				)
+				storage.nets.push(net)
 
 			deleteNet: (name) ->
 				storage.nets.splice(getNetIdByName(name), 1)

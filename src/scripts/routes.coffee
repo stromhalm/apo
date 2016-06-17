@@ -1,7 +1,7 @@
 class Routes extends Config
 
 	constructor: ($stateProvider, $urlRouterProvider, $locationProvider) ->
-		$locationProvider.html5Mode(false).hashPrefix("!")
+		$locationProvider.html5Mode(false)
 		$urlRouterProvider.otherwise("/0")
 		$stateProvider.state("editor",
 			url: "/:name"

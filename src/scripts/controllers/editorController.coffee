@@ -3,6 +3,10 @@ class Editor extends Controller
 	constructor: ($timeout, $scope, $stateParams, NetStorage) ->
 
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
+		
+		# Go to first net if not found
+		if not net
+			@goToNet(NetStorage.getNets()[0])
 		$scope.net = net
 
 		svg = d3.select('#main-canvas svg')
@@ -139,8 +143,8 @@ class Editor extends Controller
 				selectedNode = null
 				restart()
 
-			# show node IDs
-			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'id').text((node) -> NetStorage.getNodeFromData(node).getText())
+			# show node text
+			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'label').text((node) -> NetStorage.getNodeFromData(node).getText())
 
 			nodes.exit().remove() # remove old nodes
 			force.start() # set the graph in motion
@@ -149,10 +153,9 @@ class Editor extends Controller
 			svg.classed 'active', true
 			return if mouseDownNode or mouseDownEdge
 
-			# insert new node at point
+			# fire the current tool's mouseDown listener
 			point = new Point(d3.mouse(this)[0], d3.mouse(this)[1])
-			net.toolAddNew(point)
-
+			net.getActiveTool().mouseDownOnCanvas(net, point)
 			$scope.$apply() # Quick save net to storage
 			restart()
 

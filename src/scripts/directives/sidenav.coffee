@@ -1,16 +1,6 @@
 class SidenavController extends Controller
 	constructor: ($mdSidenav, $state, $stateParams, $mdDialog, NetStorage) ->
 
-		# load all nets, direct acess to storage for 2-way-binding
-		@nets = NetStorage.storageObjects
-
-		# Get selected net from storage
-		net = NetStorage.getNetByName(decodeURI($stateParams.name))
-
-		# Go to first net if not found
-		if not net
-			$state.go 'editor', name: NetStorage.getNets()[0].name
-
 		@toggleSideMenu = ->
 			$mdSidenav("left-menu").toggle()
 
@@ -24,8 +14,8 @@ class SidenavController extends Controller
 		@createNewNet = (name, type, $event) ->
 			if (!name or !type)
 			else
-				if type is "PN" then success = NetStorage.addPetriNet(name)
-				else if type is "LTS" then success = NetStorage.addTransitionSystem(name)
+				if type is "PN" then success = NetStorage.addNet(new PetriNet({name: name}))
+				else if type is "LTS" then success = NetStorage.addNet(new TransitionSystem({name: name}))
 				if not success
 					alert = $mdDialog.alert
 						title: "Can Not Create Net"
@@ -51,8 +41,14 @@ class SidenavController extends Controller
 				NetStorage.deleteNet(net.name)
 				# Go to first net if current net has been deleted
 				if net.name is decodeURI($stateParams.name)
-					$state.go 'editor', name: NetStorage.getNets()[0].name
+					@goToNet(NetStorage.getNets()[0])
 
+		# load all nets, direct acess to storage for 2-way-binding
+		@nets = NetStorage.storageObjects
+
+		# Get selected net from storage
+		net = NetStorage.getNetByName(decodeURI($stateParams.name))
+		
 
 class Sidenav extends Directive
 	constructor: ->

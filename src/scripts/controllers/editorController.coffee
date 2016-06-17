@@ -17,6 +17,7 @@ class Editor extends Controller
 		nodes = svg.append('svg:g').selectAll('g')
 
 		# mouse event vars
+		selectedNode = null
 		mouseDownEdge = null
 		mouseDownNode = null
 		mouseUpNode = null
@@ -62,6 +63,7 @@ class Editor extends Controller
 				.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
 				.on 'mousedown', (edge) ->
 					mouseDownEdge = edge
+					selectedNode = null
 					restart()
 
 			# remove old links
@@ -89,6 +91,13 @@ class Editor extends Controller
 				d3.select(this).attr 'transform', '' # unenlarge target node
 
 			.on 'mousedown', (node) ->
+				# select node
+				mouseDownNode = node
+				if mouseDownNode == selectedNode
+					selectedNode = null
+				else
+					selectedNode = mouseDownNode
+
 				# reposition drag line
 				drag_line.style('marker-end', 'url(#endArrow)').classed('hidden', false).attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + mouseDownNode.x + ',' + mouseDownNode.y)
 				restart()
@@ -126,6 +135,7 @@ class Editor extends Controller
 						net.addEdge(edge)
 						$scope.$apply() # Quick save net to storage
 
+				selectedNode = null
 				restart()
 
 			# show node text

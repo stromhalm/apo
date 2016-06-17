@@ -2,7 +2,7 @@ class @Transition extends @Node
 	constructor: (point) ->
 		super(point)
 		@type = "transition"
-		@reflexive = false
+		@connectableTypes = ["place"]
 		@shape = "rect"
 		@width = 35
 		@height = 35

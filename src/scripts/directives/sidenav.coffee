@@ -48,7 +48,7 @@ class SidenavController extends Controller
 
 		# Get selected net from storage
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
-		
+
 
 class Sidenav extends Directive
 	constructor: ->

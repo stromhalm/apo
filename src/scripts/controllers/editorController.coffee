@@ -1,12 +1,12 @@
 class Editor extends Controller
 
-	constructor: ($timeout, $scope, $stateParams, NetStorage) ->
+	constructor: ($timeout, $scope, $state, $stateParams, NetStorage) ->
 
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
-		
 		# Go to first net if not found
 		if not net
-			@goToNet(NetStorage.getNets()[0])
+			$state.go "editor", name: NetStorage.getNets()[0].name
+			return
 		$scope.net = net
 
 		svg = d3.select('#main-canvas svg')
@@ -18,7 +18,6 @@ class Editor extends Controller
 
 		# mouse event vars
 		selectedNode = null
-		selectedEdge = null
 		mouseDownEdge = null
 		mouseDownNode = null
 		mouseUpNode = null
@@ -54,18 +53,17 @@ class Editor extends Controller
 			edges = edges.data(net.edges)
 
 			# update existing links
-			edges.classed('selected', (edge) -> edge == selectedEdge)
-				.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
-				.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
+			edges
+			.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
+			.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
 
 			# add new links
-			edges.enter().append('svg:path').attr('class', 'link').classed('selected', (edge) -> edge == selectedEdge)
+			edges.enter().append('svg:path').attr('class', 'link')
 				.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
 				.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
 				.on 'mousedown', (edge) ->
 					# select link
 					mouseDownEdge = edge
-					selectedEdge = if mouseDownEdge == selectedEdge then null else mouseDownEdge
 					selectedNode = null
 					restart()
 
@@ -87,7 +85,7 @@ class Editor extends Controller
 			.attr('height', (node) -> NetStorage.getNodeFromData(node).height)
 			.on 'mouseover', (node) ->
 				return if !mouseDownNode or node == mouseDownNode
-				d3.select(this).attr 'transform', 'scale(1.1)' # enlarge target node
+				d3.select(this).attr('transform', 'scale(1.1)') # enlarge target node
 
 			.on 'mouseout', (node) ->
 				return if !mouseDownNode or node == mouseDownNode
@@ -100,7 +98,6 @@ class Editor extends Controller
 					selectedNode = null
 				else
 					selectedNode = mouseDownNode
-				selectedEdge = null
 
 				# reposition drag line
 				drag_line.style('marker-end', 'url(#endArrow)').classed('hidden', false).attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + mouseDownNode.x + ',' + mouseDownNode.y)
@@ -133,13 +130,13 @@ class Editor extends Controller
 				if edge
 					edge[direction] = true
 				else
-					edge = new Edge({source: source, target: target})
-					edge[direction] = true
-					net.addEdge(edge)
-					$scope.$apply() # Quick save net to storage
+					if net.isConnectable(source, target)
+						edge = new Edge({source: source, target: target})
+						edge[direction] = true
+						net.addEdge(edge)
+						$scope.$apply() # Quick save net to storage
 
 				# select new link
-				selectedEdge = edge
 				selectedNode = null
 				restart()
 

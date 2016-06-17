@@ -7,4 +7,4 @@ class @Node extends @Point
 
 	setId: (@id) ->
 
-	getText: () -> @id
+	getText: -> @id

@@ -1,5 +1,6 @@
 class @State extends @Node
-	constructor: (node) ->
+	constructor: (point) ->
 		@type = "state"
 		@reflexive = false
-		super(node)
+		@connectableTypes = ["state"]
+		super(point)

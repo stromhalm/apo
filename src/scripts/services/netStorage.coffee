@@ -33,6 +33,8 @@ class NetStorage extends Factory
 				return @getNetFromData(net) for net in storage.nets when net.name is name
 				return false
 
+			resetStorage: -> $localStorage.$reset()
+
 			getNetFromData: (netData) ->
 				switch netData.type
 					when "lts" then return new TransitionSystem(netData)

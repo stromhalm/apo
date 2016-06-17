@@ -10,7 +10,8 @@ class @Net
 	setTools: (@tools) ->
 		@activeTool = @tools[0].name if not @activeTool and @tools.length > 0
 
-	addEdge: (edge) -> @edges.push(edge)
+	addEdge: (edge) ->
+		@edges.push(edge)
 
 	addNode: (node) ->
 		node.setId(@nodes.length)
@@ -20,3 +21,6 @@ class @Net
 		for tool in @tools
 			if tool.name is @activeTool
 				return tool
+
+	isConnectable: (source, target) ->
+		source.connectableTypes.indexOf(target.type) isnt -1

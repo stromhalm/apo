@@ -1,5 +1,5 @@
 class NetStorage extends Factory
-	constructor: ($localStorage) ->
+	constructor: ($localStorage, $state) ->
 
 		getDefaultNet = ->
 			new TransitionSystem({name: "Sample Net"})
@@ -33,7 +33,10 @@ class NetStorage extends Factory
 				return @getNetFromData(net) for net in storage.nets when net.name is name
 				return false
 
-			resetStorage: -> $localStorage.$reset()
+			resetStorage: ->
+				storage.nets.splice(0, 1) while storage.nets.length > 0
+				storage.nets.push(getDefaultNet())
+				$state.go "editor", name: storage.nets[0].name
 
 			getNetFromData: (netData) ->
 				switch netData.type

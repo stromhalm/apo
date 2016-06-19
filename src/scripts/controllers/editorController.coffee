@@ -83,12 +83,12 @@ class Editor extends Controller
 			.attr('width', (node) -> NetStorage.getNodeFromData(node).width)
 			.attr('height', (node) -> NetStorage.getNodeFromData(node).height)
 			.on 'mouseover', (node) ->
-				return if !mouseDownNode or node == mouseDownNode
-				d3.select(this).attr('transform', 'scale(1.1)') # enlarge target node
+				return if !mouseDownNode or node == mouseDownNode or !net.isConnectable(mouseDownNode, node)
+				d3.select(this).style('fill', 'rgb(235, 235, 235)') # highlight target node
 
 			.on 'mouseout', (node) ->
 				return if !mouseDownNode or node == mouseDownNode
-				d3.select(this).attr 'transform', '' # unenlarge target node
+				d3.select(this).attr 'style', '' # unhighlight target node
 
 			.on 'mousedown', (node) ->
 				# select node
@@ -113,8 +113,7 @@ class Editor extends Controller
 					resetMouseVars()
 					return
 
-				# unenlarge target node
-				d3.select(this).attr 'transform', ''
+				d3.select(this).style('fill', '') # unhighlight target node
 
 				# add link to graph (update if exists)
 				if mouseDownNode.id < mouseUpNode.id

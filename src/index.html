@@ -18,8 +18,21 @@
 		   </md-sidenav>
 		   <md-content class="main-content">
 		      <div layout="column" layout-fill class="net-editor" ui-view></div>
+				<svg class="definitions">
+		         <defs>
+		            <marker id="endArrow" viewBox="0 -5 10 10" refX="6" markerWidth="3" markerHeight="3" orient="auto">
+		               <path d="M0,-5L10,0L0,5" fill="#000"></path>
+		            </marker>
+		         </defs>
+		         <defs>
+		            <marker id="startArrow" viewBox="0 -5 10 10" refX="4" markerWidth="3" markerHeight="3" orient="auto">
+		               <path d="M10,-5L0,0L10,5" fill="#000"></path>
+		            </marker>
+		         </defs>
+		      </svg>
 		   </md-content>
 		</div>
+
 
 		<!-- Load Angular.js Libraries -->
       <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>

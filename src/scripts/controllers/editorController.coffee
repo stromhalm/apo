@@ -12,8 +12,8 @@ class Editor extends Controller
 		svg = d3.select('#main-canvas svg')
 		force = d3.layout.force()
 		colors = d3.scale.category10()
-		drag_line = svg.select('svg .dragline')
-		edges = svg.append('svg:g').selectAll('path')
+		dragLine = svg.select('svg .dragline')
+		edges = svg.append('svg:g').selectAll('.edge')
 		nodes = svg.append('svg:g').selectAll('g')
 
 		# mouse event vars
@@ -57,17 +57,32 @@ class Editor extends Controller
 			.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
 			.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
 
-			# add new links
-			edges.enter().append('svg:path').attr('class', 'link')
+			# add new edges
+			newEdges = edges.enter()
+
+			# add edge labels
+			newEdges.append('svg:text').attr('dy', -8).attr('class', 'label')
+			.attr('id', (edge) -> 'edgeLabel-' + edge.id)
+			.append('textPath').attr('startOffset', '50%')
+			.attr('xlink:href', (edge) -> '#' + edge.id).text((edge) -> NetStorage.getEdgeFromData(edge).getText())
+
+			# add egde paths
+			newEdges.append('svg:path').attr('class', 'link')
 				.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
 				.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
+				.attr('id', (edge) -> edge.id)
+				.classed('edge', true)
 				.on 'mousedown', (edge) ->
 					mouseDownEdge = edge
 					selectedNode = null
+
+					# call the tools mouseDown listener
+					net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge)
+					$scope.$apply() # Quick save net to storage
 					restart()
 
 			# remove old links
-			edges.exit().remove()
+			edges.exit().each((edge) -> d3.selectAll('#edgeLabel-' + edge.id).remove()).remove()
 
 			nodes = nodes.data(net.nodes, (node) -> node.id)
 
@@ -98,41 +113,17 @@ class Editor extends Controller
 				else
 					selectedNode = mouseDownNode
 
-				# reposition drag line
-				drag_line.style('marker-end', 'url(#endArrow)').classed('hidden', false).attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + mouseDownNode.x + ',' + mouseDownNode.y)
+				# call the tools mouseDown listener
+				net.getActiveTool().mouseDownOnNode(net, mouseDownNode, dragLine)
+				$scope.$apply() # Quick save net to storage
 				restart()
 
 			.on 'mouseup', (node) ->
 				mouseUpNode = node
-				return if not mouseDownNode
-
-				drag_line.classed('hidden', true).style('marker-end', '') # needed by FF
-
-				# check for drag-to-self
-				if mouseUpNode == mouseDownNode
-					resetMouseVars()
-					return
 
 				d3.select(this).style('fill', '') # unhighlight target node
-
-				# add link to graph (update if exists)
-				if mouseDownNode.id < mouseUpNode.id
-					source = mouseDownNode
-					target = mouseUpNode
-					direction = 'right'
-				else
-					source = mouseUpNode
-					target = mouseDownNode
-					direction = 'left'
-				edge = net.edges.filter((edge) -> edge.source == source and edge.target == target)[0]
-				if edge
-					edge[direction] = true
-				else
-					if net.isConnectable(source, target)
-						edge = new Edge({source: source, target: target})
-						edge[direction] = true
-						net.addEdge(edge)
-						$scope.$apply() # Quick save net to storage
+				net.getActiveTool().mouseUpOnNode(net, mouseUpNode, mouseDownNode, dragLine)
+				$scope.$apply() # Quick save net to storage
 
 				selectedNode = null
 				restart()
@@ -157,11 +148,11 @@ class Editor extends Controller
 			return if not mouseDownNode
 
 			# update drag line
-			drag_line.attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + d3.mouse(this)[0] + ',' + d3.mouse(this)[1])
+			dragLine.attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + d3.mouse(this)[0] + ',' + d3.mouse(this)[1])
 			restart()
 
 		mouseup = ->
-			drag_line.classed('hidden', true).style('marker-end', '') if mouseDownNode # hide drag line
+			dragLine.classed('hidden', true).style('marker-end', '') if mouseDownNode # hide drag line
 			svg.classed('active', false)
 			resetMouseVars()
 

@@ -1,9 +1,13 @@
 class @Edge
 	constructor: (options) ->
-		{@source, @target, @left = false, @right = false} = options
+		{@source, @target, @id, @left = false, @right = false} = options
+
+	setId: (@id) ->
 
 	setArrowLeft: (boolean) -> @left = boolean
 	setArrowRight: (boolean) -> @right = boolean
+
+	getText: -> ''
 
 	getPath: ->
 		deltaX = @target.x - @source.x

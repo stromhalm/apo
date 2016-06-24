@@ -1,13 +1,15 @@
 class @Tool
 	constructor: (options) ->
-		@icon = 'help_outline'
-		@netName = ''
+		@icon = "help_outline"
+		@netName = ""
 
 	# ngStorage can't save circle references.
 	# Therefore we can't save the net reference
 
-	clickOnNode: (net, node) ->
+	mouseDownOnNode: (net, node) ->
 
-	clickOnEdge: (net, edge) ->
+	mouseUpOnNode: (net, mouseUpNode, mouseDownNode, dragLine) ->
 
-	mouseDownOnCanvas: (net, point) ->
+	mouseDownOnEdge: (net, edge) ->
+
+	mouseDownOnCanvas: (net, point, dragLine = null) ->

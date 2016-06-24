@@ -5,7 +5,9 @@ class @PetriNet extends @Net
 		@setTools([
 			new PlaceTool()
 			new TransitionTool()
+			new ArrowTool()
 			new TokenTool()
+			new DeleteTool()
 		])
 
 	addTransition: (point) ->

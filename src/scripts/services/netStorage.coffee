@@ -28,6 +28,7 @@ class NetStorage extends Factory
 
 			deleteNet: (name) ->
 				storage.nets.splice(getNetIdByName(name), 1)
+				storage.nets.push(getDefaultNet()) if storage.nets.length is 0
 
 			getNetByName: (name) ->
 				return @getNetFromData(net) for net in storage.nets when net.name is name
@@ -43,6 +44,9 @@ class NetStorage extends Factory
 					when "lts" then return new TransitionSystem(netData)
 					when "pn" then return new PetriNet(netData)
 					else return new TransitionSystem(netData)
+
+			getEdgeFromData: (edgeData) ->
+				return new Edge(edgeData)
 
 			getNodeFromData: (nodeData) ->
 				switch nodeData.type

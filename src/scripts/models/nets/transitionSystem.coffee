@@ -4,6 +4,8 @@ class @TransitionSystem extends @Net
 		super(netObject)
 		@setTools([
 			new StateTool()
+			new ArrowTool()
+			new DeleteTool()
 		])
 
 	addState: (point) ->

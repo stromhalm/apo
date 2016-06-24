@@ -1,6 +1,6 @@
 class @PnEdge extends @Edge
 	constructor: (options)->
-		{@weight} = options
+		{@weight = 1} = options
 		@type = "pnEdge"
 		super(options)
 

@@ -46,11 +46,16 @@ class NetStorage extends Factory
 					else return new TransitionSystem(netData)
 
 			getEdgeFromData: (edgeData) ->
-				return new Edge(edgeData)
+				switch edgeData.type
+					when "pnEdge" then return new PnEdge(edgeData)
+					when "tsEdge" then return new TsEdge(edgeData)
+					else return new Edge(edgeData)
 
 			getNodeFromData: (nodeData) ->
 				switch nodeData.type
 					when "transition" then return new Transition(nodeData)
 					when "place" then return new Place(nodeData)
 					when "state" then return new State(nodeData)
+					when "initState" then return new InitState(nodeData)
+					else return new Node(nodeData)
 		}

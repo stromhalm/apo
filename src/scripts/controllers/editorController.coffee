@@ -93,10 +93,10 @@ class Editor extends Controller
 			# add new nodes
 			newNodes = nodes.enter().append('svg:g')
 			newNodes.append((node) -> document.createElementNS("http://www.w3.org/2000/svg", NetStorage.getNodeFromData(node).shape))
-			.attr('class', (node) -> NetStorage.getNodeFromData(node).type + ' node')
-			.attr('r', (node) -> NetStorage.getNodeFromData(node).radius)
-			.attr('width', (node) -> NetStorage.getNodeFromData(node).width)
-			.attr('height', (node) -> NetStorage.getNodeFromData(node).height)
+			.attr('class', (node) -> node.type + ' node')
+			.attr('r', (node) -> node.radius)
+			.attr('width', (node) -> node.width)
+			.attr('height', (node) -> node.height)
 			.on 'mouseover', (node) ->
 				return if !mouseDownNode or node == mouseDownNode or !net.isConnectable(mouseDownNode, node)
 				d3.select(this).style('fill', 'rgb(235, 235, 235)') # highlight target node
@@ -161,7 +161,7 @@ class Editor extends Controller
 			if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
 			window.innerHeight + 80
 		])
-		.linkDistance(150)
+		.linkDistance((edge) -> edge.length)
 		.charge(-500)
 		.on('tick', tick)
 

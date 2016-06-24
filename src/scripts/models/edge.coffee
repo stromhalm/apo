@@ -1,6 +1,6 @@
 class @Edge
 	constructor: (options) ->
-		{@source, @target, @id, @left = false, @right = false} = options
+		{@source, @target, @id, @left = false, @right = false, @length = 150} = options
 
 	setId: (@id) ->
 

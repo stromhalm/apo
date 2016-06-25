@@ -50,10 +50,10 @@ class @Net
 
 	getMaxNodeId: ->
 		maxId = -1
-		maxId = node.id for node in @nodes when node.id > maxId
+		maxId = node.id for node in @nodes when (node.id > maxId)
 		maxId
 
 	getMaxEdgeId: ->
 		maxId = -1
-		maxId = edge.id for edge in @edges when edge.id > maxId
+		maxId = edge.id for edge in @edges when (edge.id > maxId)
 		maxId

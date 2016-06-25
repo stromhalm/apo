@@ -4,4 +4,4 @@ class @PnEdge extends @Edge
 		@type = "pnEdge"
 		super(options)
 
-	getText: -> @weight
+	getText: -> @weight if @weight >= 2

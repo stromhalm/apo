@@ -8,6 +8,7 @@ class @PetriNet extends @Net
 			new ArrowTool()
 			new TokenTool()
 			new DeleteTool()
+			new LabelPnTool()
 		])
 
 	addTransition: (point) ->

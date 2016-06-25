@@ -7,6 +7,7 @@ class @TransitionSystem extends @Net
 			new ArrowTool()
 			new DeleteTool()
 			new InitStateTool()
+			new LabelTsTool()
 		])
 
 	addState: (point) ->

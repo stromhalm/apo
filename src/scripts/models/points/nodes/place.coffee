@@ -4,4 +4,6 @@ class @Place extends @Node
 		@connectableTypes = ["transition"]
 		super(point)
 
-	getText: -> "s#{@id}"
+	getText: ->
+		return @label if @label
+		return "s#{@id}"

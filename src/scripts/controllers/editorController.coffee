@@ -1,6 +1,6 @@
 class Editor extends Controller
 
-	constructor: ($timeout, $scope, $state, $stateParams, NetStorage) ->
+	constructor: ($timeout, $scope, $state, $stateParams, NetStorage, $mdDialog) ->
 
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
 		# Go to first net if not found
@@ -57,17 +57,17 @@ class Editor extends Controller
 			.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
 			.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
 
-			# add new edges
-			newEdges = edges.enter()
+			# update existing edge labels
+			d3.selectAll('.edgeLabel .text').text((edge) -> NetStorage.getEdgeFromData(edge).getText())
 
 			# add edge labels
-			newEdges.append('svg:text').attr('dy', -8).attr('class', 'label')
+			edges.enter().append('svg:text').attr('dy', -8).attr('class', 'label edgeLabel')
 			.attr('id', (edge) -> 'edgeLabel-' + edge.id)
-			.append('textPath').attr('startOffset', '50%')
+			.append('textPath').attr('startOffset', '50%').attr('class', 'text')
 			.attr('xlink:href', (edge) -> '#' + edge.id).text((edge) -> NetStorage.getEdgeFromData(edge).getText())
 
 			# add egde paths
-			newEdges.append('svg:path').attr('class', 'link')
+			edges.enter().append('svg:path').attr('class', 'link')
 				.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
 				.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
 				.attr('id', (edge) -> edge.id)
@@ -77,7 +77,7 @@ class Editor extends Controller
 					selectedNode = null
 
 					# call the tools mouseDown listener
-					net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge)
+					net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge, $mdDialog, restart)
 					$scope.$apply() # Quick save net to storage
 					restart()
 
@@ -87,8 +87,10 @@ class Editor extends Controller
 			nodes = nodes.data(net.nodes, (node) -> node.id)
 
 			# update existing nodes
-			nodes.selectAll('.node')
-			.classed('reflexive', (node) -> node.reflexive)
+			nodes.selectAll('.node').classed('reflexive', (node) -> node.reflexive)
+
+			# update existing node labels
+			d3.selectAll('.nodeLabel').text((node) -> NetStorage.getNodeFromData(node).getText())
 
 			# add new nodes
 			newNodes = nodes.enter().append('svg:g')
@@ -114,7 +116,7 @@ class Editor extends Controller
 					selectedNode = mouseDownNode
 
 				# call the tools mouseDown listener
-				net.getActiveTool().mouseDownOnNode(net, mouseDownNode, dragLine)
+				net.getActiveTool().mouseDownOnNode(net, mouseDownNode, dragLine, $mdDialog, restart)
 				$scope.$apply() # Quick save net to storage
 				restart()
 
@@ -129,7 +131,7 @@ class Editor extends Controller
 				restart()
 
 			# show node text
-			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'label').text((node) -> NetStorage.getNodeFromData(node).getText())
+			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'label nodeLabel').text((node) -> NetStorage.getNodeFromData(node).getText())
 
 			nodes.exit().remove() # remove old nodes
 			force.start() # set the graph in motion

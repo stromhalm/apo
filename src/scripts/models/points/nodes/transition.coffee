@@ -7,4 +7,6 @@ class @Transition extends @Node
 		@width = 35
 		@height = 35
 
-	getText: -> "t#{@id}"
+	getText: ->
+		return @label if @label
+		return "t#{@id}"

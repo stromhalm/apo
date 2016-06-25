@@ -1,6 +1,6 @@
 class @Node extends @Point
 	constructor: (options) ->
-		{@reflexive, @id, @label = ""} = options
+		{@id, @label = ""} = options
 		super(options.x, options.y)
 		@shape = 'circle'
 		@radius = 18

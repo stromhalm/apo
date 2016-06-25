@@ -19,4 +19,4 @@ class @TokenTool extends @Tool
 					restart()
 
 		else if mouseDownNode.type is "transition"
-			console.log net.fireTransition(mouseDownNode)
+			net.fireTransition(mouseDownNode)

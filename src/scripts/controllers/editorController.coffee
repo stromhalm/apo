@@ -86,7 +86,7 @@ class Editor extends Controller
 			nodes = nodes.data(net.nodes, (node) -> node.id)
 
 			# update existing nodes
-			nodes.selectAll('.node').classed('reflexive', (node) -> node.reflexive)
+			nodes.selectAll('.node').classed('firable', (node) ->  net.isFirable(node))
 
 			# update existing node labels
 			d3.selectAll('.nodeLabel').text((node) -> NetStorage.getNodeFromData(node).getText())
@@ -99,6 +99,7 @@ class Editor extends Controller
 			.attr('r', (node) -> node.radius)
 			.attr('width', (node) -> node.width)
 			.attr('height', (node) -> node.height)
+			.classed('firable', (node) ->  net.isFirable(node))
 			.on 'mouseover', (node) ->
 				return if !mouseDownNode or node == mouseDownNode or !net.isConnectable(mouseDownNode, node)
 				d3.select(this).style('fill', 'rgb(235, 235, 235)') # highlight target node

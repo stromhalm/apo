@@ -20,6 +20,7 @@ class @PetriNet extends @Net
 		@addNode(place)
 
 	isFirable: (transition) ->
+		return false if transition.type isnt "transition"
 		preset = @getPreset(transition)
 		return false for place in preset when place.token < 1
 		return true

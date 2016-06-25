@@ -45,6 +45,24 @@ class @Net
 			if tool.name is @activeTool
 				return tool
 
+	getPreset: (node) ->
+		preset = []
+		for edge in @edges
+			if (edge.target.id is node.id and edge.right is true)
+				preset.push(edge.source)
+			else if (edge.source.id is node.id and edge.left is true)
+				preset.push(edge.target)
+		return preset
+
+	getPostset: (node) ->
+		preset = []
+		for edge in @edges
+			if (edge.target.id is node.id and edge.left is true)
+				preset.push(edge.source)
+			else if (edge.source.id is node.id and edge.right is true)
+				preset.push(edge.target)
+		return preset
+
 	isConnectable: (source, target) ->
 		source.connectableTypes.indexOf(target.type) isnt -1
 

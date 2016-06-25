@@ -7,6 +7,7 @@ class @LabelTsTool extends @Tool
 		prompt = $mdDialog.prompt
 			title: "Label for Edge"
 			textContent: "Enter a name for this edge"
+			placeholder: "name"
 			ok: "OK"
 			cancel: "Cancel"
 		$mdDialog.show(prompt)
@@ -18,6 +19,7 @@ class @LabelTsTool extends @Tool
 		prompt = $mdDialog.prompt
 			title: "Label for Node"
 			textContent: "Enter a name for this #{mouseDownNode.type}"
+			placeholder: "name"
 			ok: "OK"
 			cancel: "Cancel"
 		$mdDialog.show(prompt)

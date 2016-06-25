@@ -18,3 +18,17 @@ class @PetriNet extends @Net
 	addPlace: (point) ->
 		place = new Place(point)
 		@addNode(place)
+
+	isFirable: (transition) ->
+		preset = @getPreset(transition)
+		return false for place in preset when place.token < 1
+		return true
+
+
+	fireTransition: (transition) ->
+		return false if not @isFirable(transition)
+		preset = @getPreset(transition)
+		postset = @getPostset(transition)
+		place.token-- for place in preset
+		place.token++ for place in postset
+		return true

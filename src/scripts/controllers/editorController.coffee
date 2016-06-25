@@ -53,9 +53,8 @@ class Editor extends Controller
 			edges = edges.data(net.edges)
 
 			# update existing links
-			edges
-			.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
-			.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
+			edges.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
+			edges.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
 
 			# update existing edge labels
 			d3.selectAll('.edgeLabel .text').text((edge) -> NetStorage.getEdgeFromData(edge).getText())
@@ -91,6 +90,7 @@ class Editor extends Controller
 
 			# update existing node labels
 			d3.selectAll('.nodeLabel').text((node) -> NetStorage.getNodeFromData(node).getText())
+			d3.selectAll('.token').text((node) -> NetStorage.getNodeFromData(node).getTokenLabel())
 
 			# add new nodes
 			newNodes = nodes.enter().append('svg:g')
@@ -131,7 +131,8 @@ class Editor extends Controller
 				restart()
 
 			# show node text
-			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'label nodeLabel').text((node) -> NetStorage.getNodeFromData(node).getText())
+			newNodes.append('svg:text').attr('x', (node) -> node.labelXoffset).attr('y', (node) -> node.labelYoffset).attr('class', 'label nodeLabel').text((node) -> NetStorage.getNodeFromData(node).getText())
+			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'label token').text((node) -> NetStorage.getNodeFromData(node).getTokenLabel())
 
 			nodes.exit().remove() # remove old nodes
 			force.start() # set the graph in motion

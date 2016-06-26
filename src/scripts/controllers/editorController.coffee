@@ -53,8 +53,8 @@ class Editor extends Controller
 			edges = edges.data(net.edges)
 
 			# update existing links
-			edges.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
-			edges.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
+			edges.style('marker-start', (edge) -> if edge.left > 0 then 'url(#startArrow)' else '')
+			edges.style('marker-end', (edge) -> if edge.right > 0 then 'url(#endArrow)' else '')
 
 			# update existing edge labels
 			d3.selectAll('.edgeLabel .text').text((edge) -> NetStorage.getEdgeFromData(edge).getText())
@@ -67,8 +67,8 @@ class Editor extends Controller
 
 			# add egde paths
 			edges.enter().append('svg:path').attr('class', 'link')
-				.style('marker-start', (edge) -> if edge.left then 'url(#startArrow)' else '')
-				.style('marker-end', (edge) -> if edge.right then 'url(#endArrow)' else '')
+				.style('marker-start', (edge) -> if edge.left > 0 then 'url(#startArrow)' else '')
+				.style('marker-end', (edge) -> if edge.right > 0 then 'url(#endArrow)' else '')
 				.attr('id', (edge) -> edge.id)
 				.classed('edge', true)
 				.on 'mousedown', (edge) ->
@@ -76,7 +76,7 @@ class Editor extends Controller
 					selectedNode = null
 
 					# call the tools mouseDown listener
-					net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge, $mdDialog, restart)
+					net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge, $mdDialog, restart, NetStorage)
 					$scope.$apply() # Quick save net to storage
 					restart()
 

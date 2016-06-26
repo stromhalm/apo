@@ -1,12 +1,8 @@
 class @Edge
 	constructor: (options) ->
-		{@source, @target, @id, @left = false, @right = false, @length = 150} = options
+		{@source, @target, @id, @left = 0, @right = 0, @length = 150} = options
 
 	setId: (@id) ->
-
-	setArrowLeft: (boolean) -> @left = boolean
-	setArrowRight: (boolean) -> @right = boolean
-
 	getText: -> ''
 
 	getPath: ->
@@ -15,16 +11,8 @@ class @Edge
 		dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
 		normX = deltaX / dist
 		normY = deltaY / dist
-
-		if @source.shape is 'rect'
-			sourcePadding = if @left then @source.radius + 5 else @source.radius
-		else
-			sourcePadding = if @left then @source.radius + 5 else @source.radius
-
-		if @target.shape is 'rect'
-			targetPadding = if @right then @target.radius + 5 else @target.radius
-		else
-			targetPadding = if @right then @target.radius + 5 else @target.radius
+		sourcePadding = if @left >= 1 then @source.radius + 5 else @source.radius
+		targetPadding = if @right >= 1 then @target.radius + 5 else @target.radius
 
 		sourceX = @source.x + sourcePadding * normX
 		sourceY = @source.y + sourcePadding * normY

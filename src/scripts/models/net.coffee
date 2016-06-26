@@ -48,18 +48,18 @@ class @Net
 	getPreset: (node) ->
 		preset = []
 		for edge in @edges
-			if (edge.target.id is node.id and edge.right is true)
+			if (edge.target.id is node.id and edge.right >= 1)
 				preset.push(edge.source)
-			else if (edge.source.id is node.id and edge.left is true)
+			else if (edge.source.id is node.id and edge.left >= 1)
 				preset.push(edge.target)
 		return preset
 
 	getPostset: (node) ->
 		preset = []
 		for edge in @edges
-			if (edge.target.id is node.id and edge.left is true)
+			if (edge.target.id is node.id and edge.left >= 1)
 				preset.push(edge.source)
-			else if (edge.source.id is node.id and edge.right is true)
+			else if (edge.source.id is node.id and edge.right >= 1)
 				preset.push(edge.target)
 		return preset
 

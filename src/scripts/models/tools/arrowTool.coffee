@@ -27,11 +27,12 @@ class @ArrowTool extends @Tool
 			direction = 'left'
 		edge = net.edges.filter((edge) -> edge.source == source and edge.target == target)[0]
 		if edge
-			edge[direction] = true
+			edge[direction] = 1
 		else
 			if net.isConnectable(source, target)
 				if net.type is "pn"
 					edge = new PnEdge({source: source, target: target})
 				else edge = new TsEdge({source: source, target: target})
-				edge[direction] = true
+				edge[direction] = 1
 				net.addEdge(edge)
+				

@@ -9,5 +9,5 @@ class @PnEdge extends @Edge
 		else if @left >= 2
 			return @left
 		else if @right >= 2
-			return @left
+			return @right
 		return ""

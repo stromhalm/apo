@@ -22,7 +22,7 @@ class @PetriNet extends @Net
 	isFirable: (transition) ->
 		return false if transition.type isnt "transition"
 		preset = @getPreset(transition)
-		return false for place in preset when place.token < 1
+		return false for place in preset when place.token < @getEdgeWeight(place, transition)
 		return true
 
 	getEdgeWeight: (source, target) ->

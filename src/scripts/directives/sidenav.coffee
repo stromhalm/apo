@@ -41,7 +41,7 @@ class SidenavController extends Controller
 				NetStorage.deleteNet(net.name)
 				# Go to first net if current net has been deleted
 				if net.name is decodeURI($stateParams.name)
-					@goToNet(NetStorage.getNets()[0])
+					$state.go "editor", name: NetStorage.getNets()[0].name
 
 		# load all nets, direct acess to storage for 2-way-binding
 		@nets = NetStorage.storageObjects

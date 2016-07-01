@@ -22,9 +22,15 @@ class NetStorage extends Factory
 				allNets
 
 			addNet: (net) ->
-				if (@getNetByName(net.name))
+				if (net.name is "" or net.name is undefined or @getNetByName(net.name))
 					return false
 				storage.nets.push(net)
+
+			renameNet: (oldName, newName) ->
+				if (newName is "" or newName is undefined or @getNetByName(newName))
+					return false
+				oldNet.name = newName for oldNet in storage.nets when oldNet.name is oldName
+				return true
 
 			deleteNet: (name) ->
 				storage.nets.splice(getNetIdByName(name), 1)

@@ -5,7 +5,7 @@ class @LabelTsTool extends @Tool
 
 	mouseDownOnEdge: (net, mouseDownEdge, $mdDialog, restart, NetStorage) ->
 		return if mouseDownEdge.type is "tsInitEdge"
-		
+
 		getPrompt = (source, target) ->
 			sourceObj = NetStorage.getNodeFromData(source)
 			targetObj = NetStorage.getNodeFromData(target)

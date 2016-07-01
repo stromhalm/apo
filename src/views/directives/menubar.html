@@ -12,10 +12,10 @@
                      <md-button ng-click="$mdOpenMenu()">New</md-button>
                      <md-menu-content>
                         <md-menu-item>
-                           <md-button ng-click="ctrl.sampleAction('New Document', $event)">Petri Net</md-button>
+                           <md-button ng-click="mb.createPN($event)">Petri Net</md-button>
                         </md-menu-item>
                         <md-menu-item>
-                           <md-button ng-click="ctrl.sampleAction('New Spreadsheet', $event)">Transition System</md-button>
+                           <md-button ng-click="mb.createTS($event)">Transition System</md-button>
                         </md-menu-item>
                      </md-menu-content>
                   </md-menu>
@@ -23,34 +23,20 @@
                <md-menu-item class="md-indent">
                   <ng-md-icon icon="cloud_upload" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
                   <md-button ng-click="ctrl.sampleAction('Open', $event)">
-                     Upload
+                     Upload APT
                   </md-button>
                </md-menu-item>
-               <md-menu-item class="md-indent">
-                  <ng-md-icon icon="insert_drive_file" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-menu>
-                     <md-button ng-click="$mdOpenMenu()">Save as...</md-button>
-                     <md-menu-content>
-                        <md-menu-item class="md-indent">
-                           <ng-md-icon icon="merge_type" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                           <md-button ng-click="ctrl.sampleAction('New Document', $event)">OPN-File</md-button>
-                        </md-menu-item>
-                        <md-menu-item class="md-indent">
-                           <ng-md-icon icon="insert_drive_file" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                           <md-button ng-click="ctrl.sampleAction('New Spreadsheet', $event)">APT-File</md-button>
-                        </md-menu-item>
-                        <md-menu-item class="md-indent">
-                           <ng-md-icon icon="insert_photo" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                           <md-button ng-click="ctrl.sampleAction('New Spreadsheet', $event)">PNG-File</md-button>
-                        </md-menu-item>
-                     </md-menu-content>
-                  </md-menu>
+					<md-menu-item class="md-indent">
+                  <ng-md-icon icon="cloud_download" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
+                  <md-button ng-click="ctrl.sampleAction('Open', $event)">
+                     Download APT
+                  </md-button>
                </md-menu-item>
                <md-menu-divider></md-menu-divider>
                <md-menu-item class="md-indent">
                   <ng-md-icon icon="text_fields" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-button ng-click="ctrl.sampleAction('Rename', $event)">
-                     Rename
+                  <md-button ng-click="mb.renameNet(net.name, $event)">
+                     Rename Net
                   </md-button>
                </md-menu-item>
                <md-menu-item class="md-indent">
@@ -63,7 +49,7 @@
          </md-menu>
          <md-menu>
             <button ng-click="$mdOpenMenu()">
-               Edit
+               Tools
             </button>
             <md-menu-content>
                <md-menu-item class="md-indent">
@@ -72,38 +58,7 @@
                      Undo
                   </md-button>
                </md-menu-item>
-               <md-menu-item class="md-indent">
-                  <ng-md-icon icon="redo" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-button ng-click="redo();">
-                     Redo
-                  </md-button>
-               </md-menu-item>
-               <md-menu-divider></md-menu-divider>
-               <md-menu-item class="md-indent">
-                  <ng-md-icon icon="content_cut" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-button ng-click="ctrl.sampleAction('cut', $event)">
-                     Cut
-                  </md-button>
-               </md-menu-item>
-               <md-menu-item class="md-indent">
-                  <ng-md-icon icon="content_copy" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-button ng-click="ctrl.sampleAction('copy', $event)">
-                     Copy
-                  </md-button>
-               </md-menu-item>
-               <md-menu-item class="md-indent">
-                  <ng-md-icon icon="content_paste" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-button ng-click="ctrl.sampleAction('paste', $event)">
-                     Paste
-                  </md-button>
-               </md-menu-item>
-               <md-menu-divider></md-menu-divider>
-               <md-menu-item class="md-indent">
-                  <ng-md-icon icon="search" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-button ng-click="ctrl.sampleAction('Find and replace', $event)">
-                     Find and replace...
-                  </md-button>
-               </md-menu-item>
+
             </md-menu-content>
          </md-menu>
          <md-menu>

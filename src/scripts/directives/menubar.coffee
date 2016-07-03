@@ -99,11 +99,21 @@ class AptImportController extends Controller
 			@errorMsg = ""
 			net = converterService.getNetFromApt(@aptCode)
 			if not net
-				@errorMsg = "Couldn't import the net beacause of syntax errors in the apt code"
+				$mdDialog.show(
+					$mdDialog.alert
+						title: "Syntax Error"
+						textContent: "Couldn't import the net beacause of syntax errors in the apt code"
+						ok: "OK"
+				)
 			else
 				success = NetStorage.addNet(net)
 				if not success
-					@errorMsg = "a net with this name already exists!"
+					$mdDialog.show(
+						$mdDialog.alert
+							title: "Name exists"
+							textContent: "A net with the name '#{net.name}' already exists"
+							ok: "OK"
+					)
 				else
 					@closeDialog()
 

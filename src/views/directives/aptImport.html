@@ -15,6 +15,9 @@
 					<label>Insert Code</label>
 					<textarea class="code-editor" ng-model="ai.aptCode" style="min-height: 300px" md-select-on-focus></textarea>
 				</md-input-container>
+				<div class="errorMsg" ng-if="ai.errorMsg">
+					{{ ai.errorMsg }}
+				</div>
 			</div>
 		</md-dialog-content>
 		<md-dialog-actions layout="row">

@@ -119,40 +119,44 @@ class Converter extends Service
 			return code
 
 		@getNetFromApt = (aptCode) ->
-			name = @getAptBlock("name", aptCode).split("\"")[1]
-			if @isPartOfString("LTS", @getAptBlock("type", aptCode))
-				net = new TransitionSystem({name: name})
+			try
+				name = @getAptBlock("name", aptCode).split("\"")[1]
+				if @isPartOfString("LTS", @getAptBlock("type", aptCode))
+					net = new TransitionSystem({name: name})
 
-				# add states
-				states = @getAptBlockRows("states", aptCode)
-				for stateLabel in states
-					if @isPartOfString("[initial]", stateLabel)
-						initial = true
-						stateLabel = stateLabel.replace("[initial]", "")
-					else
-						initial = false
-					state = new State({label: stateLabel})
-					net.addState(state)
-					net.setInitState(net.getNodeByText(stateLabel)) if initial
+					# add states
+					states = @getAptBlockRows("states", aptCode)
+					for stateLabel in states
+						if @isPartOfString("[initial]", stateLabel)
+							initial = true
+							stateLabel = stateLabel.replace("[initial]", "")
+						else
+							initial = false
+						state = new State({label: stateLabel})
+						net.addState(state)
+						net.setInitState(net.getNodeByText(stateLabel)) if initial
 
-				# add edges
-				edges = @getAptBlockRows("arcs", aptCode)
-				for edge in edges
-					source = edge.split(" ")[0]
-					label = edge.split(" ")[1]
-					target = edge.split(" ")[2]
-					edge = new TsEdge
-						source: net.getNodeByText(source)
-						right: 1
-						labelRight: label
-						target: net.getNodeByText(target)
-					net.addEdge(edge)
+					# add edges
+					edges = @getAptBlockRows("arcs", aptCode)
+					for edge in edges
+						source = edge.split(" ")[0]
+						label = edge.split(" ")[1]
+						target = edge.split(" ")[2]
+						edge = new TsEdge
+							source: net.getNodeByText(source)
+							right: 1
+							labelRight: label
+							target: net.getNodeByText(target)
+						net.addEdge(edge)
 
 
-			else if @isPartOfString("PN", @getAptBlock("type", aptCode))
-				net = new PetriNet({name: name})
+				else if @isPartOfString("PN", @getAptBlock("type", aptCode))
+					net = new PetriNet({name: name})
 
-			console.log net
+				console.log net
+
+			catch error
+				return false
 			return net
 
 		# checks if the searchFor string is part of the searchIn string

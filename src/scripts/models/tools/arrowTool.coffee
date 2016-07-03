@@ -16,22 +16,17 @@ class @ArrowTool extends @Tool
 			resetMouseVars()
 			return
 
-		# add link to graph (update if exists)
-		if mouseDownNode.id < mouseUpNode.id
-			source = mouseDownNode
-			target = mouseUpNode
-			direction = 'right'
+		existingEdge = edge for edge in net.edges when edge.source is mouseDownNode and edge.target is mouseUpNode
+		if existingEdge
+			existingEdge.right = 1
 		else
-			source = mouseUpNode
-			target = mouseDownNode
-			direction = 'left'
-		edge = net.edges.filter((edge) -> edge.source == source and edge.target == target)[0]
-		if edge
-			edge[direction] = 1
+			existingEdge = edge for edge in net.edges when edge.source is mouseUpNode and edge.target is mouseDownNode
+		if existingEdge
+			existingEdge.left = 1
 		else
-			if net.isConnectable(source, target)
+			if net.isConnectable(mouseDownNode, mouseUpNode)
 				if net.type is "pn"
-					edge = new PnEdge({source: source, target: target})
-				else edge = new TsEdge({source: source, target: target})
-				edge[direction] = 1
+					edge = new PnEdge({source: mouseDownNode, target: mouseUpNode, right: 1})
+				else
+					edge = new TsEdge({source: mouseDownNode, target: mouseUpNode, right: 1})
 				net.addEdge(edge)

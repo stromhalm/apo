@@ -6,9 +6,11 @@ class @TsEdge extends @Edge
 
 	getText: ->
 		if @left >= 1 and @right >= 1
-			if @labelLeft is ""
+			if @labelLeft is "" and @labelRight is ""
+				return
+			else if @labelLeft is ""
 				return "#{@labelRight} →"
-			if @labelRight is ""
+			else if @labelRight is ""
 				return "← #{@labelLeft}"
 			return "← #{@labelLeft} | #{@labelRight} →"
 		else if @left >= 1

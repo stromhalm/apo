@@ -53,7 +53,7 @@ class MenubarController extends Controller
 			dialog = $mdDialog.prompt
 				templateUrl: "/views/directives/aptExport.html"
 				controller: AptExportController
-				controllerAs: "ce"
+				controllerAs: "ae"
 				clickOutsideToClose: true
 				fullscreen: true
 				targetEvent: $event # To animate the dialog to/from the click
@@ -61,11 +61,24 @@ class MenubarController extends Controller
 					net: net
 			$mdDialog.show(dialog)
 
+		@importAPT = ($event) ->
+			dialog = $mdDialog.prompt
+				templateUrl: "/views/directives/aptImport.html"
+				controller: AptImportController
+				controllerAs: "ai"
+				clickOutsideToClose: true
+				fullscreen: true
+				targetEvent: $event # To animate the dialog to/from the click
+			$mdDialog.show(dialog)
+
 
 class AptExportController extends Controller
 	constructor: ($mdDialog, converterService) ->
-		@aptCode = converterService.netToApt(@net)
+
+		@aptCode = converterService.getAptFromNet(@net)
+
 		@closeDialog = -> $mdDialog.hide()
+
 		@download = ->
 			element = document.createElement('a')
 			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(@aptCode))
@@ -75,6 +88,24 @@ class AptExportController extends Controller
 			document.body.appendChild(element)
 			element.click()
 			document.body.removeChild(element)
+
+
+class AptImportController extends Controller
+	constructor: ($mdDialog, converterService, NetStorage) ->
+
+		@closeDialog = -> $mdDialog.hide()
+
+		@import = ->
+			@errorMsg = ""
+			net = converterService.getNetFromApt(@aptCode)
+			if not net
+				@errorMsg = "Couldn't import the net beacause of syntax errors in the apt code"
+			else
+				success = NetStorage.addNet(net)
+				if not success
+					@errorMsg = "a net with this name already exists!"
+				else
+					@closeDialog()
 
 
 class Menubar extends Directive

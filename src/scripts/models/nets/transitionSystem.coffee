@@ -22,7 +22,7 @@ class @TransitionSystem extends @Net
 
 	setInitState: (state) ->
 		@deleteNode(node) for node in @nodes when node.type is "initState"
-		initState = new InitState(new Point(state.x, state.y))
+		initState = new InitState()
 		@addNode(initState)
-		arrow = new TsInitEdge({source: initState, target: state, right: true})
+		arrow = new TsInitEdge({source: initState, target: state, right: 1})
 		@addEdge(arrow)

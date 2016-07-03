@@ -1,2 +1,3 @@
 class @Point
-	constructor: (@x, @y) ->
+	constructor: (options) ->
+		{@x = 0, @y = 0} = options

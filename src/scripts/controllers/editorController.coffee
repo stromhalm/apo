@@ -143,7 +143,7 @@ class Editor extends Controller
 			return if mouseDownNode or mouseDownEdge
 
 			# fire the current tool's mouseDown listener
-			point = new Point(d3.mouse(this)[0], d3.mouse(this)[1])
+			point = new Point({x: d3.mouse(this)[0], y: d3.mouse(this)[1]})
 			net.getActiveTool().mouseDownOnCanvas(net, point)
 			$scope.$apply() # Quick save net to storage
 			restart()

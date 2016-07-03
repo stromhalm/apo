@@ -21,7 +21,7 @@ class Converter extends Service
 				when "initState" then return new InitState(nodeData)
 				else return new Node(nodeData)
 
-		@netToApt = (net) ->
+		@getAptFromNet = (net) ->
 			code = ""
 			rows = []
 			rows.push ".name \"#{net.name}\""
@@ -59,9 +59,9 @@ class Converter extends Service
 					if edge.type is "tsEdge"
 						source = @getNodeFromData(edge.source)
 						target = @getNodeFromData(edge.target)
-						if edge.left >= 1
+						if edge.left >= 1 and edge.labelLeft
 							rows.push "" + target.getText() + " " + edge.labelLeft + " " + source.getText()
-						if edge.right >= 1
+						if edge.right >= 1 and edge.labelRight
 							rows.push "" + source.getText() + " " + edge.labelRight + " " + target.getText()
 
 			# convert petri nets
@@ -114,7 +114,57 @@ class Converter extends Service
 				row += "}"
 				rows.push row
 
-
 			# return code as String
-			code += row + "\r" for row in rows
+			code += row + "\n" for row in rows
 			return code
+
+		@getNetFromApt = (aptCode) ->
+			name = @getAptBlock("name", aptCode).split("\"")[1]
+			if @isPartOfString("LTS", @getAptBlock("type", aptCode))
+				net = new TransitionSystem({name: name})
+
+				# add states
+				states = @getAptBlockRows("states", aptCode)
+				for stateLabel in states
+					if @isPartOfString("[initial]", stateLabel)
+						initial = true
+						stateLabel = stateLabel.replace("[initial]", "")
+					else
+						initial = false
+					state = new State({label: stateLabel})
+					net.addState(state)
+					net.setInitState(net.getNodeByText(stateLabel)) if initial
+
+				# add edges
+				edges = @getAptBlockRows("arcs", aptCode)
+				for edge in edges
+					source = edge.split(" ")[0]
+					label = edge.split(" ")[1]
+					target = edge.split(" ")[2]
+					edge = new TsEdge
+						source: net.getNodeByText(source)
+						right: 1
+						labelRight: label
+						target: net.getNodeByText(target)
+					net.addEdge(edge)
+
+
+			else if @isPartOfString("PN", @getAptBlock("type", aptCode))
+				net = new PetriNet({name: name})
+
+			console.log net
+			return net
+
+		# checks if the searchFor string is part of the searchIn string
+		@isPartOfString = (searchFor, searchIn) ->
+			searchIn.replace(searchFor, "") isnt searchIn
+
+		# get the text between the specified block and the next dot
+		@getAptBlock = (blockName, aptCode) ->
+			aptCode.split(".#{blockName}")[1].split(".")[0]
+
+		@getAptBlockRows = (blockName, aptCode) ->
+			block = @getAptBlock(blockName, aptCode).split("\n")
+			rows = []
+			rows.push row for row in block when row isnt ""
+			return rows

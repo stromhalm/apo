@@ -56,7 +56,6 @@ class @Net
 
 	getPostset: (node) ->
 		preset = []
-		console.log node
 		for edge in @edges
 			if (edge.target.id is node.id and edge.left >= 1)
 				preset.push(edge.source)
@@ -66,6 +65,10 @@ class @Net
 
 	isConnectable: (source, target) ->
 		source.connectableTypes.indexOf(target.type) isnt -1
+
+	getNodeByText: (text) ->
+		return node for node in @nodes when node.getText() is text
+		return false
 
 	getMaxNodeId: ->
 		maxId = -1

@@ -1,14 +1,14 @@
 class @LabelTsTool extends @Tool
-	constructor: ->
+	constructor: () ->
 		@name = "Labels"
 		@icon = "text_fields"
 
-	mouseDownOnEdge: (net, mouseDownEdge, $mdDialog, restart, NetStorage) ->
+	mouseDownOnEdge: (net, mouseDownEdge, $mdDialog, restart, converterService) ->
 		return if mouseDownEdge.type is "tsInitEdge"
 
 		getPrompt = (source, target) ->
-			sourceObj = NetStorage.getNodeFromData(source)
-			targetObj = NetStorage.getNodeFromData(target)
+			sourceObj = converterService.getNodeFromData(source)
+			targetObj = converterService.getNodeFromData(target)
 			$mdDialog.prompt
 				title: "Set Label"
 				textContent: "Enter name for the edge '#{sourceObj.getText()} → #{targetObj.getText()}'"

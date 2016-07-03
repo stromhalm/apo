@@ -76,7 +76,7 @@ class Editor extends Controller
 					selectedNode = null
 
 					# call the tools mouseDown listener
-					net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge, $mdDialog, restart, NetStorage)
+					net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge, $mdDialog, restart, converterService)
 					$scope.$apply() # Quick save net to storage
 					restart()
 

@@ -51,8 +51,8 @@ class MenubarController extends Controller
 
 		@showAPT = (net, $event) ->
 			dialog = $mdDialog.prompt
-				templateUrl: "/views/directives/codeEditor.html"
-				controller: CodeEditorController
+				templateUrl: "/views/directives/aptExport.html"
+				controller: AptExportController
 				controllerAs: "ce"
 				clickOutsideToClose: true
 				fullscreen: true
@@ -62,12 +62,10 @@ class MenubarController extends Controller
 			$mdDialog.show(dialog)
 
 
-class CodeEditorController extends Controller
+class AptExportController extends Controller
 	constructor: ($mdDialog, converterService) ->
 		@aptCode = converterService.netToApt(@net)
-
 		@closeDialog = -> $mdDialog.hide()
-
 		@download = ->
 			element = document.createElement('a')
 			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(@aptCode))
@@ -77,6 +75,7 @@ class CodeEditorController extends Controller
 			document.body.appendChild(element)
 			element.click()
 			document.body.removeChild(element)
+
 
 class Menubar extends Directive
 	constructor: ->

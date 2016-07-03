@@ -56,6 +56,7 @@ class @Net
 
 	getPostset: (node) ->
 		preset = []
+		console.log node
 		for edge in @edges
 			if (edge.target.id is node.id and edge.left >= 1)
 				preset.push(edge.source)

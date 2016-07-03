@@ -17,7 +17,8 @@ class @TransitionSystem extends @Net
 	getInitState: ->
 		for node in @nodes when node.type is "initState"
 			initNode = node
-		return @getPostset(initNode)[0]
+		return @getPostset(initNode)[0] if initNode
+		return false
 
 	setInitState: (state) ->
 		@deleteNode(node) for node in @nodes when node.type is "initState"

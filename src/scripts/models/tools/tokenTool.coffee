@@ -1,6 +1,6 @@
 class @TokenTool extends @Tool
 	constructor: ->
-		@name = "Token"
+		@name = "Tokens"
 		@icon = "play_circle_outline"
 
 	mouseDownOnNode: (net, mouseDownNode, dragLine, $mdDialog, restart) ->

@@ -14,6 +14,11 @@ class @TransitionSystem extends @Net
 		state = new State(point)
 		@addNode(state)
 
+	getInitState: ->
+		for node in @nodes when node.type is "initState"
+			initNode = node
+		return @getPostset(initNode)[0]
+
 	setInitState: (state) ->
 		@deleteNode(node) for node in @nodes when node.type is "initState"
 		initState = new InitState(new Point(state.x, state.y))

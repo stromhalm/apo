@@ -1,6 +1,6 @@
 class @StateTool extends @Tool
 	constructor: ->
-		@name = "State"
+		@name = "States"
 		@icon = "radio_button_unchecked"
 
 	mouseDownOnCanvas: (net, point) -> net.addState(point)

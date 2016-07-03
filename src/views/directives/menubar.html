@@ -23,13 +23,13 @@
                <md-menu-item class="md-indent">
                   <ng-md-icon icon="cloud_upload" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
                   <md-button ng-click="ctrl.sampleAction('Open', $event)">
-                     Upload APT
+                     Import APT
                   </md-button>
                </md-menu-item>
 					<md-menu-item class="md-indent">
                   <ng-md-icon icon="cloud_download" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-button ng-click="ctrl.sampleAction('Open', $event)">
-                     Download APT
+                  <md-button ng-click="mb.showAPT(net, $event)">
+                     Export APT
                   </md-button>
                </md-menu-item>
                <md-menu-divider></md-menu-divider>
@@ -39,12 +39,6 @@
                      Rename Net
                   </md-button>
                </md-menu-item>
-               <md-menu-item class="md-indent">
-                  <ng-md-icon icon="print" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-button ng-click="ctrl.sampleAction('Print', $event)">
-                     Print
-                  </md-button>
-               </md-menu-item>
             </md-menu-content>
          </md-menu>
          <md-menu>
@@ -52,20 +46,12 @@
                Tools
             </button>
             <md-menu-content>
-               <md-menu-item class="md-indent">
-                  <ng-md-icon icon="undo" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
+               <md-menu-item class="md-indent" ng-repeat="tool in net.tools">
+                  <ng-md-icon icon="{{tool.icon}}" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
                   <md-button ng-click="undo();">
-                     Undo
+                     {{tool.name}}
                   </md-button>
                </md-menu-item>
-
-            </md-menu-content>
-         </md-menu>
-         <md-menu>
-            <button ng-click="$mdOpenMenu()">
-               View
-            </button>
-            <md-menu-content>
             </md-menu-content>
          </md-menu>
          <md-menu>

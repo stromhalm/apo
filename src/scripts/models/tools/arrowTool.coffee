@@ -1,6 +1,6 @@
 class @ArrowTool extends @Tool
 	constructor: ->
-		@name = "Arrow"
+		@name = "Arrows"
 		@icon = "keyboard_backspace"
 
 	mouseDownOnNode: (net, node, dragLine) ->
@@ -35,4 +35,3 @@ class @ArrowTool extends @Tool
 				else edge = new TsEdge({source: source, target: target})
 				edge[direction] = 1
 				net.addEdge(edge)
-				

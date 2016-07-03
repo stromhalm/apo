@@ -1,0 +1,30 @@
+<md-dialog aria-label="APT Export" flex ng-cloak>
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>APT Export</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="ce.closeDialog()">
+					<ng-md-icon icon="close" style="fill: rgba(255, 255, 255, .87)" size="24"></ng-md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content>
+			<div class="md-dialog-content">
+				<md-input-container class="md-block">
+					<label>Generated Code</label>
+					<textarea class="code-editor" ng-model="ce.aptCode" readonly="true" style="width: 800px" style="font" md-select-on-focus></textarea>
+				</md-input-container>
+
+			</div>
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<md-button ng-click="ce.download()" class="md-primary">
+				Download
+			</md-button>
+			<md-button ng-click="ce.closeDialog()" class="md-primary" style="margin-right:20px;">
+				Close
+			</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

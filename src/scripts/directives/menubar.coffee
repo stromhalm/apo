@@ -49,7 +49,34 @@ class MenubarController extends Controller
 					$state.go "editor", name: newName
 		@renameNet = renameNet # required for recursive calls
 
+		@showAPT = (net, $event) ->
+			dialog = $mdDialog.prompt
+				templateUrl: "/views/directives/codeEditor.html"
+				controller: CodeEditorController
+				controllerAs: "ce"
+				clickOutsideToClose: true
+				fullscreen: true
+				targetEvent: $event # To animate the dialog to/from the click
+				locals:
+					net: net
+			$mdDialog.show(dialog)
 
+
+class CodeEditorController extends Controller
+	constructor: ($mdDialog, converterService) ->
+		@aptCode = converterService.netToApt(@net)
+
+		@closeDialog = -> $mdDialog.hide()
+
+		@download = ->
+			element = document.createElement('a')
+			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(@aptCode))
+			element.setAttribute('target', '_blank')
+			element.setAttribute('download', @net.name + ".apt")
+			element.style.display = 'none'
+			document.body.appendChild(element)
+			element.click()
+			document.body.removeChild(element)
 
 class Menubar extends Directive
 	constructor: ->

@@ -1,6 +1,6 @@
 class Editor extends Controller
 
-	constructor: ($timeout, $scope, $state, $stateParams, NetStorage, $mdDialog) ->
+	constructor: ($timeout, $scope, $state, $stateParams, NetStorage, $mdDialog, converterService) ->
 
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
 		# Go to first net if not found
@@ -57,13 +57,13 @@ class Editor extends Controller
 			edges.style('marker-end', (edge) -> if edge.right > 0 then 'url(#endArrow)' else '')
 
 			# update existing edge labels
-			d3.selectAll('.edgeLabel .text').text((edge) -> NetStorage.getEdgeFromData(edge).getText())
+			d3.selectAll('.edgeLabel .text').text((edge) -> converterService.getEdgeFromData(edge).getText())
 
 			# add edge labels
 			edges.enter().append('svg:text').attr('dy', -8).attr('class', 'label edgeLabel')
 			.attr('id', (edge) -> 'edgeLabel-' + edge.id)
 			.append('textPath').attr('startOffset', '50%').attr('class', 'text')
-			.attr('xlink:href', (edge) -> '#' + edge.id).text((edge) -> NetStorage.getEdgeFromData(edge).getText())
+			.attr('xlink:href', (edge) -> '#' + edge.id).text((edge) -> converterService.getEdgeFromData(edge).getText())
 
 			# add egde paths
 			edges.enter().append('svg:path').attr('class', 'link')
@@ -89,12 +89,12 @@ class Editor extends Controller
 			nodes.selectAll('.node').classed('firable', (node) ->  net.isFirable(node))
 
 			# update existing node labels
-			d3.selectAll('.nodeLabel').text((node) -> NetStorage.getNodeFromData(node).getText())
-			d3.selectAll('.token').text((node) -> NetStorage.getNodeFromData(node).getTokenLabel())
+			d3.selectAll('.nodeLabel').text((node) -> converterService.getNodeFromData(node).getText())
+			d3.selectAll('.token').text((node) -> converterService.getNodeFromData(node).getTokenLabel())
 
 			# add new nodes
 			newNodes = nodes.enter().append('svg:g')
-			newNodes.append((node) -> document.createElementNS("http://www.w3.org/2000/svg", NetStorage.getNodeFromData(node).shape))
+			newNodes.append((node) -> document.createElementNS("http://www.w3.org/2000/svg", converterService.getNodeFromData(node).shape))
 			.attr('class', (node) -> node.type + ' node')
 			.attr('r', (node) -> node.radius)
 			.attr('width', (node) -> node.width)
@@ -132,8 +132,8 @@ class Editor extends Controller
 				restart()
 
 			# show node text
-			newNodes.append('svg:text').attr('x', (node) -> node.labelXoffset).attr('y', (node) -> node.labelYoffset).attr('class', 'label nodeLabel').text((node) -> NetStorage.getNodeFromData(node).getText())
-			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'label token').text((node) -> NetStorage.getNodeFromData(node).getTokenLabel())
+			newNodes.append('svg:text').attr('x', (node) -> node.labelXoffset).attr('y', (node) -> node.labelYoffset).attr('class', 'label nodeLabel').text((node) -> converterService.getNodeFromData(node).getText())
+			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'label token').text((node) -> converterService.getNodeFromData(node).getTokenLabel())
 
 			nodes.exit().remove() # remove old nodes
 			force.start() # set the graph in motion

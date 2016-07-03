@@ -1,6 +1,6 @@
 class @PlaceTool extends @Tool
 	constructor: ->
-		@name = "Place"
+		@name = "Places"
 		@icon = "radio_button_unchecked"
 
 	mouseDownOnCanvas: (net, point) ->

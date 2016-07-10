@@ -13,7 +13,6 @@ class @ArrowTool extends @Tool
 
 		# check for drag-to-self
 		if mouseUpNode == mouseDownNode
-			resetMouseVars()
 			return
 
 		for edge in net.edges when edge.source is mouseDownNode and edge.target is mouseUpNode

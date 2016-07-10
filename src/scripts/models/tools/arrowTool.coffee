@@ -16,11 +16,13 @@ class @ArrowTool extends @Tool
 			resetMouseVars()
 			return
 
-		existingEdge = edge for edge in net.edges when edge.source is mouseDownNode and edge.target is mouseUpNode
+		for edge in net.edges when edge.source is mouseDownNode and edge.target is mouseUpNode
+			existingEdge = edge
 		if existingEdge
 			existingEdge.right = 1
 		else
-			existingEdge = edge for edge in net.edges when edge.source is mouseUpNode and edge.target is mouseDownNode
+			for edge in net.edges when edge.source is mouseUpNode and edge.target is mouseDownNode
+				existingEdge = edge
 		if existingEdge
 			existingEdge.left = 1
 		else

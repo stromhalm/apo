@@ -2,18 +2,70 @@
 .node {
 	fill: white;
 	stroke: black;
+	cursor: auto;
 
 	&.transition {
 		transform: translate(-50%, -50%);
 	}
 }
 
-.Tokens .transition {
-	stroke-width: 3px;
-	stroke: #E53935;
+// Default mode (node creators)
+#main-canvas {
+	cursor: crosshair;
 
-	&.firable {
-		stroke: #43A047;
+	.edge {
+		cursor: default;
+	}
+}
+
+// Token mode
+.Tokens {
+	.place {
+		cursor: text;
+	}
+
+	.transition {
+		stroke-width: 3px;
+		stroke: #E53935;
+		cursor: not-allowed;
+
+		&.firable {
+			stroke: #43A047;
+			cursor: e-resize;
+		}
+	}
+}
+
+// Arrow Mode
+.Arrows, .Delete {
+	#main-canvas {
+		cursor: default;
+
+		.node {
+			cursor: crosshair;
+		}
+	}
+}
+
+// Delete mode
+.Delete {
+	#main-canvas {
+		cursor: default;
+
+		.node, .edge {
+			cursor: crosshair;
+		}
+	}
+}
+
+// Labels mode
+.Labels {
+	#main-canvas {
+		cursor: default;
+
+		.node, .edge {
+			cursor: text;
+		}
 	}
 }
 

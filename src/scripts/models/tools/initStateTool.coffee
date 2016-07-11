@@ -1,5 +1,6 @@
 class @InitStateTool extends @Tool
 	constructor: ->
+		super()
 		@name = "Initial State"
 		@icon = "play_for_work"
 

@@ -3,6 +3,7 @@ class @PetriNet extends @Net
 		@type = "pn"
 		super(netObject)
 		@setTools([
+			new MoveTool()
 			new PlaceTool()
 			new TransitionTool()
 			new ArrowTool()

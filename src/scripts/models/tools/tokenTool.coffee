@@ -1,5 +1,6 @@
 class @TokenTool extends @Tool
 	constructor: ->
+		super()
 		@name = "Tokens"
 		@icon = "play_circle_outline"
 

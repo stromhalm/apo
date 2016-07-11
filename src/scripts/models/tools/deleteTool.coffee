@@ -1,5 +1,6 @@
 class @DeleteTool extends @Tool
 	constructor: ->
+		super()
 		@name = "Delete"
 		@icon = "delete"
 

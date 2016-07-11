@@ -11,6 +11,7 @@ class Editor extends Controller
 
 		svg = d3.select('#main-canvas svg')
 		force = d3.layout.force()
+		drag = force.drag()
 		colors = d3.scale.category10()
 		dragLine = svg.select('svg .dragline')
 		edges = svg.append('svg:g').selectAll('.edge')
@@ -109,6 +110,9 @@ class Editor extends Controller
 				d3.select(this).attr 'style', '' # unhighlight target node
 
 			.on 'mousedown', (node) ->
+
+				nodes.call(drag) if net.getActiveTool().draggable # drag and drop
+
 				# select node
 				mouseDownNode = node
 				if mouseDownNode == selectedNode
@@ -128,8 +132,14 @@ class Editor extends Controller
 				net.getActiveTool().mouseUpOnNode(net, mouseUpNode, mouseDownNode, dragLine)
 				$scope.$apply() # Quick save net to storage
 
+				nodes.on('mousedown.drag', null)
+
 				selectedNode = null
 				restart()
+
+			.on 'dblclick', (node) ->
+				net.getActiveTool().dblClickOnNode(net, node)
+
 
 			# show node text
 			newNodes.append('svg:text').attr('x', (node) -> node.labelXoffset).attr('y', (node) -> node.labelYoffset).attr('class', 'label nodeLabel').text((node) -> converterService.getNodeFromData(node).getText())

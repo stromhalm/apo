@@ -1,5 +1,6 @@
 class @ArrowTool extends @Tool
 	constructor: ->
+		super()
 		@name = "Arrows"
 		@icon = "keyboard_backspace"
 

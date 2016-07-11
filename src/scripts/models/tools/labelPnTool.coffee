@@ -1,5 +1,6 @@
 class @LabelPnTool extends @Tool
 	constructor: ->
+		super()
 		@name = "Labels"
 		@icon = "text_fields"
 

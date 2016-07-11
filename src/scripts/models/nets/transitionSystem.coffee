@@ -3,6 +3,7 @@ class @TransitionSystem extends @Net
 		@type = "lts"
 		super(netObject)
 		@setTools([
+			new MoveTool()
 			new StateTool()
 			new ArrowTool()
 			new DeleteTool()

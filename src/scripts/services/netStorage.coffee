@@ -2,7 +2,7 @@ class NetStorage extends Factory
 	constructor: (converterService, $localStorage, $state) ->
 
 		getDefaultNet = ->
-			new TransitionSystem({name: "Sample Net"})
+			new PetriNet({name: "Sample Net"})
 
 		getNetIdByName = (name) ->
 			return id for net, id in storage.nets when net.name is name

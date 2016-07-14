@@ -44,5 +44,4 @@ class NetStorage extends Factory
 				storage.nets.splice(0, 1) while storage.nets.length > 0
 				storage.nets.push(getDefaultNet())
 				$state.go "editor", name: storage.nets[0].name
-
 		}

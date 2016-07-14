@@ -139,17 +139,29 @@ class Converter extends Service
 
 					# add edges
 					edges = @getAptBlockRows("arcs", aptCode)
-					for edge in edges
-						source = edge.split(" ")[0]
-						label = edge.split(" ")[1]
-						target = edge.split(" ")[2]
-						edge = new TsEdge
-							source: net.getNodeByText(source)
-							right: 1
-							labelRight: label
-							target: net.getNodeByText(target)
-						net.addEdge(edge)
+					for edgeCode in edges
+						source = net.getNodeByText(edgeCode.split(" ")[0])
+						label = edgeCode.split(" ")[1]
+						target = net.getNodeByText(edgeCode.split(" ")[2])
 
+						for edge in net.edges when edge.source is source and edge.target is target
+							existingEdge = edge
+						if existingEdge
+							existingEdge.right = 1
+							existingEdge.labelRight = label
+						else
+							for edge in net.edges when edge.source is target and edge.target is source
+								existingEdge = edge
+						if existingEdge
+							existingEdge.left = 1
+							existingEdge.labelLeft = label
+						else
+							edge = new TsEdge
+								source: source
+								right: 1
+								labelRight: label
+								target: target
+							net.addEdge(edge)
 
 				else if @isPartOfString("PN", @getAptBlock("type", aptCode))
 					net = new PetriNet({name: name})
@@ -181,8 +193,12 @@ class Converter extends Service
 
 						# only create edges if they not already exist
 						for edge in preset
-							weight = edge.split("*")[0]
-							place = net.getNodeByText(edge.split("*")[1])
+							if @isPartOfString("*", edge)
+								weight = edge.split("*")[0]
+								place = net.getNodeByText(edge.split("*")[1])
+							else
+								weight = 1
+								place = net.getNodeByText(edge)
 							for edge in net.edges when edge.source is place and edge.target is transition
 								existingEdge = edge
 							if existingEdge
@@ -197,8 +213,12 @@ class Converter extends Service
 								net.addEdge(edge)
 
 						for edge in postset
-							weight = edge.split("*")[0]
-							place = net.getNodeByText(edge.split("*")[1])
+							if @isPartOfString("*", edge)
+								weight = edge.split("*")[0]
+								place = net.getNodeByText(edge.split("*")[1])
+							else
+								weight = 1
+								place = net.getNodeByText(edge)
 							for edge in net.edges when edge.source is transition and edge.target is place
 								existingEdge = edge
 							if existingEdge
@@ -215,8 +235,12 @@ class Converter extends Service
 					# add initial tokens
 					markings = @getAptBlock("initial_marking", aptCode).split("{")[1].split("}")[0].split(", ")
 					for marking in markings
-						number = marking.split("*")[0]
-						place = net.getNodeByText(marking.split("*")[1])
+						if @isPartOfString("*", marking)
+							number = marking.split("*")[0]
+							place = net.getNodeByText(marking.split("*")[1])
+						else
+							number = 1
+							place = net.getNodeByText(marking)
 						place.token = number
 
 					# rename transitions from id's to labels

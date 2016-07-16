@@ -48,7 +48,7 @@
             <md-menu-content>
                <md-menu-item class="md-indent" ng-repeat="tool in net.tools">
                   <ng-md-icon icon="{{tool.icon}}" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-button ng-click="undo();">
+                  <md-button ng-click="net.activeTool = tool.name">
                      {{tool.name}}
                   </md-button>
                </md-menu-item>

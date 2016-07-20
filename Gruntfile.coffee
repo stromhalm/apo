@@ -25,7 +25,7 @@ module.exports = (grunt) ->
 			js: [
 				'<%= settings.tempDirectory %>/scripts/**/*.js'
 				'<%= settings.tempDirectory %>/scripts/**/*.map'
-				'!<%= settings.tempDirectory %>/scripts/scripts.js'
+				'!<%= settings.tempDirectory %>/scripts/**/*.min.js'
 				'!<%= settings.tempDirectory %>/scripts/scripts.js.map'
 			]
 
@@ -213,7 +213,7 @@ module.exports = (grunt) ->
 		uglify:
 			my_target:
 				files:
-					'.temp/scripts/scripts.min.js': '.temp/scripts/**/*.js'
+					'.temp/scripts/scripts.min.js': '.temp/scripts/scripts.js'
 
 		concat:
 			options:
@@ -331,9 +331,9 @@ module.exports = (grunt) ->
 		'coffee:app'
 		'imagemin'
 		'less'
-		#'uglify'
 		'ngtemplates'
 		'concat'
+		'uglify'
 		'clean:js'
 		'cacheBust'
 		'includeSource'

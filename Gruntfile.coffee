@@ -220,10 +220,7 @@ module.exports = (grunt) ->
 				separator: ';'
 				sourceMap: true
 			dist:
-				src: [
-					'.temp/scripts/*.js'
-					'.temp/scripts/**/*.js'
-				]
+				src: ['.temp/scripts/*.js', '.temp/scripts/**/*.js']
 				dest: '.temp/scripts/scripts.js'
 
 		# Run tasks when monitored files change

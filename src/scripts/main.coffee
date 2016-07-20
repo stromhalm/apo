@@ -1,4 +1,4 @@
-class Opn extends App
+class APO extends App
 	constructor: ->
 		return [
 			'ngMaterial'

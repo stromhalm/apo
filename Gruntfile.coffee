@@ -26,6 +26,7 @@ module.exports = (grunt) ->
 				'<%= settings.tempDirectory %>/scripts/**/*.js'
 				'<%= settings.tempDirectory %>/scripts/**/*.map'
 				'!<%= settings.tempDirectory %>/scripts/scripts.js'
+				'!<%= settings.tempDirectory %>/scripts/scripts.js.map'
 			]
 
 		# Compiles CoffeeScript (.coffee) files to JavaScript (.js)
@@ -164,7 +165,7 @@ module.exports = (grunt) ->
 		less:
 			app:
 				files:
-					'.temp/styles/style.css': '.temp/styles/**.less'
+					'.temp/styles/styles.css': '.temp/styles/**.less'
 
 		# Convert CoffeeScript classes to AngularJS modules
 		ngClassify:
@@ -179,7 +180,10 @@ module.exports = (grunt) ->
 		cacheBust:
 			taskName:
 				options:
-					assets: ['.temp/scripts/**/*.js']
+					assets: [
+						'.temp/scripts/**/*.js'
+						'.temp/styles/styles.css'
+					]
 					deleteOriginals: true
 				src: []
 
@@ -216,7 +220,10 @@ module.exports = (grunt) ->
 				separator: ';'
 				sourceMap: true
 			dist:
-				src: ['.temp/scripts/**/*.js']
+				src: [
+					'.temp/scripts/*.js'
+					'.temp/scripts/**/*.js'
+				]
 				dest: '.temp/scripts/scripts.js'
 
 		# Run tasks when monitored files change

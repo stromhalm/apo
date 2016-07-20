@@ -22,6 +22,11 @@ module.exports = (grunt) ->
 				'<%= settings.tempDirectory %>'
 				'<%= settings.distDirectory %>'
 			]
+			js: [
+				'<%= settings.tempDirectory %>/scripts/**/*.js'
+				'<%= settings.tempDirectory %>/scripts/**/*.map'
+				'!<%= settings.tempDirectory %>/scripts/scripts.js'
+			]
 
 		# Compiles CoffeeScript (.coffee) files to JavaScript (.js)
 		coffee:
@@ -34,7 +39,7 @@ module.exports = (grunt) ->
 					ext: '.js'
 				]
 				options:
-					sourceMap: true
+					sourceMap: false
 
 		# Lints CoffeeScript files
 		coffeelint:
@@ -206,6 +211,14 @@ module.exports = (grunt) ->
 				files:
 					'.temp/scripts/scripts.min.js': '.temp/scripts/**/*.js'
 
+		concat:
+			options:
+				separator: ';'
+				sourceMap: true
+			dist:
+				src: ['.temp/scripts/**/*.js']
+				dest: '.temp/scripts/scripts.js'
+
 		# Run tasks when monitored files change
 		watch:
 			basic:
@@ -316,6 +329,8 @@ module.exports = (grunt) ->
 		'less'
 		#'uglify'
 		'ngtemplates'
+		'concat'
+		'clean:js'
 		'cacheBust'
 		'includeSource'
 		'copy:prod'

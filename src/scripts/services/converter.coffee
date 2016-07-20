@@ -186,7 +186,6 @@ class Converter extends Service
 
 					# add edges
 					flows = @getAptBlockRows("flows", aptCode)
-					console.log flows
 					for flow in flows
 						transition = net.getNodeByText(flow.split(": {")[0])
 						preset = flow.split(": {")[1].split("}")[0].split(", ")

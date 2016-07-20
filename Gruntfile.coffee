@@ -211,6 +211,8 @@ module.exports = (grunt) ->
 						removeStyleLinkTypeAttributes:  true
 
 		uglify:
+			options:
+				mangle: false
 			my_target:
 				files:
 					'.temp/scripts/scripts.min.js': '.temp/scripts/scripts.js'

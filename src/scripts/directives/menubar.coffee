@@ -1,5 +1,5 @@
 class MenubarController extends Controller
-	constructor: ($mdDialog, NetStorage, $state) ->
+	constructor: ($mdDialog, NetStorage, $state, apt, $http, converterService) ->
 
 		createPN = ($event, nameExists = false) ->
 			if nameExists then alert = "A net with the name '#{nameExists}' already exists. " else alert = ""
@@ -70,6 +70,9 @@ class MenubarController extends Controller
 				fullscreen: true
 				targetEvent: $event # To animate the dialog to/from the click
 			$mdDialog.show(dialog)
+
+		@startAnalyzer = (analyzer, net) ->
+			analyzer.run(apt, NetStorage, converterService, net)
 
 
 class AptExportController extends Controller

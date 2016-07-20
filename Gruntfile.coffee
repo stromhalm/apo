@@ -134,6 +134,7 @@ module.exports = (grunt) ->
 						'https://d3js.org/d3.v3.min.js'
 						'http://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'
 						'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-mocks.js'
+						'http://angular-apt.azurewebsites.net/apt.js'
 						'dist/**/main.js'
 						'dist/**/*.js'
 						'test/**/*.{coffee,js}'
@@ -220,7 +221,6 @@ module.exports = (grunt) ->
 					'less'
 					'includeSource'
 					'copy:dev'
-					'karma'
 				]
 				options:
 					livereload: true
@@ -236,7 +236,7 @@ module.exports = (grunt) ->
 					'less'
 					'includeSource'
 					'copy:dev'
-					'karma'
+					#'karma'
 				]
 				options:
 					livereload: true

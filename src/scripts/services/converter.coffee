@@ -176,7 +176,7 @@ class Converter extends Service
 					transitionLabels = new Map()
 					transitions = @getAptBlockRows("transitions", aptCode)
 					for transitionRow in transitions
-						transitionId = transitionRow.split(" ")[0]
+						transitionId = transitionRow.split(" ")[0].split("[")[0]
 
 						# labels are saved and applied later
 						if @isPartOfString("label=", transitionRow)
@@ -186,6 +186,7 @@ class Converter extends Service
 
 					# add edges
 					flows = @getAptBlockRows("flows", aptCode)
+					console.log flows
 					for flow in flows
 						transition = net.getNodeByText(flow.split(": {")[0])
 						preset = flow.split(": {")[1].split("}")[0].split(", ")
@@ -250,6 +251,7 @@ class Converter extends Service
 				console.log net
 
 			catch error
+				console.error error
 				return false
 			return net
 
@@ -262,7 +264,7 @@ class Converter extends Service
 			aptCode.split(".#{blockName}")[1].split(".")[0]
 
 		@getAptBlockRows = (blockName, aptCode) ->
-			block = @getAptBlock(blockName, aptCode).split("\n")
+			block = @getAptBlock(blockName, aptCode).split("\r\n")
 			rows = []
 			rows.push row for row in block when row isnt ""
 			return rows

@@ -58,7 +58,13 @@
             <button ng-click="$mdOpenMenu()">
                Analyze
             </button>
-            <md-menu-content>
+				<md-menu-content>
+               <md-menu-item class="md-indent" ng-repeat="analyzer in net.analyzers">
+                  <ng-md-icon icon="{{analyzer.icon}}" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
+                  <md-button ng-click="mb.startAnalyzer(analyzer, net)">
+                     {{analyzer.name}}
+                  </md-button>
+               </md-menu-item>
             </md-menu-content>
          </md-menu>
       </md-menu-bar>

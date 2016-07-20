@@ -11,6 +11,9 @@ class @PetriNet extends @Net
 			new DeleteTool()
 			new LabelPnTool()
 		])
+		@setAnalyzers([
+			new CoverabilityAnalyzer()
+		])
 
 	addTransition: (point) ->
 		transition = new Transition(point)

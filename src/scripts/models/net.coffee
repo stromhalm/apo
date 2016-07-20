@@ -10,6 +10,8 @@ class @Net
 	setTools: (@tools) ->
 		@activeTool = @tools[0].name if not @activeTool and @tools.length > 0
 
+	setAnalyzers: (@analyzers) ->
+
 	addEdge: (edge) ->
 		edge.setId(@getMaxEdgeId()+1)
 		@edges.push(edge)

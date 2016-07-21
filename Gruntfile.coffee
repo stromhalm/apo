@@ -335,7 +335,7 @@ module.exports = (grunt) ->
 		'less'
 		'ngtemplates'
 		'concat'
-		#'uglify'
+		'uglify'
 		'clean:js'
 		'cacheBust'
 		'includeSource'

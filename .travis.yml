@@ -1,8 +1,6 @@
 language: node_js
 node_js:
   - 0.10.25
-before_script:
-  - npm install grunt-cli -g
 before_deploy:
   - "grunt prod"
   - "git config --global user.email 'adrian.jagusch@uni-oldenburg.de'"

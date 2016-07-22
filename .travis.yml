@@ -3,19 +3,6 @@ node_js:
   - 0.10.25
 before_script:
   - npm install grunt-cli -g
-before_deploy:
+after_success: # deploy to azure
   - "grunt prod"
-  - "git config --global user.email 'adrian.jagusch@uni-oldenburg.de'"
-  - "git config --global user.name 'Adrian Jagusch'"
-  - "git clone https://$AZURE_WA_USERNAME:$AZURE_WA_PASSWORD@$AZURE_WA_SITE.scm.azurewebsites.net:443/$AZURE_WA_SITE.git" # clone existing repository from Azure
-  - "rm -rf apo/dist" # replace all the compiled files
-  - "mv dist apo/dist"
-  - "cd apo"
-  - "echo \"`date +%s`\" > date.txt" # force Azure to push the directory even if nothing changed, so that the tests can succeed
-  - "git add *"
-  - "git commit -a -m 'Push to Azure'"
-  - "git push" # push everything to the azure sever
-deploy:
-  provider: azure_web_apps
-  skip_cleanup: true
-  verbose: true
+  - "find dist -type f -exec curl -u $AZURE_WA_USERNAME:$AZURE_WA_PASSWORD --ftp-create-dirs -T {} ftps://waws-prod-db3-015.ftp.azurewebsites.windows.net/site/wwwroot/{} \;"

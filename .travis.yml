@@ -5,4 +5,4 @@ before_script:
   - npm install grunt-cli -g
 after_success: # deploy to azure
   - "grunt prod"
-  - "find dist -type f -exec curl -u $AZURE_WA_USERNAME:$AZURE_WA_PASSWORD --ftp-create-dirs -T {} ftps://waws-prod-db3-015.ftp.azurewebsites.windows.net/site/wwwroot/{} \;"
+  - "find dist -type f -exec curl -u $AZURE_WA_USERNAME:$AZURE_WA_PASSWORD --ftp-create-dirs -T {} ftps://waws-prod-db3-015.ftp.azurewebsites.windows.net/site/wwwroot/{} \\;"

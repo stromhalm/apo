@@ -263,7 +263,10 @@ class Converter extends Service
 			aptCode.split(".#{blockName}")[1].split(".")[0]
 
 		@getAptBlockRows = (blockName, aptCode) ->
-			block = @getAptBlock(blockName, aptCode).split("\r\n")
+			if @isPartOfString("\r\n", aptCode)
+				block = @getAptBlock(blockName, aptCode).split("\r\n") # use Windows linebreaks
+			else
+				block = @getAptBlock(blockName, aptCode).split("\n") # use Unix linebreaks
 			rows = []
 			rows.push row for row in block when row isnt ""
 			return rows

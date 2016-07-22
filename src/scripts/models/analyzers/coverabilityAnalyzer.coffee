@@ -8,6 +8,7 @@ class @CoverabilityAnalyzer extends @Analyzer
 		aptNet = converterService.getAptFromNet(currentNet)
 		apt.getCoverabilityGraph(aptNet).then((response) ->
 			aptCov = response.data.coverabilityGraph
+			console.log aptCov
 			covGraph = converterService.getNetFromApt(aptCov)
 			NetStorage.addNet(covGraph)
 		)

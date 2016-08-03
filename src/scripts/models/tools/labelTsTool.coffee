@@ -4,43 +4,59 @@ class @LabelTsTool extends @Tool
 		@name = "Labels"
 		@icon = "text_fields"
 
-	mouseDownOnEdge: (net, mouseDownEdge, $mdDialog, restart, converterService) ->
+	mouseDownOnEdge: (net, mouseDownEdge, formDialogService, restart, converterService) ->
 		return if mouseDownEdge.type is "tsInitEdge"
 
-		getPrompt = (source, target) ->
-			sourceObj = converterService.getNodeFromData(source)
-			targetObj = converterService.getNodeFromData(target)
-			$mdDialog.prompt
-				title: "Set Label"
-				textContent: "Enter name for the edge '#{sourceObj.getText()} → #{targetObj.getText()}'"
-				ok: "OK"
-				cancel: "Cancel"
+		sourceObj = converterService.getNodeFromData(mouseDownEdge.source)
+		targetObj = converterService.getNodeFromData(mouseDownEdge.target)
 
+		formElements = []
 		if mouseDownEdge.left >= 1
-			$mdDialog.show(getPrompt(mouseDownEdge.target, mouseDownEdge.source))
-			.then (labelLeft) ->
-				mouseDownEdge.labelLeft = labelLeft
-				restart()
-				if mouseDownEdge.right >= 1
-					$mdDialog.show(getPrompt(mouseDownEdge.source, mouseDownEdge.target))
-					.then (labelRight) ->
-						mouseDownEdge.labelRight = labelRight
-						restart()
+			formElements.push({
+				name: "#{targetObj.getText()} → #{sourceObj.getText()}"
+				type: "text"
+				value: mouseDownEdge.labelLeft
+			})
+		if mouseDownEdge.right >= 1
+			formElements.push({
+				name: "#{sourceObj.getText()} → #{targetObj.getText()}"
+				type: "text"
+				value: mouseDownEdge.labelRight
+			})
 
-		else if mouseDownEdge.right >= 1
-			$mdDialog.show(getPrompt(mouseDownEdge.source, mouseDownEdge.target))
-			.then (labelRight) ->
-				mouseDownEdge.labelRight = labelRight
+		if formElements.length is 1
+			labelText = "a label"
+		else
+			labelText = "labels"
+
+		formDialogService.runDialog({
+			title: "Set Label"
+			text: "Enter #{labelText} for this edge"
+			formElements: formElements
+		})
+		.then (formElements) ->
+			if formElements
+				if mouseDownEdge.left >= 1
+					mouseDownEdge.labelLeft = formElements[0].value
+					if mouseDownEdge.right >= 1
+						mouseDownEdge.labelRight = formElements[1].value
+				else if mouseDownEdge.right >= 1
+					mouseDownEdge.labelRight = formElements[0].value
 				restart()
 
-	mouseDownOnNode: (net, mouseDownNode, dragLine, $mdDialog, restart) ->
-		prompt = $mdDialog.prompt
+	mouseDownOnNode: (net, mouseDownNode, dragLine, formDialogService, restart) ->
+		formDialogService.runDialog({
 			title: "Label for Node"
-			textContent: "Enter a name for this #{mouseDownNode.type}"
-			placeholder: "name"
-			ok: "OK"
-			cancel: "Cancel"
-		$mdDialog.show(prompt)
-		.then (label) ->
-			mouseDownNode.label = label
-			restart()
+			text: "Enter a name for this #{mouseDownNode.type}"
+			formElements: [
+				{
+					name: "Name"
+					type: "text"
+					value: mouseDownNode.label
+				}
+			]
+		})
+		.then (formElements) ->
+			if formElements
+				mouseDownNode.label = formElements[0].value
+				restart()

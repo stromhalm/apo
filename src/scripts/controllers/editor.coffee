@@ -1,6 +1,6 @@
 class Editor extends Controller
 
-	constructor: ($timeout, $scope, $state, $stateParams, NetStorage, $mdDialog, converterService) ->
+	constructor: ($timeout, $scope, $state, $stateParams, NetStorage, converterService, formDialogService) ->
 
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
 		# Go to first net if not found
@@ -77,7 +77,7 @@ class Editor extends Controller
 					selectedNode = null
 
 					# call the tools mouseDown listener
-					net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge, $mdDialog, restart, converterService)
+					net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge, formDialogService, restart, converterService)
 					$scope.$apply() # Quick save net to storage
 					restart()
 
@@ -121,7 +121,7 @@ class Editor extends Controller
 					selectedNode = mouseDownNode
 
 				# call the tools mouseDown listener
-				net.getActiveTool().mouseDownOnNode(net, mouseDownNode, dragLine, $mdDialog, restart)
+				net.getActiveTool().mouseDownOnNode(net, mouseDownNode, dragLine, formDialogService, restart)
 				$scope.$apply() # Quick save net to storage
 				restart()
 

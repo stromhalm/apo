@@ -4,20 +4,27 @@ class @TokenTool extends @Tool
 		@name = "Tokens"
 		@icon = "play_circle_outline"
 
-	mouseDownOnNode: (net, mouseDownNode, dragLine, $mdDialog, restart) ->
+	mouseDownOnNode: (net, mouseDownNode, dragLine, formDialogService, restart) ->
+
 		if mouseDownNode.type is "place"
-			prompt = $mdDialog.prompt
+			formDialogService.runDialog({
 				title: "Set Tokens"
-				textContent: "Enter a number of tokens for this place"
-				placeholder: "Integer ≥ 0"
-				ok: "OK"
-				cancel: "Cancel"
-			$mdDialog.show(prompt)
-			.then (token) ->
-				token = parseInt(token)
-				if token >= 0
-					mouseDownNode.token = token
-					restart()
+				text: "Enter a number of tokens for this place"
+				formElements: [
+					{
+						name: "Integer ≥ 0"
+						type: "number"
+						min: 0
+						value: parseInt(mouseDownNode.token)
+					}
+				]
+			})
+			.then (formElements) ->
+				if formElements
+					tokens = formElements[0].value
+					if tokens >= 0
+						mouseDownNode.token = tokens
+						restart()
 
 		else if mouseDownNode.type is "transition"
 			net.fireTransition(mouseDownNode)

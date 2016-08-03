@@ -1,5 +1,5 @@
 class MenubarController extends Controller
-	constructor: ($mdDialog, NetStorage, $state, apt, $http, converterService) ->
+	constructor: ($mdDialog, NetStorage, $state, apt, $http, formDialogService, converterService) ->
 
 		createPN = ($event, nameExists = false) ->
 			if nameExists then alert = "A net with the name '#{nameExists}' already exists. " else alert = ""
@@ -62,14 +62,37 @@ class MenubarController extends Controller
 			$mdDialog.show(dialog)
 
 		@importAPT = ($event) ->
-			dialog = $mdDialog.prompt
-				templateUrl: "/views/directives/aptImport.html"
-				controller: AptImportController
-				controllerAs: "ai"
-				clickOutsideToClose: true
-				fullscreen: true
-				targetEvent: $event # To animate the dialog to/from the click
-			$mdDialog.show(dialog)
+			formDialogService.runDialog({
+				title: "APT Import"
+				text: "Insert APT Code here to import a net"
+				ok: "import"
+				event: $event
+				formElements: [
+					{
+						type: "code"
+						name: "Insert Code"
+					}
+				]
+			})
+			.then (formElements) ->
+				if formElements
+					net = converterService.getNetFromApt(formElements[0].value)
+					if not net
+						$mdDialog.show(
+							$mdDialog.alert
+								title: "Syntax Error"
+								textContent: "Couldn't import the net beacause of syntax errors in the apt code"
+								ok: "OK"
+						)
+					else
+						success = NetStorage.addNet(net)
+						if not success
+							$mdDialog.show(
+								$mdDialog.alert
+									title: "Name exists"
+									textContent: "A net with the name '#{net.name}' already exists"
+									ok: "OK"
+							)
 
 		@startAnalyzer = (analyzer, net) ->
 			analyzer.run(apt, NetStorage, converterService, net)
@@ -91,35 +114,6 @@ class AptExportController extends Controller
 			document.body.appendChild(element)
 			element.click()
 			document.body.removeChild(element)
-
-
-class AptImportController extends Controller
-	constructor: ($mdDialog, converterService, NetStorage) ->
-
-		@closeDialog = -> $mdDialog.hide()
-
-		@import = ->
-			@errorMsg = ""
-			net = converterService.getNetFromApt(@aptCode)
-			if not net
-				$mdDialog.show(
-					$mdDialog.alert
-						title: "Syntax Error"
-						textContent: "Couldn't import the net beacause of syntax errors in the apt code"
-						ok: "OK"
-				)
-			else
-				success = NetStorage.addNet(net)
-				if not success
-					$mdDialog.show(
-						$mdDialog.alert
-							title: "Name exists"
-							textContent: "A net with the name '#{net.name}' already exists"
-							ok: "OK"
-					)
-				else
-					@closeDialog()
-
 
 class Menubar extends Directive
 	constructor: ->

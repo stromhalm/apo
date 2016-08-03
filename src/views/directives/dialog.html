@@ -1,0 +1,35 @@
+<md-dialog aria-label="Form Dialog" ng-cloak>
+	<form name="formDialog" ng-submit="dialog.complete()">
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>{{ dialog.title }}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="dialog.dismiss()">
+					<ng-md-icon icon="close" style="fill: rgba(255, 255, 255, .87)" size="24"></ng-md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content>
+			<div class="md-dialog-content">
+				<p>{{ dialog.text }}</p>
+				<p ng-repeat="input in dialog.formElements">
+					<md-input-container class="md-block">
+						<label>{{ input.name }}</label>
+						<input ng-if="input.type == 'number'" required type="number" step="1" ng-model="input.value" min="{{input.min}}" max="{{input.max}}" />
+						<input ng-if="input.type == 'text'" required type="text" ng-model="input.value" />
+						<textarea ng-if="input.type == 'code'" required class="code-editor" ng-model="input.value" style="min-height: 300px"></textarea>
+					</md-input-container>
+				</p>
+			</div>
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<span flex></span>
+			<md-button ng-if="dialog.cancel" class="md-primary" ng-click="dialog.dismiss()">
+				{{ dialog.cancel }}
+			</md-button>
+			<md-button ng-disabled="!dialog.formIsComplete()" class="md-primary" ng-click="dialog.complete()" style="margin-right:20px;">
+				{{ dialog.ok }}
+			</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

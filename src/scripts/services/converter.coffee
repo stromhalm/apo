@@ -193,44 +193,46 @@ class Converter extends Service
 
 						# only create edges if they not already exist
 						for edge in preset
-							if @isPartOfString("*", edge)
-								weight = edge.split("*")[0]
-								place = net.getNodeByText(edge.split("*")[1])
-							else
-								weight = 1
-								place = net.getNodeByText(edge)
-							for edge in net.edges when edge.source is place and edge.target is transition
-								existingEdge = edge
-							if existingEdge
-								existingEdge.right = weight
-							else
-								for edge in net.edges when edge.source is transition and edge.target is place
-									existingEdge = edge
-							if existingEdge
-								existingEdge.left = weight
-							else
-								edge = new PnEdge({source: place, target: transition, right: weight})
-								net.addEdge(edge)
-
-						for edge in postset
-							if @isPartOfString("*", edge)
-								weight = edge.split("*")[0]
-								place = net.getNodeByText(edge.split("*")[1])
-							else
-								weight = 1
-								place = net.getNodeByText(edge)
-							for edge in net.edges when edge.source is transition and edge.target is place
-								existingEdge = edge
-							if existingEdge
-								existingEdge.right = weight
-							else
+							if edge isnt ""
+								if @isPartOfString("*", edge)
+									weight = edge.split("*")[0]
+									place = net.getNodeByText(edge.split("*")[1])
+								else
+									weight = 1
+									place = net.getNodeByText(edge)
 								for edge in net.edges when edge.source is place and edge.target is transition
 									existingEdge = edge
-							if existingEdge
-								existingEdge.left = weight
-							else
-								edge = new PnEdge({source: transition, target: place, right: weight})
-								net.addEdge(edge)
+								if existingEdge
+									existingEdge.right = weight
+								else
+									for edge in net.edges when edge.source is transition and edge.target is place
+										existingEdge = edge
+								if existingEdge
+									existingEdge.left = weight
+								else
+									edge = new PnEdge({source: place, target: transition, right: weight})
+									net.addEdge(edge)
+
+						for edge in postset
+							if edge isnt ""
+								if @isPartOfString("*", edge)
+									weight = edge.split("*")[0]
+									place = net.getNodeByText(edge.split("*")[1])
+								else
+									weight = 1
+									place = net.getNodeByText(edge)
+								for edge in net.edges when edge.source is transition and edge.target is place
+									existingEdge = edge
+								if existingEdge
+									existingEdge.right = weight
+								else
+									for edge in net.edges when edge.source is place and edge.target is transition
+										existingEdge = edge
+								if existingEdge
+									existingEdge.left = weight
+								else
+									edge = new PnEdge({source: transition, target: place, right: weight})
+									net.addEdge(edge)
 
 					# add initial tokens
 					markings = @getAptBlock("initial_marking", aptCode).split("{")[1].split("}")[0].split(", ")

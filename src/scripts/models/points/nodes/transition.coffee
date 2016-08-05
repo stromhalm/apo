@@ -4,8 +4,8 @@ class @Transition extends @Node
 		@type = "transition"
 		@connectableTypes = ["place"]
 		@shape = "rect"
-		@width = 35
-		@height = 35
+		@width = 36
+		@height = 36
 
 	getText: ->
 		return @label if @label

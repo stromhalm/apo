@@ -2,6 +2,7 @@ class FormDialog extends Service
 	constructor: ($mdDialog) ->
 
 		@runDialog = (options) ->
+			# Set dialog dafaults
 			{
 				title = "APO",
 				text = "",

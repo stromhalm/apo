@@ -13,20 +13,24 @@
 			<div class="md-dialog-content">
 				<p>{{ dialog.text }}</p>
 				<p ng-repeat="input in dialog.formElements">
-					<md-input-container class="md-block">
+					<md-input-container class="md-block" ng-if="input.type != 'textArray'">
 						<label>{{ input.name }}</label>
 						<input ng-if="input.type == 'number'" required type="number" step="1" ng-model="input.value" min="{{input.min}}" max="{{input.max}}" error-message="input.error" validation="input.validation" />
 						<input ng-if="input.type == 'text'" required type="text" ng-model="input.value" error-message="input.error" validation="input.validation" />
-						<textarea ng-if="input.type == 'code'" required class="code-editor" ng-model="input.value" style="min-height: 300px" error-message="input.error" validation="input.validation"></textarea>
+						<textarea ng-if="input.type == 'code'" required class="code-editor" ng-model="input.value" style="min-height: 200px" error-message="input.error" validation="input.validation"></textarea>
 						<ng-message>{{ input.error }}</ng-message>
 					</md-input-container>
+					<md-chips ng-if="input.type == 'textArray'" ng-model="input.value" placeholder="{{ input.name }}" md-separator-keys="dialog.arraySeperators">
+						<input type="text" ng-model="dialog.chipInput" validation="input.validation" error-message="input.error" placeholder="{{ input.name }}" />
+						<ng-message>{{ input.error }}</ng-message>
+					</md-chips>
 				</p>
 				<p ng-repeat="output in dialog.outputElements">
 					<md-input-container class="md-block">
 						<label>{{ output.name }}</label>
 						<input readonly ng-if="output.type == 'number'" type="number" ng-model="output.value" />
 						<input readonly ng-if="output.type == 'text'" type="text" ng-model="output.value" />
-						<textarea readonly ng-if="output.type == 'code'" class="code-editor" ng-model="output.value" style="min-height: 300px"></textarea>
+						<textarea readonly ng-if="output.type == 'code'" class="code-editor" ng-model="output.value" style="min-height: 200px"></textarea>
 						<ng-message>{{ output.error }}</ng-message>
 					</md-input-container>
 				</p>

@@ -1,19 +1,19 @@
 class @TsEdge extends @Edge
 	constructor: (options)->
-		{@labelLeft = "", @labelRight = ""} = options
+		{@labelsLeft = [], @labelsRight = []} = options
 		@type = "tsEdge"
 		super(options)
 
 	getText: ->
 		if @left >= 1 and @right >= 1
-			if @labelLeft is "" and @labelRight is ""
+			if @labelsLeft.length is 0 and @labelsRight.length is 0
 				return
-			else if @labelLeft is ""
-				return "#{@labelRight} →"
-			else if @labelRight is ""
-				return "← #{@labelLeft}"
-			return "← #{@labelLeft} | #{@labelRight} →"
+			else if @labelsLeft.length is 0
+				return "#{@labelsRight.join(", ")} →"
+			else if @labelsRight.length is 0
+				return "← #{@labelsLeft.join(", ")}"
+			return "← #{@labelsLeft.join(", ")} | #{@labelsRight.join(", ")} →"
 		else if @left >= 1
-			return @labelLeft
+			return @labelsLeft.join(", ")
 		else if @right >= 1
-			return @labelRight
+			return @labelsRight.join(", ")

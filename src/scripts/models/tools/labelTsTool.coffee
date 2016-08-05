@@ -14,16 +14,16 @@ class @LabelTsTool extends @Tool
 		if mouseDownEdge.left >= 1
 			formElements.push({
 				name: "#{targetObj.getText()} → #{sourceObj.getText()}"
-				type: "text"
-				value: mouseDownEdge.labelLeft
-				validation: @labelValidator
+				type: "textArray"
+				value: mouseDownEdge.labelsLeft
+				validation: (value) -> if value is "" then true else false
 		})
 		if mouseDownEdge.right >= 1
 			formElements.push({
 				name: "#{sourceObj.getText()} → #{targetObj.getText()}"
-				type: "text"
-				value: mouseDownEdge.labelRight
-				validation: @labelValidator
+				type: "textArray"
+				value: mouseDownEdge.labelsRight
+				validation: (value) -> if value is "" then true else false
 			})
 
 		if formElements.length is 1
@@ -39,11 +39,11 @@ class @LabelTsTool extends @Tool
 		.then (formElements) ->
 			if formElements
 				if mouseDownEdge.left >= 1
-					mouseDownEdge.labelLeft = formElements[0].value
+					mouseDownEdge.labelsLeft = formElements[0].value
 					if mouseDownEdge.right >= 1
-						mouseDownEdge.labelRight = formElements[1].value
+						mouseDownEdge.labelsRight = formElements[1].value
 				else if mouseDownEdge.right >= 1
-					mouseDownEdge.labelRight = formElements[0].value
+					mouseDownEdge.labelsRight = formElements[0].value
 				restart()
 
 	mouseDownOnNode: (net, mouseDownNode, dragLine, formDialogService, restart, converterService) ->

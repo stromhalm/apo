@@ -33,7 +33,10 @@ class FormDialog extends Service
 			})
 
 class FormDialogController extends Controller
-	constructor: ($mdDialog, $scope) ->
+	constructor: ($mdDialog, $scope, $mdConstant) ->
+
+		@arraySeperators = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA, $mdConstant.KEY_CODE.SPACE]
+		@chipInput = ""
 		@dismiss = () -> $mdDialog.hide(null)
 		@formIsComplete = () -> if not $scope.formDialog then return false else return $scope.formDialog.$valid
 		@complete = () ->

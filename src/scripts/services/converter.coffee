@@ -48,8 +48,8 @@ class Converter extends Service
 				labels = []
 				for edge in net.edges
 					if edge.type is "tsEdge"
-						labels.push edge.labelLeft if edge.left >= 1 and labels.indexOf(edge.labelLeft) is -1
-						labels.push edge.labelRight if edge.right >= 1 and labels.indexOf(edge.labelRight) is -1
+						labels.push label for label in edge.labelsleft when labels.indexOf(label) is -1 if edge.left >= 1
+						labels.push label for label in edge.labelsRight when labels.indexOf(label) is -1 if edge.right >= 1
 				rows.push label for label in labels
 				rows.push ""
 
@@ -59,10 +59,10 @@ class Converter extends Service
 					if edge.type is "tsEdge"
 						source = @getNodeFromData(edge.source)
 						target = @getNodeFromData(edge.target)
-						if edge.left >= 1 and edge.labelLeft
-							rows.push "" + target.getText() + " " + edge.labelLeft + " " + source.getText()
-						if edge.right >= 1 and edge.labelRight
-							rows.push "" + source.getText() + " " + edge.labelRight + " " + target.getText()
+						if edge.left >= 1 and edge.labelsLeft.length isnt 0
+							rows.push "" + target.getText() + " " + label + " " + source.getText() for label in edge.labelsLeft
+						if edge.right >= 1 and edge.labelsRight.length isnt 0
+							rows.push "" + source.getText() + " " + label + " " + target.getText() for label in edge.labelsRight
 
 			# convert petri nets
 			else if net.type is "pn"
@@ -143,25 +143,26 @@ class Converter extends Service
 						source = net.getNodeByText(edgeCode.split(" ")[0])
 						label = edgeCode.split(" ")[1]
 						target = net.getNodeByText(edgeCode.split(" ")[2])
+						existingEdge = false
 
 						for edge in net.edges when edge.source is source and edge.target is target
 							existingEdge = edge
 						if existingEdge
 							existingEdge.right = 1
-							existingEdge.labelRight = label
+							existingEdge.labelsRight.push label
 						else
 							for edge in net.edges when edge.source is target and edge.target is source
 								existingEdge = edge
-						if existingEdge
-							existingEdge.left = 1
-							existingEdge.labelLeft = label
-						else
-							edge = new TsEdge
-								source: source
-								right: 1
-								labelRight: label
-								target: target
-							net.addEdge(edge)
+							if existingEdge
+								existingEdge.left = 1
+								existingEdge.labelsLeft.push label
+							else
+								edge = new TsEdge
+									source: source
+									right: 1
+									labelsRight: [label]
+									target: target
+								net.addEdge(edge)
 
 				else if @isPartOfString("PN", @getAptBlock("type", aptCode))
 					net = new PetriNet({name: name})

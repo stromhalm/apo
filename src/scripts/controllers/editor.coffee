@@ -139,6 +139,7 @@ class Editor extends Controller
 
 			.on 'dblclick', (node) ->
 				net.getActiveTool().dblClickOnNode(net, node)
+				restart()
 
 
 			# show node text

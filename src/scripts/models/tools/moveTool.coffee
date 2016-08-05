@@ -5,7 +5,7 @@ class @MoveTool extends @Tool
 		@icon = "gps_fixed"
 		@draggable = true
 
-	mouseDownOnNode: (net, node, dragLine) ->
+	mouseDownOnNode: (net, node) ->
 		node.fixed = true
 
 	dblClickOnNode: (net, node) ->

@@ -54,16 +54,17 @@ class MenubarController extends Controller
 						value: converterService.getAptFromNet(net)
 					}
 				]
+				onComplete: () ->
+					element = document.createElement('a')
+					element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(converterService.getAptFromNet(net)))
+					element.setAttribute('target', '_blank')
+					element.setAttribute('download', net.name + ".apt")
+					element.style.display = 'none'
+					document.body.appendChild(element)
+					element.click()
+					document.body.removeChild(element)
+					return false # do not close dialog after download
 			})
-			.then (formElements) ->
-				element = document.createElement('a')
-				element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(converterService.getAptFromNet(net)))
-				element.setAttribute('target', '_blank')
-				element.setAttribute('download', net.name + ".apt")
-				element.style.display = 'none'
-				document.body.appendChild(element)
-				element.click()
-				document.body.removeChild(element)
 
 		@importAPT = ($event) ->
 			formDialogService.runDialog({

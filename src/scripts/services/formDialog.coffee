@@ -2,7 +2,7 @@ class FormDialog extends Service
 	constructor: ($mdDialog) ->
 
 		@runDialog = (options) ->
-			{title = "APO", text = "", formElements = [], ok = "ok", cancel = "cancel", event = null} = options
+			{title = "APO", text = "", formElements = [], outputElements = [], ok = "ok", cancel = "cancel", event = null} = options
 			$mdDialog.show({
 				targetEvent: event
 				templateUrl: 'views/directives/dialog.html'
@@ -15,6 +15,7 @@ class FormDialog extends Service
 					title: title
 					text: text
 					formElements: formElements
+					outputElements: outputElements
 					ok: ok
 					cancel: cancel
 			})

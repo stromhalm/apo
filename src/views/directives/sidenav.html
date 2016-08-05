@@ -13,7 +13,8 @@
       <form ng-submit="sn.createNewNet(sn.newName, sn.newType, $event)" layout="row">
          <md-input-container class="net-name-input">
             <label>Create New</label>
-            <input ng-model="sn.newName">
+            <input ng-model="sn.newName" validation="sn.nameValidation" error-message="sn.error">
+				<ng-message>{{ sn.error }}</ng-message>
          </md-input-container>
 			<md-input-container class="net-type-input">
 				<label>Type</label>

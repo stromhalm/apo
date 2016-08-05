@@ -10,6 +10,7 @@ class MenubarController extends Controller
 					type: "text"
 					name: "Name"
 					validation: (value) ->
+						return "The name can't contain \"" if value.replace("\"", "") isnt value
 						return "A net with this name already exists" if NetStorage.getNetByName(value)
 						return true
 				}]
@@ -31,6 +32,7 @@ class MenubarController extends Controller
 					name: "New Name"
 					value: oldName
 					validation: (value) ->
+						return "The name can't contain \"" if value.replace("\"", "") isnt value
 						return "A net with this name already exists" if NetStorage.getNetByName(value)
 						return true
 				}]

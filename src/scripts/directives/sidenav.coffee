@@ -1,5 +1,7 @@
 class SidenavController extends Controller
-	constructor: ($mdSidenav, $state, $stateParams, $mdDialog, NetStorage) ->
+	constructor: ($mdSidenav, $state, $stateParams, NetStorage, $mdDialog) ->
+
+		@newName = ""
 
 		@toggleSideMenu = ->
 			$mdSidenav("left-menu").toggle()
@@ -11,19 +13,16 @@ class SidenavController extends Controller
 			$state.go "editor", name: net.name
 			$mdSidenav("left-menu").close()
 
+		@nameValidation = (name) ->
+			return "\" is not allowed" if name.replace("\"", "") isnt name
+			return "A net with this name already exists" if NetStorage.getNetByName(name)
+			return true
+
 		@createNewNet = (name, type, $event) ->
-			if (!name or !type)
+			if (!name or !type or @nameValidation(name) isnt true)
 			else
 				if type is "PN" then success = NetStorage.addNet(new PetriNet({name: name}))
 				else if type is "LTS" then success = NetStorage.addNet(new TransitionSystem({name: name}))
-				if not success
-					alert = $mdDialog.alert
-						title: "Can Not Create Net"
-						textContent: "A net with the name '#{name}' already exists!"
-						ok: "OK"
-						targetEvent: $event # To animate the dialog to/from the click
-					$mdDialog.show(alert).finally ->
-						alert = undefined
 				@newName = ""
 				@newType = ""
 

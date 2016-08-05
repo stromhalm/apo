@@ -47,6 +47,9 @@ class @LabelTsTool extends @Tool
 				restart()
 
 	mouseDownOnNode: (net, mouseDownNode, dragLine, formDialogService, restart, converterService) ->
+
+		nodeObj = converterService.getNodeFromData(mouseDownNode)
+
 		formDialogService.runDialog({
 			title: "Label for Node"
 			text: "Enter a name for this #{mouseDownNode.type}"
@@ -54,7 +57,7 @@ class @LabelTsTool extends @Tool
 				{
 					name: "Name"
 					type: "text"
-					value: mouseDownNode.label
+					value: nodeObj.getText()
 					validation: @labelValidator
 				}
 			]

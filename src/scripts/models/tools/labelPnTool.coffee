@@ -46,7 +46,9 @@ class @LabelPnTool extends @Tool
 				restart()
 
 
-	mouseDownOnNode: (net, mouseDownNode, dragLine, formDialogService, restart) ->
+	mouseDownOnNode: (net, mouseDownNode, dragLine, formDialogService, restart, converterService) ->
+
+		nodeObj = converterService.getNodeFromData(mouseDownNode)
 
 		formDialogService.runDialog({
 			title: "Label for Node"
@@ -55,7 +57,7 @@ class @LabelPnTool extends @Tool
 				{
 					name: "Name"
 					type: "text"
-					value: mouseDownNode.label
+					value: nodeObj.getText()
 					validation: @labelValidator
 				}
 			]

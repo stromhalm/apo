@@ -15,7 +15,7 @@ class @TokenTool extends @Tool
 						name: "Integer ≥ 0"
 						type: "number"
 						min: 0
-						value: parseInt(mouseDownNode.token)
+						value: parseInt(mouseDownNode.tokens)
 					}
 				]
 			})
@@ -23,7 +23,7 @@ class @TokenTool extends @Tool
 				if formElements
 					tokens = formElements[0].value
 					if tokens >= 0
-						mouseDownNode.token = tokens
+						mouseDownNode.tokens = tokens
 						restart()
 
 		else if mouseDownNode.type is "transition"

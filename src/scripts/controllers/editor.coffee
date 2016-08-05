@@ -121,7 +121,7 @@ class Editor extends Controller
 					selectedNode = mouseDownNode
 
 				# call the tools mouseDown listener
-				net.getActiveTool().mouseDownOnNode(net, mouseDownNode, dragLine, formDialogService, restart)
+				net.getActiveTool().mouseDownOnNode(net, mouseDownNode, dragLine, formDialogService, restart, converterService)
 				$scope.$apply() # Quick save net to storage
 				restart()
 

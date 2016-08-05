@@ -15,3 +15,16 @@ class @Tool
 	mouseDownOnCanvas: (net, point, dragLine) ->
 
 	dblClickOnNode: (net, node) ->
+
+	# General validator for APT labels
+	labelValidator: (value) ->
+
+		@isPartOfString = (searchFor, searchIn) ->
+			searchIn.replace(searchFor, "") isnt searchIn
+
+		return "Labels can't contain '*'" if @isPartOfString('*', value)
+		return "Labels can't contain ','" if @isPartOfString(',', value)
+		return "Labels can't contain spaces" if @isPartOfString(' ', value)
+		return "Labels can't contain '{'" if @isPartOfString('{', value)
+		return "Labels can't contain '}'" if @isPartOfString('}', value)
+		return true

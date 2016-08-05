@@ -12,10 +12,10 @@
                      <md-button ng-click="$mdOpenMenu()">New</md-button>
                      <md-menu-content>
                         <md-menu-item>
-                           <md-button ng-click="mb.createPN($event)">Petri Net</md-button>
+                           <md-button ng-click="mb.createNet($event, 'petri net')">Petri Net</md-button>
                         </md-menu-item>
                         <md-menu-item>
-                           <md-button ng-click="mb.createTS($event)">Transition System</md-button>
+                           <md-button ng-click="mb.createNet($event, 'transition system')">Transition System</md-button>
                         </md-menu-item>
                      </md-menu-content>
                   </md-menu>

@@ -1,6 +1,6 @@
 class @Place extends @Node
 	constructor: (point) ->
-		{@token = 0} = point
+		{@tokens = 0} = point
 		super(point)
 		@type = "place"
 		@connectableTypes = ["transition"]
@@ -11,5 +11,5 @@ class @Place extends @Node
 		return "s#{@id}"
 
 	getTokenLabel: ->
-		return "" if @token is 0
-		return @token
+		return "" if @tokens is 0
+		return @tokens

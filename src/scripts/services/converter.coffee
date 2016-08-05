@@ -106,10 +106,10 @@ class Converter extends Service
 				# add initial marking
 				row = ".initial_marking {"
 				placesWithTokens = []
-				placesWithTokens.push place for place in net.nodes when place.type is "place" and place.token >= 1
+				placesWithTokens.push place for place in net.nodes when place.type is "place" and place.tokens >= 1
 				for place, index in placesWithTokens
 					place = @getNodeFromData(place)
-					row += place.token + "*" + place.getText()
+					row += place.tokens + "*" + place.getText()
 					row += ", " if index isnt placesWithTokens.length - 1
 				row += "}"
 				rows.push row
@@ -243,7 +243,7 @@ class Converter extends Service
 						else
 							number = 1
 							place = net.getNodeByText(marking)
-						place.token = number
+						place.tokens = number
 
 					# rename transitions from id's to labels
 					transitionLabels.forEach (label, transitionId) ->

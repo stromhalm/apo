@@ -15,9 +15,10 @@
 				<p ng-repeat="input in dialog.formElements">
 					<md-input-container class="md-block">
 						<label>{{ input.name }}</label>
-						<input ng-if="input.type == 'number'" required type="number" step="1" ng-model="input.value" min="{{input.min}}" max="{{input.max}}" />
-						<input ng-if="input.type == 'text'" required type="text" ng-model="input.value" />
-						<textarea ng-if="input.type == 'code'" required class="code-editor" ng-model="input.value" style="min-height: 300px"></textarea>
+						<input ng-if="input.type == 'number'" required type="number" step="1" ng-model="input.value" min="{{input.min}}" max="{{input.max}}" error-message="input.error" validation="input.validation" />
+						<input ng-if="input.type == 'text'" required type="text" ng-model="input.value" error-message="input.error" validation="input.validation" />
+						<textarea ng-if="input.type == 'code'" required class="code-editor" ng-model="input.value" style="min-height: 300px" error-message="input.error" validation="input.validation"></textarea>
+						<ng-message>{{ input.error }}</ng-message>
 					</md-input-container>
 				</p>
 			</div>

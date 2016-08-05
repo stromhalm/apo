@@ -16,12 +16,14 @@ class @LabelTsTool extends @Tool
 				name: "#{targetObj.getText()} → #{sourceObj.getText()}"
 				type: "text"
 				value: mouseDownEdge.labelLeft
-			})
+				validation: @labelValidator
+		})
 		if mouseDownEdge.right >= 1
 			formElements.push({
 				name: "#{sourceObj.getText()} → #{targetObj.getText()}"
 				type: "text"
 				value: mouseDownEdge.labelRight
+				validation: @labelValidator
 			})
 
 		if formElements.length is 1
@@ -44,7 +46,7 @@ class @LabelTsTool extends @Tool
 					mouseDownEdge.labelRight = formElements[0].value
 				restart()
 
-	mouseDownOnNode: (net, mouseDownNode, dragLine, formDialogService, restart) ->
+	mouseDownOnNode: (net, mouseDownNode, dragLine, formDialogService, restart, converterService) ->
 		formDialogService.runDialog({
 			title: "Label for Node"
 			text: "Enter a name for this #{mouseDownNode.type}"
@@ -53,6 +55,7 @@ class @LabelTsTool extends @Tool
 					name: "Name"
 					type: "text"
 					value: mouseDownNode.label
+					validation: @labelValidator
 				}
 			]
 		})

@@ -26,7 +26,7 @@ class @PetriNet extends @Net
 	isFirable: (transition) ->
 		return false if transition.type isnt "transition"
 		preset = @getPreset(transition)
-		return false for place in preset when place.token < @getEdgeWeight(place, transition)
+		return false for place in preset when place.tokens < @getEdgeWeight(place, transition)
 		return true
 
 	getEdgeWeight: (source, target) ->
@@ -42,7 +42,7 @@ class @PetriNet extends @Net
 		preset = @getPreset(transition)
 		postset = @getPostset(transition)
 		for place in preset
-			place.token = parseInt(place.token) - parseInt(@getEdgeWeight(place, transition))
+			place.tokens = parseInt(place.tokens) - parseInt(@getEdgeWeight(place, transition))
 		for place in postset
-			place.token = parseInt(place.token) + parseInt(@getEdgeWeight(transition, place))
+			place.tokens = parseInt(place.tokens) + parseInt(@getEdgeWeight(transition, place))
 		return true

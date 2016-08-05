@@ -56,6 +56,7 @@ class @LabelPnTool extends @Tool
 					name: "Name"
 					type: "text"
 					value: mouseDownNode.label
+					validation: @labelValidator
 				}
 			]
 		})

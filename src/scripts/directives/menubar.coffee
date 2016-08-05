@@ -1,52 +1,49 @@
 class MenubarController extends Controller
 	constructor: ($mdDialog, NetStorage, $state, apt, $http, formDialogService, converterService) ->
 
-		createPN = ($event, nameExists = false) ->
+		createNet = ($event, type, nameExists = false) ->
 			if nameExists then alert = "A net with the name '#{nameExists}' already exists. " else alert = ""
-			prompt = $mdDialog.prompt
-				title: "Create Petri Net"
-				textContent: alert + "Enter a name for the new petri net."
-				placeholder: "Enter a name"
-				ok: "OK"
-				cancel: "Cancel"
-				targetEvent: $event # To animate the dialog to/from the click
-			$mdDialog.show(prompt)
-			.then (pnName) ->
-				success = NetStorage.addNet(new PetriNet({name: pnName}))
-				createPN($event, pnName) if not success
-		@createPN = createPN # required for recursive calls
-
-		createTS = ($event, nameExists = false) ->
-			if nameExists then alert = "A net with the name '#{nameExists}' already exists. " else alert = ""
-			prompt = $mdDialog.prompt
-				title: "Create Transition System"
-				textContent: alert + "Enter a name for the new transition system."
-				placeholder: "Enter a name"
-				ok: "OK"
-				cancel: "Cancel"
-				targetEvent: $event # To animate the dialog to/from the click
-			$mdDialog.show(prompt)
-			.then (tsName) ->
-				success = NetStorage.addNet(new TransitionSystem({name: tsName}))
-				createTS($event, tsName) if not success
-		@createTS = createTS # required for recursive calls
+			formDialogService.runDialog({
+				title: "Create #{type}"
+				text: alert + "Enter a name for the new #{type}."
+				event: $event
+				formElements: [{
+					type: "text"
+					name: "Name"
+					validation: (value) ->
+						return "A net with this name already exists" if NetStorage.getNetByName(value)
+						return true
+				}]
+			})
+			.then (formElements) ->
+				if formElements
+					switch type
+						when "petri net" then newNet = new PetriNet({name: formElements[0].value})
+						else newNet = new TransitionSystem({name: formElements[0].value})
+					success = NetStorage.addNet(newNet)
+					createNet($event, type, newNet.name) if not success
+		@createNet = createNet
 
 		renameNet = (oldName, $event, nameExists = false) ->
 			if nameExists then alert = "A net with the name '#{nameExists}' already exists. " else alert = ""
-			prompt = $mdDialog.prompt
-				title: "Rename net"
-				textContent: alert + "Enter a new name for the net."
-				placeholder: "Enter a new name"
-				ok: "OK"
-				cancel: "Cancel"
-				targetEvent: $event # To animate the dialog to/from the click
-			$mdDialog.show(prompt)
-			.then (newName) ->
-				success = NetStorage.renameNet(oldName, newName)
-				if not success
-					renameNet(oldName, $event, newName)
-				else
-					$state.go "editor", name: newName
+			formDialogService.runDialog({
+				title: "Rename Net"
+				text: alert + "Enter a new name for the net."
+				event: $event
+				formElements: [{
+					type: "text"
+					name: "New Name"
+					value: oldName
+				}]
+			})
+			.then (formElements) ->
+				if formElements
+					newName = formElements[0].value
+					success = NetStorage.renameNet(oldName, newName)
+					if not success
+						renameNet(oldName, $event, newName)
+					else
+						$state.go "editor", name: newName
 		@renameNet = renameNet # required for recursive calls
 
 		@showAPT = (net, $event) ->
@@ -64,7 +61,7 @@ class MenubarController extends Controller
 		@importAPT = ($event) ->
 			formDialogService.runDialog({
 				title: "APT Import"
-				text: "Insert APT Code here to import a net"
+				text: "Insert APT code here to import a net"
 				ok: "import"
 				event: $event
 				formElements: [

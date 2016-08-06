@@ -2,6 +2,7 @@ class @TokenTool extends @Tool
 	constructor: ->
 		super()
 		@name = "Tokens"
+		@description = "Set the number of tokens on places and fire transitions"
 		@icon = "play_circle_outline"
 
 	mouseDownOnNode: (net, mouseDownNode, dragLine, formDialogService, restart) ->

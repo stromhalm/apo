@@ -3,6 +3,7 @@ class @LabelTsTool extends @Tool
 		super()
 		@name = "Labels"
 		@icon = "text_fields"
+		@description = "Label states and transitions"
 
 	mouseDownOnEdge: (net, mouseDownEdge, formDialogService, restart, converterService) ->
 		return if mouseDownEdge.type is "tsInitEdge"

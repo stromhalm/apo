@@ -39,6 +39,12 @@
                      Rename Net
                   </md-button>
                </md-menu-item>
+					<md-menu-item class="md-indent">
+                  <ng-md-icon icon="delete" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
+                  <md-button ng-click="mb.deleteNet(net, $event)">
+                     Delete Net
+                  </md-button>
+               </md-menu-item>
             </md-menu-content>
          </md-menu>
          <md-menu>
@@ -48,7 +54,7 @@
             <md-menu-content>
                <md-menu-item class="md-indent" ng-repeat="tool in net.tools">
                   <ng-md-icon icon="{{tool.icon}}" style="fill: rgba(0, 0, 0, .87)" size="20"></ng-md-icon>
-                  <md-button ng-click="net.activeTool = tool.name">
+                  <md-button ng-click="net.activeTool = tool.name" title="{{ tool.description }}">
                      {{tool.name}}
                   </md-button>
                </md-menu-item>

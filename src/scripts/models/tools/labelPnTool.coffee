@@ -3,6 +3,7 @@ class @LabelPnTool extends @Tool
 		super()
 		@name = "Labels"
 		@icon = "text_fields"
+		@description = "Label places, transitions and set edge weights"
 
 	mouseDownOnEdge: (net, mouseDownEdge, formDialogService, restart, converterService) ->
 
@@ -51,7 +52,7 @@ class @LabelPnTool extends @Tool
 		nodeObj = converterService.getNodeFromData(mouseDownNode)
 
 		formDialogService.runDialog({
-			title: "Label for Node"
+			title: "Label for #{mouseDownNode.type}"
 			text: "Enter a name for this #{mouseDownNode.type}"
 			formElements: [
 				{

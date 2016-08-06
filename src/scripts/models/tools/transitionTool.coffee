@@ -3,6 +3,7 @@ class @TransitionTool extends @Tool
 		super()
 		@name = "Transitions"
 		@icon = "check_box_outline_blank"
+		@description = "Create transitions"
 		@draggable = true
 
 	mouseDownOnCanvas: (net, point) -> net.addTransition(point)

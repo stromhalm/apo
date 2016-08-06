@@ -3,6 +3,7 @@ class @MoveTool extends @Tool
 		super()
 		@name = "Fix Nodes"
 		@icon = "gps_fixed"
+		@description = "Move nodes to fix their position. Double click to free them."
 		@draggable = true
 
 	mouseDownOnNode: (net, node) ->

@@ -3,6 +3,7 @@ class @ArrowTool extends @Tool
 		super()
 		@name = "Arrows"
 		@icon = "keyboard_backspace"
+		@description = "Connect nodes in the graph via arrows"
 
 	mouseDownOnNode: (net, node, dragLine) ->
 		dragLine.style('marker-end', 'url(#endArrow)').classed('hidden', false).attr('d', 'M' + node.x + ',' + node.y + 'L' + node.x + ',' + node.y)

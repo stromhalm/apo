@@ -2,6 +2,8 @@ class @Tool
 	constructor: ->
 		@icon = "help_outline"
 		@draggable = false
+		@name = "Unnamed Tool"
+		@description = ""
 
 	# ngStorage can't save circle references.
 	# Therefore we can't save the net reference – is has to be passed with every function call

@@ -3,6 +3,6 @@ class @InitStateTool extends @Tool
 		super()
 		@name = "Initial State"
 		@icon = "play_for_work"
+		@description = "Set a state as initial state"
 
-	mouseDownOnNode: (net, node) ->
-		net.setInitState(node)
+	mouseDownOnNode: (net, node) -> net.setInitState(node)

@@ -3,6 +3,7 @@ class @StateTool extends @Tool
 		super()
 		@name = "States"
 		@icon = "radio_button_unchecked"
+		@description = "Create states"
 		@draggable = true
 
 	mouseDownOnCanvas: (net, point) -> net.addState(point)

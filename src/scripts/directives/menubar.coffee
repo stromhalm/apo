@@ -2,7 +2,7 @@ class MenubarController extends Controller
 	constructor: ($mdDialog, NetStorage, $state, apt, $http, formDialogService, converterService, $timeout) ->
 
 		@createNet = ($event, type) ->
-			formDialogService.runDialog({
+			formDialogService.runDialog
 				title: "Create #{type}"
 				text: "Enter a name for the new #{type}."
 				event: $event
@@ -14,7 +14,6 @@ class MenubarController extends Controller
 						return "A net with this name already exists" if value and NetStorage.getNetByName(value)
 						return true
 				}]
-			})
 			.then (formElements) ->
 				if formElements
 					switch type
@@ -107,8 +106,8 @@ class MenubarController extends Controller
 					else
 						NetStorage.addNet(net)
 
-		@startAnalyzer = (analyzer, net) ->
-			analyzer.run(apt, NetStorage, converterService, net)
+		@startAnalyzer = (analyzer, net, $event) ->
+			analyzer.run(apt, NetStorage, converterService, net, formDialogService, $event)
 
 class Menubar extends Directive
 	constructor: ->

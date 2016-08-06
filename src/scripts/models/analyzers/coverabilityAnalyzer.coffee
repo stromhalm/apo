@@ -3,20 +3,26 @@ class @CoverabilityAnalyzer extends @Analyzer
 		super()
 		@icon = "call_merge"
 		@name = "Coverability Graph"
-		@infoText = "This module creates the coverability graph as a new transition system from an existing petri net."
-		@options =
-			[
-				{
-					name: "Name of the new net"
-					type: "text"
-				}
-			]
+		@description =  "This module creates the coverability graph as a new transition system from an existing petri net."
 
-	run: (apt, NetStorage, converterService, currentNet) ->
-		aptNet = converterService.getAptFromNet(currentNet)
-		apt.getCoverabilityGraph(aptNet).then((response) ->
+	inputOptions: (currentNet, NetStorage) ->
+		[
+			{
+				name: "Name of the new net"
+				type: "text"
+				value: "CG of #{currentNet.name}"
+				validation: (name) ->
+					return "The name can't contain \"" if name and name.replace("\"", "") isnt name
+					return "A net with this name already exists" if name and NetStorage.getNetByName(name)
+					return true
+			}
+		]
+
+	analyze: (inputOptions, apt, net, converterService, NetStorage) ->
+		aptNet = converterService.getAptFromNet(net)
+		apt.getCoverabilityGraph(aptNet)
+		.then (response) ->
 			aptCov = response.data.coverabilityGraph
-			console.log aptCov
 			covGraph = converterService.getNetFromApt(aptCov)
+			covGraph.name = inputOptions[0].value
 			NetStorage.addNet(covGraph)
-		)

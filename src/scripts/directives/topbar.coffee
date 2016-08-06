@@ -1,8 +1,15 @@
 class TopbarController extends Controller
-	constructor: (NetStorage) ->
+	constructor: (NetStorage, $mdDialog) ->
 
-		@resetStorage = ->
-			NetStorage.resetStorage()
+		@resetStorage = ($event) ->
+			$mdDialog.show $mdDialog.confirm
+				title: "Delete All Nets"
+				textContent: "Do you really want to delete all nets?"
+				ok: "Reset Storage"
+				cancel: "Cancel"
+				targetEvent: $event # To animate the dialog to/from the click
+			.then ->
+				NetStorage.resetStorage()
 
 class Topbar extends Directive
 	constructor: ->

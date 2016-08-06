@@ -1,5 +1,5 @@
 class NetStorage extends Factory
-	constructor: (converterService, $localStorage, $state) ->
+	constructor: (converterService, $localStorage, $state, $stateParams) ->
 
 		getDefaultNet = ->
 			new PetriNet({name: "Sample Net"})
@@ -35,6 +35,9 @@ class NetStorage extends Factory
 			deleteNet: (name) ->
 				storage.nets.splice(getNetIdByName(name), 1)
 				storage.nets.push(getDefaultNet()) if storage.nets.length is 0
+				# Go to first net if current net has been deleted
+				if name is decodeURI($stateParams.name)
+					$state.go "editor", name: ""
 
 			getNetByName: (name) ->
 				return converterService.getNetFromData(net) for net in storage.nets when net.name is name
@@ -43,5 +46,5 @@ class NetStorage extends Factory
 			resetStorage: ->
 				storage.nets.splice(0, 1) while storage.nets.length > 0
 				storage.nets.push(getDefaultNet())
-				$state.go "editor", name: storage.nets[0].name
+				$state.go "editor", name: ""
 		}

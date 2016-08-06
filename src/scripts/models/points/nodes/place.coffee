@@ -8,7 +8,7 @@ class @Place extends @Node
 
 	getText: ->
 		return @label if @label
-		return "s#{@id}"
+		return "p#{@id}"
 
 	getTokenLabel: ->
 		return "" if @tokens is 0

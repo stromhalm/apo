@@ -8,7 +8,7 @@ class @CoverabilityAnalyzer extends @Analyzer
 	inputOptions: (currentNet, NetStorage) ->
 		[
 			{
-				name: "Name of the new net"
+				name: "Name of the new transition system"
 				type: "text"
 				value: "CG of #{currentNet.name}"
 				validation: (name) ->

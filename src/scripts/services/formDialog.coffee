@@ -14,7 +14,7 @@ class FormDialog extends Service
 				onComplete = null
 			} = options
 
-			$mdDialog.show({
+			$mdDialog.show
 				targetEvent: event
 				templateUrl: 'views/directives/dialog.html'
 				controller: FormDialogController
@@ -30,16 +30,18 @@ class FormDialog extends Service
 					onComplete: onComplete
 					ok: ok
 					cancel: cancel
-			})
 
 class FormDialogController extends Controller
 	constructor: ($mdDialog, $scope, $mdConstant) ->
 
+		@chipInput = []
 		@arraySeperators = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA, $mdConstant.KEY_CODE.SPACE]
-		@chipInput = ""
-		@dismiss = () -> $mdDialog.hide(null)
-		@formIsComplete = () -> if not $scope.formDialog then return false else return $scope.formDialog.$valid
-		@complete = () ->
+		@dismiss = -> $mdDialog.hide(null)
+		@formIsComplete = -> if not $scope.formDialog then return false else return $scope.formDialog.$valid
+
+		@complete = ->
 			if @formIsComplete()
 				completed = @onComplete() if @onComplete
 				$mdDialog.hide(@formElements) if completed isnt false # don't hide dialog if @onComplete returns false
+
+		@querySearch = (query, array) -> array

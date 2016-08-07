@@ -11,20 +11,82 @@
 		</md-toolbar>
 		<md-dialog-content>
 			<div class="md-dialog-content">
-				<p>{{ dialog.text }}</p>
-				<p ng-repeat="input in dialog.formElements">
-					<md-input-container class="md-block" ng-if="input.type != 'textArray'">
+				<p class="dialog-description">{{ dialog.text }}</p>
+				<div ng-repeat="(inputId, input) in dialog.formElements">
+					<md-input-container class="md-block" ng-if="input.type != 'textArray' && input.type != 'chooseArray'">
 						<label>{{ input.name }}</label>
-						<input ng-if="input.type == 'number'" required type="number" step="1" ng-model="input.value" min="{{input.min}}" max="{{input.max}}" error-message="input.error" validation="input.validation" />
-						<input ng-if="input.type == 'text'" required type="text" ng-model="input.value" error-message="input.error" validation="input.validation" />
-						<textarea ng-if="input.type == 'code'" required class="code-editor" ng-model="input.value" style="min-height: 200px" error-message="input.error" validation="input.validation"></textarea>
+						<input
+							ng-if="input.type == 'number'"
+							required type="number"
+							step="1"
+							ng-model="input.value"
+							min="{{input.min}}"
+							max="{{input.max}}"
+							error-message="input.error"
+							validation="input.validation" />
+						<input
+							ng-if="input.type == 'text'"
+							required
+							type="text"
+							ng-model="input.value"
+							error-message="input.error"
+							validation="input.validation" />
+						<textarea
+							ng-if="input.type == 'code'"
+							required class="code-editor"
+							ng-model="input.value"
+							style="min-height: 200px"
+							error-message="input.error"
+							validation="input.validation">
+						</textarea>
 						<ng-message>{{ input.error }}</ng-message>
 					</md-input-container>
-					<md-chips ng-if="input.type == 'textArray'" ng-model="input.value" placeholder="{{ input.name }}" md-separator-keys="dialog.arraySeperators">
-						<input type="text" ng-model="dialog.chipInput" validation="input.validation" error-message="input.error" placeholder="{{ input.name }}" />
+					<md-chips
+						ng-if="input.type == 'textArray'"
+						ng-model="input.value"
+						md-separator-keys="dialog.arraySeperators"
+						placeholder="{{ input.name }}"
+						secondary-placeholder="+">
+						<input
+							type="text"
+							ng-model="dialog.chipInput[inputId]"
+							validation="input.validation"
+							error-message="input.error" />
 						<ng-message>{{ input.error }}</ng-message>
 					</md-chips>
-				</p>
+					<md-contact-chips
+						ng-if="input.type == 'chooseArray'"
+						ng-model="input.value"
+						md-contacts="dialog.querySearch($query, input.chooseFrom)"
+						md-contact-name="nicename"
+						md-filter-selected="'true'"
+						md-require-match="true"
+						placeholder="{{ input.name }}"
+						secondary-placeholder="+">
+						<input
+							type="text"
+							ng-model="dialog.chipInput[inputId]"
+							validation="input.validation"
+							error-message="input.error"
+							placeholder="{{ input.name }}" />
+					</md-contact-chips>
+
+					<md-list class="fixedRows" layout="row" layout-wrap>
+						<md-list-item
+							ng-if="input.value.indexOf(item) < 0"
+							ng-repeat="(index, item) in input.chooseFrom"
+							flex-xs="100"
+							flex-gt-xs="50"
+							flex-gt-md="25"
+							flex-gt-lg="33"
+							class="md-2-line contact-item">
+							<div class="md-list-item-text compact">
+								<h3>{{item.nicename}}</h3>
+								<p class="item-description">{{item.description}}</p>
+							</div>
+						</md-list-item>
+					</md-list>
+				</div>
 				<p ng-repeat="output in dialog.outputElements">
 					<md-input-container class="md-block">
 						<label>{{ output.name }}</label>

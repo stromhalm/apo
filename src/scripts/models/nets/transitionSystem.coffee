@@ -11,6 +11,10 @@ class @TransitionSystem extends @Net
 			new LabelTsTool()
 		])
 
+		@setAnalyzers([
+			new Synthesizer()
+		])
+
 	addState: (point) ->
 		state = new State(point)
 		@addNode(state)

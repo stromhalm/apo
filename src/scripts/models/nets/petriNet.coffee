@@ -26,15 +26,15 @@ class @PetriNet extends @Net
 	isFirable: (transition) ->
 		return false if transition.type isnt "transition"
 		preset = @getPreset(transition)
-		return false for place in preset when place.tokens < @getEdgeWeight(place, transition)
+		return false for place in preset when parseInt(place.tokens) < @getEdgeWeight(place, transition)
 		return true
 
 	getEdgeWeight: (source, target) ->
 		for edge in @edges
 			if edge.source.id is source.id and edge.target.id is target.id
-				return edge.right
+				return parseInt(edge.right)
 			else if edge.source.id is target.id and edge.target.id is source.id
-				return edge.left
+				return parseInt(edge.left)
 		return 0
 
 	fireTransition: (transition) ->

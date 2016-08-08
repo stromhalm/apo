@@ -17,24 +17,17 @@ class @LabelTsTool extends @Tool
 				name: "#{targetObj.getText()} → #{sourceObj.getText()}"
 				type: "textArray"
 				value: mouseDownEdge.labelsLeft
-				validation: (value) -> if value is "" then true else false
 		})
 		if mouseDownEdge.right >= 1
 			formElements.push({
 				name: "#{sourceObj.getText()} → #{targetObj.getText()}"
 				type: "textArray"
 				value: mouseDownEdge.labelsRight
-				validation: (value) -> if value is "" then true else false
 			})
-
-		if formElements.length is 1
-			labelText = "a label"
-		else
-			labelText = "labels"
 
 		formDialogService.runDialog({
 			title: "Set Label"
-			text: "Enter #{labelText} for this edge"
+			text: "Enter labels for this edge"
 			formElements: formElements
 		})
 		.then (formElements) ->

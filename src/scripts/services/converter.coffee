@@ -189,12 +189,13 @@ class Converter extends Service
 					flows = @getAptBlockRows("flows", aptCode)
 					for flow in flows
 						transition = net.getNodeByText(flow.split(": {")[0])
-						preset = flow.split(": {")[1].split("}")[0].split(", ")
-						postset = flow.split("-> {")[1].split("}")[0].split(", ")
+						preset = flow.split(": {")[1].split("}")[0].replace(", ", ",").split(",")
+						postset = flow.split("-> {")[1].split("}")[0].replace(", ", ",").split(",")
 
 						# only create edges if they not already exist
 						for edge in preset
 							if edge isnt ""
+								existingEdge = false
 								if @isPartOfString("*", edge)
 									weight = edge.split("*")[0]
 									place = net.getNodeByText(edge.split("*")[1])

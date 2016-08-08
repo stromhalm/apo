@@ -4,17 +4,22 @@ class @Analyzer
 		@icon = "help_outline"
 		@description = ""
 		@ok = "generate"
+		@cancel = "close"
 
 	run: (apt, NetStorage, converterService, currentNet, formDialogService, $event) ->
 		analyzer = @analyze
+		formElements = @inputOptions(currentNet, NetStorage)
+		outputElements = []
 		formDialogService.runDialog
 			title: @name
 			text: @description
 			ok: @ok
+			cancel: @cancel
 			event: $event
-			formElements: @inputOptions(currentNet, NetStorage)
-		.then (inputOptions) ->
-			analyzer(inputOptions, apt, currentNet, converterService, NetStorage) if (inputOptions)
+			formElements: formElements
+			outputElements: outputElements
+			onComplete: (inputOptions) ->
+				analyzer(inputOptions, outputElements, currentNet, apt, converterService, NetStorage, formDialogService)
 
 	inputOptions: (currentNet, NetStorage) ->
 	analyze: (inputOptions, apt, currentNet, converterService, NetStorage) ->

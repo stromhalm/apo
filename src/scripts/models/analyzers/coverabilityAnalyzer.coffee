@@ -3,7 +3,7 @@ class @CoverabilityAnalyzer extends @Analyzer
 		super()
 		@icon = "call_merge"
 		@name = "Coverability Graph"
-		@description =  "This module creates the coverability graph as a new transition system from an existing petri net."
+		@description =  "Compute a petri net's coverability graph"
 
 	inputOptions: (currentNet, NetStorage) ->
 		[
@@ -18,10 +18,9 @@ class @CoverabilityAnalyzer extends @Analyzer
 			}
 		]
 
-	analyze: (inputOptions, apt, net, converterService, NetStorage) ->
-		aptNet = converterService.getAptFromNet(net)
-		apt.getCoverabilityGraph(aptNet)
-		.then (response) ->
+	analyze: (inputOptions, outputElements, currentNet, apt, converterService, NetStorage, formDialogService) ->
+		aptNet = converterService.getAptFromNet(currentNet)
+		apt.getCoverabilityGraph(aptNet).then (response) ->
 			aptCov = response.data.coverabilityGraph
 			covGraph = converterService.getNetFromApt(aptCov)
 			covGraph.name = inputOptions[0].value

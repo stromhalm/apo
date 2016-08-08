@@ -21,7 +21,7 @@ class @CoverabilityAnalyzer extends @Analyzer
 	analyze: (inputOptions, outputElements, currentNet, apt, converterService, NetStorage, formDialogService) ->
 		aptNet = converterService.getAptFromNet(currentNet)
 		apt.getCoverabilityGraph(aptNet).then (response) ->
-			aptCov = response.data.coverabilityGraph
+			aptCov = response.data.lts
 			covGraph = converterService.getNetFromApt(aptCov)
 			covGraph.name = inputOptions[0].value
 			NetStorage.addNet(covGraph)

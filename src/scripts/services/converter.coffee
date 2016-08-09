@@ -55,6 +55,10 @@ class Converter extends Service
 
 				# add arcs
 				rows.push ".arcs"
+				for state in net.nodes when state.type is "state"
+					state = @getNodeFromData(state)
+					for labelToSelf in state.labelsToSelf
+						rows.push state.getText() + " " + labelToSelf + " " + state.getText()
 				for edge in net.edges
 					if edge.type is "tsEdge"
 						source = @getNodeFromData(edge.source)
@@ -145,24 +149,27 @@ class Converter extends Service
 						target = net.getNodeByText(edgeCode.split(" ")[2])
 						existingEdge = false
 
-						for edge in net.edges when edge.source is source and edge.target is target
-							existingEdge = edge
-						if existingEdge
-							existingEdge.right = 1
-							existingEdge.labelsRight.push label
+						if source is target
+							source.labelsToSelf.push label
 						else
-							for edge in net.edges when edge.source is target and edge.target is source
+							for edge in net.edges when edge.source is source and edge.target is target
 								existingEdge = edge
 							if existingEdge
-								existingEdge.left = 1
-								existingEdge.labelsLeft.push label
+								existingEdge.right = 1
+								existingEdge.labelsRight.push label
 							else
-								edge = new TsEdge
-									source: source
-									right: 1
-									labelsRight: [label]
-									target: target
-								net.addEdge(edge)
+								for edge in net.edges when edge.source is target and edge.target is source
+									existingEdge = edge
+								if existingEdge
+									existingEdge.left = 1
+									existingEdge.labelsLeft.push label
+								else
+									edge = new TsEdge
+										source: source
+										right: 1
+										labelsRight: [label]
+										target: target
+									net.addEdge(edge)
 
 				else if @isPartOfString("PN", @getAptBlock("type", aptCode))
 					net = new PetriNet({name: name})

@@ -7,7 +7,7 @@
 			<p ng-if="net.type == 'pn'">petri net</p>
 			<p ng-if="net.type == 'lts'">transition system</p>
 		</div>
-      <ng-md-icon class="md-secondary" ng-click="sn.deleteNet(net, $event)" icon="delete" size="22"></ng-md-icon>
+      <ng-md-icon class="md-secondary" ng-click="sn.deleteNet(net, $event)" icon="delete" size="22" aria-label="Delete net"></ng-md-icon>
    </md-list-item>
    <md-list-item class="list-form-item">
       <form ng-submit="sn.createNewNet(sn.newName, sn.newType, $event)" layout="row">
@@ -27,7 +27,7 @@
 					</md-option>
 				</md-select>
 			</md-input-container>
-			<ng-md-icon class="md-secondary submit-form" ng-click="sn.createNewNet(sn.newName, sn.newType, $event)" icon="add" size="22"></ng-md-icon>
+			<ng-md-icon class="md-secondary submit-form" ng-click="sn.createNewNet(sn.newName, sn.newType, $event)" icon="add" size="22" aria-label="Add net"></ng-md-icon>
       </form>
 	</md-list-item>
 </md-list>

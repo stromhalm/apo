@@ -84,7 +84,7 @@ class @Synthesizer extends @Analyzer
 						value: "No"
 						type: "text"
 						touched: true
-						validation: -> false
+						validation: -> "" #false
 					}
 				)
 				outputElements.push(
@@ -93,7 +93,7 @@ class @Synthesizer extends @Analyzer
 						value: response.data.failedStateSeparationProblems
 						type: "text"
 						touched: true
-						validation: -> false
+						validation: -> "" #false
 					}
 				)
 				outputElements.push(

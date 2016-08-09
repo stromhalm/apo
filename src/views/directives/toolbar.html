@@ -5,7 +5,7 @@
 			ng-attr-title="{{tool.name}}"
 			ng-class="tool.name == net.activeTool ? 'active md-icon-button toolbar-button' : 'md-icon-button toolbar-button'"
 			ng-click="net.activeTool = tool.name">
-			<ng-md-icon icon="{{tool.icon}}" size="24"></ng-md-icon>
+			<ng-md-icon icon="{{tool.icon}}" size="24" aria-label="Start Tool"></ng-md-icon>
 		</md-button>
 	</div>
 </md-toolbar>

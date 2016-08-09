@@ -66,7 +66,7 @@ class Editor extends Controller
 			.append('textPath').attr('startOffset', '50%').attr('class', 'text')
 			.attr('xlink:href', (edge) -> '#' + edge.id).text((edge) -> converterService.getEdgeFromData(edge).getText())
 
-			# add egde paths
+			# add new egdes
 			edges.enter().append('svg:path').attr('class', 'link')
 				.style('marker-start', (edge) -> if edge.left > 0 then 'url(#startArrow)' else '')
 				.style('marker-end', (edge) -> if edge.right > 0 then 'url(#endArrow)' else '')
@@ -92,6 +92,8 @@ class Editor extends Controller
 			# update existing node labels
 			d3.selectAll('.nodeLabel').text((node) -> converterService.getNodeFromData(node).getText())
 			d3.selectAll('.token').text((node) -> converterService.getNodeFromData(node).getTokenLabel())
+			d3.selectAll('.selfEdgeLabel .text').text((node) -> converterService.getNodeFromData(node).getSelfEdgeText())
+			d3.selectAll('.selfEdge').classed('hidden', (node) -> node.labelsToSelf and node.labelsToSelf.length is 0)
 
 			# add new nodes
 			newNodes = nodes.enter().append('svg:g')
@@ -141,10 +143,24 @@ class Editor extends Controller
 				net.getActiveTool().dblClickOnNode(net, node)
 				restart()
 
-
 			# show node text
 			newNodes.append('svg:text').attr('x', (node) -> node.labelXoffset).attr('y', (node) -> node.labelYoffset).attr('class', 'label nodeLabel').text((node) -> converterService.getNodeFromData(node).getText())
 			newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'label token').text((node) -> converterService.getNodeFromData(node).getTokenLabel())
+
+			#add edge to self
+			newNodes.append('svg:path').attr('class', 'link edge selfEdge')
+				.style('marker-end', 'url(#endArrow)')
+				.attr('id', (node) -> "selfEdge-#{node.id}")
+				.attr('d', (node) -> converterService.getNodeFromData(node).getSelfEdgePath())
+				.classed('hidden', (node) -> node.labelsToSelf and node.labelsToSelf.length is 0)
+				.on 'mousedown', (node) ->
+					# call the tools mouseDown listener
+					net.getActiveTool().mouseDownOnNode(net, node, dragLine, formDialogService, restart, converterService)
+
+			newNodes.append('svg:text').attr('dy', -4).attr('class', 'label selfEdgeLabel')
+				.append('textPath').attr('startOffset', '50%').attr('class', 'text')
+				.attr('xlink:href', (node) -> '#selfEdge-' + node.id)
+				.text((node) -> converterService.getNodeFromData(node).getSelfEdgeText())
 
 			nodes.exit().remove() # remove old nodes
 			force.start() # set the graph in motion

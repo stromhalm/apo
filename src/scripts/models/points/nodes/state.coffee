@@ -1,5 +1,10 @@
 class @State extends @Node
-	constructor: (point) ->
+	constructor: (options) ->
+		super(options)
 		@type = "state"
 		@connectableTypes = ["state"]
-		super(point)
+		{@labelsToSelf = []} = options
+
+	getSelfEdgeText: -> @labelsToSelf.join(", ")
+
+	getSelfEdgePath: -> "M 0,-#{@radius} C 0,-#{@radius*5} #{@radius*5},0 #{@radius+5},0"

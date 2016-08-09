@@ -14,3 +14,7 @@ class @Node extends @Point
 		return @id
 
 	getTokenLabel: -> ""
+
+	getSelfEdgePath: -> ""
+
+	getSelfEdgeText: -> ""

@@ -14,7 +14,7 @@ class Validation extends Directive
 				# For DOM -> model validation
 				ngModel.$parsers.unshift((value) ->
 					response = validator(value)
-					if response isnt false
+					if response is true
 						valid = true
 						scope.errorMessage = ""
 					else
@@ -27,7 +27,7 @@ class Validation extends Directive
 				# For model -> DOM validation
 				ngModel.$formatters.unshift((value) ->
 					response = validator(value)
-					if response isnt false
+					if response is true
 						valid = true
 						scope.errorMessage = ""
 					else

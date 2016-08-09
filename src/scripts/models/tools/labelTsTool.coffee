@@ -26,7 +26,7 @@ class @LabelTsTool extends @Tool
 			})
 
 		formDialogService.runDialog({
-			title: "Set Label"
+			title: "Set Labels"
 			text: "Enter labels for this edge"
 			formElements: formElements
 		})
@@ -45,18 +45,24 @@ class @LabelTsTool extends @Tool
 		nodeObj = converterService.getNodeFromData(mouseDownNode)
 
 		formDialogService.runDialog({
-			title: "Label for Node"
+			title: "Labels for state"
 			text: "Enter a name for this #{mouseDownNode.type}"
 			formElements: [
 				{
-					name: "Name"
+					name: "Label for the state"
 					type: "text"
 					value: nodeObj.getText()
 					validation: @labelValidator
+				}
+				{
+					name: "Labels for arc to the same state"
+					type: "textArray"
+					value: mouseDownNode.labelsToSelf
 				}
 			]
 		})
 		.then (formElements) ->
 			if formElements
 				mouseDownNode.label = formElements[0].value
+				mouseDownNode.labelsToSelf = formElements[1].value
 				restart()

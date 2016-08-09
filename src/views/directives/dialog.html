@@ -4,7 +4,7 @@
 			<h2>{{ dialog.title }}</h2>
 			<span flex></span>
 			<md-button class="md-icon-button" ng-click="dialog.dismiss()">
-				<ng-md-icon icon="close" style="fill: rgba(255, 255, 255, .87)" size="24"></ng-md-icon>
+				<ng-md-icon icon="close" style="fill: rgba(255, 255, 255, .87)" size="24" aria-label="close"></ng-md-icon>
 			</md-button>
 		</div>
 	</md-toolbar>
@@ -36,6 +36,7 @@
 							ng-model="input.value"
 							error-message="input.error"
 							touched="input.touched"
+							autocomplete="false"
 							validation="input.validation" />
 						<textarea
 							ng-if="input.type == 'code'"

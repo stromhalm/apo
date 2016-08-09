@@ -88,8 +88,9 @@ class MenubarController extends Controller
 						type: "code"
 						name: "Insert Code"
 						validation: (value) ->
+							return "" if not value
 							return "No valid APT net" if not value.split(".name \"")[1]
-							return "A net with this name already exists" if value and NetStorage.getNetByName(value.split(".name \"")[1].split("\"")[0])
+							return "A net with this name already exists" if NetStorage.getNetByName(value.split(".name \"")[1].split("\"")[0])
 							return true
 					}
 				]

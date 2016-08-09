@@ -42,10 +42,7 @@ class @Net
 			return true
 		return false
 
-	getActiveTool: ->
-		for tool in @tools
-			if tool.name is @activeTool
-				return tool
+	getActiveTool: ->	return tool for tool in @tools when tool.name is @activeTool
 
 	getPreset: (node) ->
 		preset = []

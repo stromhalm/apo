@@ -231,7 +231,8 @@ module.exports = (grunt) ->
 				basePath: '.temp/'
 			all:
 				dest: '.temp/manifest.appcache'
-				cache: '.temp/**/*'
+				cache:
+					patterns: ['.temp/**/*', '!.temp/web.config']
 
 		# Run tasks when monitored files change
 		watch:

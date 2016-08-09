@@ -3,6 +3,12 @@ node_js:
   - 0.10.25
 before_script:
   - npm install grunt-cli -g
+
+  # use graphical interface for unit tests
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+  
 after_success: # deploy to azure
   - "grunt prod"
   - "find dist -type f -exec curl -u $AZURE_WA_USERNAME:$AZURE_WA_PASSWORD --ftp-create-dirs -T {} ftps://waws-prod-db3-015.ftp.azurewebsites.windows.net/site/wwwroot/{} \\;"

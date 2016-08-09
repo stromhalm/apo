@@ -100,7 +100,7 @@ module.exports = (grunt) ->
 				files: [
 					cwd: '<%= settings.tempDirectory %>'
 					src: [
-						'**/*.{gif,jpeg,jpg,png,svg,webp}'
+						'**/*.{gif,jpeg,jpg,png,webp}'
 						'**/*.{css,js,html,map,config}'
 						]
 					dest: '<%= settings.distDirectory %>'

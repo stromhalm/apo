@@ -124,7 +124,7 @@ module.exports = (grunt) ->
 			unit:
 				options:
 					browsers: [
-						'Firefox'
+						'SlimerJS'
 					]
 					captureTimeout: 5000
 					colors: true

@@ -41,7 +41,7 @@
 		"connect-modrewrite": "0.9.x",
 		"karma-jasmine": "~0.2.0",
 		"karma-junit-reporter": "0.2.2",
-		"karma-firefox-launcher": "1.0.x",
+		"karma-slimerjs-launcher": "1.0.x",
 		"karma-spec-reporter": "0.0.13",
 		"load-grunt-tasks": "^1.0.0",
 		"time-grunt": "^1.0.0",

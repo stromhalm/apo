@@ -25,6 +25,7 @@ module.exports = (grunt) ->
 			js: [
 				'<%= settings.tempDirectory %>/scripts/**/*.js'
 				'<%= settings.tempDirectory %>/scripts/**/*.map'
+				'<%= settings.tempDirectory %>/scripts/**/*.coffee'
 				'!<%= settings.tempDirectory %>/scripts/**/*.min.js'
 				'!<%= settings.tempDirectory %>/scripts/scripts.js.map'
 			]
@@ -40,7 +41,7 @@ module.exports = (grunt) ->
 					ext: '.js'
 				]
 				options:
-					sourceMap: false
+					sourceMap: true
 
 		# Lints CoffeeScript files
 		coffeelint:
@@ -71,7 +72,7 @@ module.exports = (grunt) ->
 
 						# enable Angular's HTML5 mode
 						modRewrite = require 'connect-modrewrite'
-						middlewares.unshift(modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png$ /index.html [L]']));
+						middlewares.unshift(modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.appcache|\\.png$ /index.html [L]']));
 						return middlewares;
 
 					open: true
@@ -101,7 +102,7 @@ module.exports = (grunt) ->
 					cwd: '<%= settings.tempDirectory %>'
 					src: [
 						'**/*.{gif,jpeg,jpg,png,webp}'
-						'**/*.{css,js,html,map,config}'
+						'**/*.{css,js,html,map,config,appcache}'
 						]
 					dest: '<%= settings.distDirectory %>'
 					expand: true
@@ -112,7 +113,7 @@ module.exports = (grunt) ->
 			images:
 				files: [
 					cwd: '<%= settings.tempDirectory %>'
-					src: '**/*.{gif,jpeg,jpg,png}'
+					src: '**/*.{gif,jpeg,jpg}'
 					dest: '<%= settings.tempDirectory %>'
 					expand: true
 				]
@@ -225,6 +226,13 @@ module.exports = (grunt) ->
 				src: ['.temp/scripts/*.js', '.temp/scripts/**/*.js']
 				dest: '.temp/scripts/scripts.js'
 
+		appcache:
+			options:
+				basePath: '.temp/'
+			all:
+				dest: '.temp/manifest.appcache'
+				cache: '.temp/**/*'
+
 		# Run tasks when monitored files change
 		watch:
 			basic:
@@ -295,6 +303,7 @@ module.exports = (grunt) ->
 		'coffee:app'
 		'less'
 		'includeSource'
+		'appcache'
 		'copy:dev'
 	]
 
@@ -339,6 +348,7 @@ module.exports = (grunt) ->
 		'clean:js'
 		'cacheBust'
 		'includeSource'
+		'appcache'
 		'copy:prod'
 	]
 

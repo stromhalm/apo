@@ -45,6 +45,7 @@
 		"karma-spec-reporter": "0.0.13",
 		"load-grunt-tasks": "^1.0.0",
 		"grunt-appcache": "0.2.x",
+		"grunt-hustler": "^4.0.6",
 		"time-grunt": "^1.0.0",
 		"karma": "~0.13.22"
 	},

@@ -299,6 +299,7 @@ module.exports = (grunt) ->
 				tasks: [
 					'copy:app'
 					'less'
+					'template:dev'
 					'includeSource'
 					'copy:dev'
 				]

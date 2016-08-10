@@ -3,6 +3,19 @@
    overflow: hidden;
 }
 
+md-backdrop {
+	&.md-sidenav-backdrop {
+		z-index: 80;
+	}
+	&.md-dialog-backdrop {
+		z-index: 85;
+	}
+}
+
+.md-dialog-container {
+	z-index: 90;
+}
+
 .code-editor {
 	font-family: monospace;
 	line-height: 1.1em !important;

@@ -224,6 +224,7 @@ class Converter extends Service
 
 						for edge in postset
 							if edge isnt ""
+								existingEdge = false
 								if @isPartOfString("*", edge)
 									weight = edge.split("*")[0]
 									place = net.getNodeByText(edge.split("*")[1])

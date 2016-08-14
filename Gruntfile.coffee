@@ -64,7 +64,7 @@ module.exports = (grunt) ->
 					ext: '.js'
 				]
 				options:
-					sourceMap: true
+					sourceMap: false
 
 		# Lints CoffeeScript files
 		coffeelint:

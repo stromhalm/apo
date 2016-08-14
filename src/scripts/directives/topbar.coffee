@@ -1,6 +1,7 @@
 class TopbarController extends Controller
 	constructor: (NetStorage, $mdDialog) ->
 
+		# Confirms the local storage via dialog
 		@resetStorage = ($event) ->
 			$mdDialog.show $mdDialog.confirm
 				title: "Delete All Nets"
@@ -16,5 +17,5 @@ class Topbar extends Directive
 		return {
 			controller: TopbarController
 			controllerAs: "tb"
-			templateUrl: '/views/directives/topbar.html'
+			templateUrl: "/views/directives/topbar.html"
 		}

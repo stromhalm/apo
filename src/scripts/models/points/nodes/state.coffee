@@ -4,6 +4,7 @@ class @State extends @Node
 		@type = "state"
 		@connectableTypes = ["state"]
 		{@labelsToSelf = []} = options
+		@radius = 18
 
 	getSelfEdgeText: -> @labelsToSelf.join(", ")
 

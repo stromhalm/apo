@@ -19,14 +19,14 @@ class @Tool
 	dblClickOnNode: (net, node) ->
 
 	# General validator for APT labels
-	labelValidator: (value) ->
+	labelValidator: (labelName) ->
 
 		@isPartOfString = (searchFor, searchIn) ->
 			searchIn.replace(searchFor, "") isnt searchIn
 
-		return "Labels can't contain '*'" if @isPartOfString('*', value)
-		return "Labels can't contain ','" if @isPartOfString(',', value)
-		return "Labels can't contain spaces" if @isPartOfString(' ', value)
-		return "Labels can't contain '{'" if @isPartOfString('{', value)
-		return "Labels can't contain '}'" if @isPartOfString('}', value)
+		return "Labels can't contain '*'" if @isPartOfString('*', labelName)
+		return "Labels can't contain ','" if @isPartOfString(',', labelName)
+		return "Labels can't contain spaces" if @isPartOfString(' ', labelName)
+		return "Labels can't contain '{'" if @isPartOfString('{', labelName)
+		return "Labels can't contain '}'" if @isPartOfString('}', labelName)
 		return true

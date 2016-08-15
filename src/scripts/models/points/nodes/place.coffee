@@ -5,6 +5,7 @@ class @Place extends @Node
 		@type = "place"
 		@connectableTypes = ["transition"]
 		@labelYoffset = 30
+		@radius = 18
 
 	getText: ->
 		return @label if @label

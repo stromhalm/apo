@@ -18,7 +18,7 @@ class SidenavController extends Controller
 			return "A net with this name already exists" if NetStorage.getNetByName(name)
 			return true
 
-		@createNewNet = (name, type, $event) ->
+		@createNewNet = (name, type, event) ->
 			if (!name or !type or @nameValidation(name) isnt true)
 			else
 				if type is "PN" then success = NetStorage.addNet(new PetriNet({name: name}))
@@ -26,13 +26,13 @@ class SidenavController extends Controller
 				@newName = ""
 				@newType = ""
 
-		@deleteNet = (net, $event) ->
+		@deleteNet = (net, event) ->
 			$mdDialog.show $mdDialog.confirm
 				title: "Delete Net"
 				textContent: "Do you really want to delete the net '#{net.name}'?"
 				ok: "Delete"
 				cancel: "Cancel"
-				targetEvent: $event # To animate the dialog to/from the click
+				targetEvent: event # To animate the dialog to/from the click
 			.then ->
 				NetStorage.deleteNet(net.name)
 

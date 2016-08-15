@@ -1,4 +1,4 @@
-class Routes extends Config
+class Router extends Config
 
 	constructor: ($stateProvider, $urlRouterProvider, $locationProvider) ->
 		$locationProvider.html5Mode(false)

@@ -13,7 +13,7 @@ class @Net
 	setAnalyzers: (@analyzers) ->
 
 	addEdge: (edge) ->
-		edge.setId(@getMaxEdgeId()+1)
+		edge.id = @getMaxEdgeId()+1
 		@edges.push(edge)
 
 	deleteEdge: (deleteEdge) ->
@@ -23,7 +23,7 @@ class @Net
 		return false
 
 	addNode: (node) ->
-		node.setId(@getMaxNodeId()+1)
+		node.id = @getMaxNodeId()+1
 		@nodes.push(node)
 
 	deleteNode: (deleteNode) ->

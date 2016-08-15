@@ -1,11 +1,11 @@
 class MenubarController extends Controller
 	constructor: ($mdDialog, NetStorage, $state, apt, $http, formDialogService, converterService, $timeout) ->
 
-		@createNet = ($event, type) ->
+		@createNet = (event, type) ->
 			formDialogService.runDialog
 				title: "Create #{type}"
 				text: "Enter a name for the new #{type}."
-				event: $event
+				event: event
 				formElements: [{
 					type: "text"
 					name: "Name"
@@ -21,11 +21,11 @@ class MenubarController extends Controller
 						else newNet = new TransitionSystem({name: formElements[0].value})
 					NetStorage.addNet(newNet)
 
-		@renameNet = (oldName, $event) ->
+		@renameNet = (oldName, event) ->
 			formDialogService.runDialog({
 				title: "Rename Net"
 				text: "Enter a new name for the net."
-				event: $event
+				event: event
 				formElements: [{
 					type: "text"
 					name: "New Name"
@@ -42,22 +42,22 @@ class MenubarController extends Controller
 					NetStorage.renameNet(oldName, newName)
 					$state.go "editor", name: newName
 
-		@deleteNet = (net, $event) ->
+		@deleteNet = (net, event) ->
 			$mdDialog.show $mdDialog.confirm
 				title: "Delete Net"
 				textContent: "Do you really want to delete the net '#{net.name}'?"
 				ok: "Delete"
 				cancel: "Cancel"
-				targetEvent: $event # To animate the dialog to/from the click
+				targetEvent: event # To animate the dialog to/from the click
 			.then ->
 				NetStorage.deleteNet(net.name)
 
-		@showAPT = (net, $event) ->
+		@showAPT = (net, event) ->
 			formDialogService.runDialog({
 				title: "APT Export"
 				ok: "download"
 				cancel: false
-				event: $event
+				event: event
 				outputElements: [
 					{
 						type: "code"
@@ -77,12 +77,12 @@ class MenubarController extends Controller
 					return false # do not close dialog after download
 			})
 
-		@importAPT = ($event) ->
+		@importAPT = (event) ->
 			formDialogService.runDialog({
 				title: "APT Import"
 				text: "Insert APT code here to import a net"
 				ok: "import"
-				event: $event
+				event: event
 				formElements: [
 					{
 						type: "code"
@@ -108,8 +108,8 @@ class MenubarController extends Controller
 					else
 						NetStorage.addNet(net)
 
-		@startAnalyzer = (analyzer, net, $event) ->
-			analyzer.run(apt, NetStorage, converterService, net, formDialogService, $event)
+		@startAnalyzer = (analyzer, net, event) ->
+			analyzer.run(apt, NetStorage, converterService, net, formDialogService, event)
 
 class Menubar extends Directive
 	constructor: ->

@@ -6,7 +6,7 @@ class @Analyzer
 		@ok = "generate"
 		@cancel = "close"
 
-	run: (apt, NetStorage, converterService, currentNet, formDialogService, $event) ->
+	run: (apt, NetStorage, converterService, currentNet, formDialogService, event) ->
 		analyzer = @analyze
 		formElements = @inputOptions(currentNet, NetStorage)
 		outputElements = []
@@ -15,7 +15,7 @@ class @Analyzer
 			text: @description
 			ok: @ok
 			cancel: @cancel
-			event: $event
+			event: event
 			formElements: formElements
 			outputElements: outputElements
 			onComplete: (inputOptions) ->

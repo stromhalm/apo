@@ -2,7 +2,6 @@ class @Edge
 	constructor: (options) ->
 		{@source, @target, @id, @left = 0, @right = 0, @length = 150} = options
 
-	setId: (@id) ->
 	getText: -> ''
 
 	getPath: ->

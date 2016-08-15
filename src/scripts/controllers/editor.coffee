@@ -9,6 +9,13 @@ class Editor extends Controller
 			return
 		$scope.net = net
 
+		# Set physics
+		charge = -500
+		linkStrength = 0.1
+		friction = 0.9
+		gravity = 0.1
+
+
 		svg = d3.select('#main-canvas svg')
 		force = d3.layout.force()
 		drag = force.drag()
@@ -193,7 +200,10 @@ class Editor extends Controller
 			window.innerHeight + 80
 		])
 		.linkDistance((edge) -> edge.length)
-		.charge(-500)
+		.linkStrength(linkStrength)
+		.friction(friction)
+		.charge(charge)
+		.gravity(gravity)
 		.on('tick', tick)
 
 		# fix lost references to nodes

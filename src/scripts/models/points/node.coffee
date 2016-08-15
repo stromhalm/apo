@@ -6,8 +6,7 @@ class @Node extends @Point
 		@radius = 18
 		@labelXoffset = 0
 		@labelYoffset = 4
-
-	setId: (@id) ->
+		@connectableTypes = []
 
 	getText: ->
 		return @label if @label

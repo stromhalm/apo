@@ -12,7 +12,7 @@ cdn = [
 	'http://d3js.org/d3.v3.min.js'
 	'http://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'
 	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js'
-	'http://angular-apt.azurewebsites.net/apt.js'
+	'http://angular-apt.azurewebsites.net/libs/angular-apt-1.0.js'
 	'http://ajax.googleapis.com/ajax/libs/angular_material/1.0.9/angular-material.min.css'
 ]
 

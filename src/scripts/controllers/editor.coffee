@@ -11,10 +11,9 @@ class Editor extends Controller
 
 		# Set physics
 		charge = -500
-		linkStrength = 0.1
+		linkStrength = 0.1 # link distance is set in edge model
 		friction = 0.9
 		gravity = 0.1
-
 
 		svg = d3.select('#main-canvas svg')
 		force = d3.layout.force()

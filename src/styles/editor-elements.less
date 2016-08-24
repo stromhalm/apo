@@ -1,20 +1,46 @@
+#main-canvas {
+	svg {
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-o-user-select: none;
+		user-select: none;
+		cursor: crosshair;
+	}
 
+	path.link {
+		fill: none;
+		stroke: #000;
+		stroke-width: 4px;
+		cursor: default;
+
+		&.dragline {
+			pointer-events: none;
+		}
+
+		&.hidden {
+			stroke-width: 0;
+		}
+	}
+
+	text {
+		font: 12px sans-serif;
+		pointer-events: none;
+
+		&.label {
+			text-anchor: middle;
+			font-weight: bold;
+		}
+	}
+}
 .node {
 	fill: white;
 	stroke: black;
+	stroke-width: 1.5px;
 	cursor: auto;
 
 	&.transition {
 		transform: translate(-18px, -18px);
-	}
-}
-
-// Default mode (node creators)
-#main-canvas {
-	cursor: crosshair;
-
-	.edge {
-		cursor: default;
 	}
 }
 
@@ -23,74 +49,66 @@
 	.place {
 		cursor: text;
 	}
-
 	.transition {
 		stroke-width: 3px;
 		stroke: #E53935;
 		cursor: not-allowed;
-
 		&.firable {
 			stroke: #43A047;
 			cursor: e-resize;
 		}
 	}
 }
-
 // Arrow Mode
-.Arrows, .Delete {
+.Arrows,
+.Delete {
 	#main-canvas {
 		cursor: default;
-
 		.node {
 			cursor: crosshair;
 		}
 	}
 }
-
 // Delete mode
 .Delete {
 	#main-canvas {
 		cursor: default;
-
-		.node, .edge {
+		.edge,
+		.node {
 			cursor: crosshair;
 		}
 	}
 }
-
 // Labels mode
 .Labels {
 	#main-canvas {
 		cursor: default;
-
-		.node, .edge {
+		.edge,
+		.node {
 			cursor: text;
 		}
 	}
 }
-
 // Initial State mode
 .Initial {
 	#main-canvas {
 		cursor: default;
-
 		.state {
 			cursor: pointer;
 		}
 	}
 }
-
 // Node modes
-.Places, .Transitions, .States {
+.Places,
+.States,
+.Transitions {
 	.node {
 		cursor: move;
 	}
 }
-
 .definitions {
 	height: 0;
 }
-
 .initState {
 	display: none;
 }

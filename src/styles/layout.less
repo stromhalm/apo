@@ -1,39 +1,159 @@
+.main-content {
+   width: 100%;
+   overflow: hidden;
+}
+
+md-backdrop {
+	&.md-sidenav-backdrop {
+		z-index: 80;
+	}
+	&.md-dialog-backdrop {
+		z-index: 85;
+	}
+}
+
+.md-dialog-container {
+	z-index: 90;
+}
+
+.code-editor {
+	font-family: monospace;
+	line-height: 1.1em !important;
+}
+
+.main-layout {
+   height: 100%;
+}
+
+md-toolbar {
+	z-index: 78 !important;
+}
+
+.md-sidenav-left {
+   height: 100%;
+	z-index: 80;
+
+   .logo {
+      width: 80%;
+      margin: 10%;
+   }
+
+	.md-subheader-inner {
+		padding-bottom: 10px;
+	}
+
+	.md-list-item-text {
+		font-size: 0.8em;
+		h3 {
+			margin: 0
+		}
+		p {
+			margin: -18px 0 0 0;
+		}
+	}
+
+	md-list md-list-item {
+
+		svg {
+			fill: rgba(0, 0, 0, 0.8);
+		}
+
+	   &.list-form-item {
+	      padding-right: 44px;
+	      margin-left: -4px;
+	      border-left: 0 !important;
+
+	      .md-secondary-container {
+	         margin-top: -17px !important;
+	      }
+
+			.net-type-input {
+				min-width: 70px;
+			}
+	   }
+
+	   &:hover {
+	      border-left: 3px solid rgba(158, 158, 158, 0.5);
+	   }
+
+	   &.active, &:active {
+	      background-color: rgba(63, 81, 181, 0.1);
+	      border-left: 3px solid rgb(63, 81, 181);
+
+	      button {
+	         color: rgb(63, 81, 181);
+	      }
+	   }
+
+	   &.active, &:hover {
+	      .md-no-style {
+	         padding-left: 13px;
+	      }
+	   }
+	}
+}
+
+md-menu-content {
+   overflow: hidden;
+
+   md-menu-item {
+      ng-md-icon {
+         position: absolute;
+         top: 7px;
+      }
+   }
+}
+
+md-toolbar {
+	min-height: 0;
+}
+
 #main-canvas {
-   svg {
+   position: absolute;
+   top: 0;
+   height: 100%;
+   width: 100%;
+}
 
-      background-color: #FFF;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      -o-user-select: none;
-      user-select: none;
-   }
-	
-   path.link {
-     fill: none;
-     stroke: #000;
-     stroke-width: 4px;
-   }
+.file-menubar {
+	background-color: rgba(158, 158, 158, 0.1) !important;
+	border-bottom: 1px solid rgba(78, 78, 78, 0.1);
+}
 
-   path.link.dragline {
-     pointer-events: none;
-   }
+.file-toolbar {
+   background-color: rgba(158, 158, 158, 0.1) !important;
+	border-bottom: 1px solid rgba(78, 78, 78, 0.1);
+	padding-left: 15px;
 
-   path.link.hidden {
-     stroke-width: 0;
-   }
+	.toolbar-button {
+		svg {
+			fill: rgba(0, 0, 0, 0.65);
+		}
 
-   circle.node {
-     stroke-width: 1.5px;
-   }
+		&.active {
+			svg {
+				fill: rgb(63, 81, 181);
+			}
+		}
+	}
+}
 
-   text {
-     font: 12px sans-serif;
-     pointer-events: none;
-   }
+md-dialog {
+	.dialog-description {
+		margin-top: 0px;
+		margin-bottom: 40px;
+	}
 
-   text.label {
-     text-anchor: middle;
-     font-weight: bold;
-   }
+	.item-description {
+		line-height: 1.1em !important;
+	}
+
+	md-chips:not(.md-contact-chips) .md-chip-input-container {
+		margin-bottom: -25px !important;
+	}
+}
+
+
+.editor-layout {
+   height: 100%;
 }

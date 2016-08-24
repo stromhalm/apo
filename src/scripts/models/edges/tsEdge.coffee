@@ -1,3 +1,7 @@
+###
+	Transition systems edges may have multiple labels to the left and to the right.
+###
+
 class @TsEdge extends @Edge
 	constructor: (options)->
 		{@labelsLeft = [], @labelsRight = []} = options

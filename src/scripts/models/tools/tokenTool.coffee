@@ -1,3 +1,7 @@
+###
+	This tool sets the number of tokens on places and fires transitions in petri nets.
+###
+
 class @TokenTool extends @Tool
 	constructor: ->
 		super()

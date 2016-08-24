@@ -1,3 +1,7 @@
+###
+	The delete tool is used to delete nodes and edges via click/tab.
+###
+
 class @DeleteTool extends @Tool
 	constructor: ->
 		super()

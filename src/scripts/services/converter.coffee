@@ -1,3 +1,10 @@
+###
+	The converter service is used to convert between the APT file format <-> native models.
+	Also because $localStrorage uses json Strings for browser storage, class types can't be preserved.
+	Therefore (to access class methods) this scervice can recreate classes from its data.
+###
+
+
 class Converter extends Service
 	constructor: ->
 

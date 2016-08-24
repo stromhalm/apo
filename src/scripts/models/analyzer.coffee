@@ -1,3 +1,7 @@
+###
+	This is an abstract class for nets analyzers.
+###
+
 class @Analyzer
 	constructor: () ->
 		@name = ""

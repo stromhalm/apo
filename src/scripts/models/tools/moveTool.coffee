@@ -1,3 +1,8 @@
+###
+	This tool is used to move nodes on the canvas.
+	Moved nodes will be fixed until you double click.
+###
+
 class @MoveTool extends @Tool
 	constructor: ->
 		super()

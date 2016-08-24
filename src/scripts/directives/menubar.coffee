@@ -1,6 +1,12 @@
+###
+	This is the menubar directive and its controller.
+	It is used to show net sensitive menus and submenus above the editor.
+###
+
 class MenubarController extends Controller
 	constructor: ($mdDialog, NetStorage, $state, apt, $http, formDialogService, converterService, $timeout) ->
 
+		# Show
 		@createNet = (event, type) ->
 			formDialogService.runDialog
 				title: "Create #{type}"

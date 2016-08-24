@@ -1,3 +1,7 @@
+###
+	Petri nets transitions may have a label
+###
+
 class @Transition extends @Node
 	constructor: (point) ->
 		super(point)

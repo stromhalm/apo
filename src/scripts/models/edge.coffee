@@ -1,3 +1,8 @@
+###
+	This is an abstract class for directed edges that connect two nodes in an net.
+	For bidirectional edges only one instace is used!
+###
+
 class @Edge
 	constructor: (options) ->
 		{@source, @target, @id, @left = 0, @right = 0, @length = 150} = options

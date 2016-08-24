@@ -1,3 +1,7 @@
+###
+	The coverability analyzer can generate the petri nets coverability graph via angular-apt.
+###
+
 class @CoverabilityAnalyzer extends @Analyzer
 	constructor: () ->
 		super()
@@ -5,6 +9,7 @@ class @CoverabilityAnalyzer extends @Analyzer
 		@name = "Coverability Graph"
 		@description =  "Compute a petri net's coverability graph"
 
+	# Ask for the new nets name
 	inputOptions: (currentNet, NetStorage) ->
 		[
 			{
@@ -18,6 +23,7 @@ class @CoverabilityAnalyzer extends @Analyzer
 			}
 		]
 
+	# connect to angular-apt
 	analyze: (inputOptions, outputElements, currentNet, apt, converterService, NetStorage, formDialogService) ->
 		aptNet = converterService.getAptFromNet(currentNet)
 		apt.getCoverabilityGraph(aptNet).then (response) ->

@@ -1,3 +1,8 @@
+###
+	The validation directive can only be used in combination with other input elements.
+	Binded to a validator function it can (un)validate form inputs.
+###
+
 class Validation extends Directive
 	constructor: ->
 		return {

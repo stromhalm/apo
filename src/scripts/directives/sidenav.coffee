@@ -1,23 +1,34 @@
+###
+	This is the sidenav directive and its controller.
+	The sidenav is hidden by default on small devices.
+###
+
 class SidenavController extends Controller
+
 	constructor: ($mdSidenav, $state, $stateParams, NetStorage, $mdDialog) ->
 
 		@newName = ""
 
+		# Toogle sidenav on small devices
 		@toggleSideMenu = ->
 			$mdSidenav("left-menu").toggle()
 
+		# The currently aktive net is highlighted in the sidenav
 		@isNet = (net) ->
 			$state.is "editor", name: net.name
 
+		# Change the currently active net in the editor
 		@goToNet = (net) ->
 			$state.go "editor", name: net.name
 			$mdSidenav("left-menu").close()
 
+		# Validate the name of a new net
 		@nameValidation = (name) ->
 			return "\" is not allowed" if name.replace("\"", "") isnt name
 			return "A net with this name already exists" if NetStorage.getNetByName(name)
 			return true
 
+		# Create a new net via the sidenav's form
 		@createNewNet = (name, type, event) ->
 			if (!name or !type or @nameValidation(name) isnt true)
 			else
@@ -26,6 +37,7 @@ class SidenavController extends Controller
 				@newName = ""
 				@newType = ""
 
+		# Delte a net via the sidebar
 		@deleteNet = (net, event) ->
 			$mdDialog.show $mdDialog.confirm
 				title: "Delete Net"

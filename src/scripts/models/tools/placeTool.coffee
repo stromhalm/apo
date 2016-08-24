@@ -1,3 +1,7 @@
+###
+	This tool creates new places in petri nets.
+###
+
 class @PlaceTool extends @Tool
 	constructor: ->
 		super()

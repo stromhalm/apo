@@ -1,3 +1,7 @@
+###
+	Petri net eges may have weights to the left (@left) and the right (@right).
+###
+
 class @PnEdge extends @Edge
 	constructor: (options)->
 		@type = "pnEdge"

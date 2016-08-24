@@ -1,6 +1,18 @@
+###
+	This is the controller for everything that happens on the editors canvas.
+	It is the connection between the model and the physics library D3.js and handels I/O.
+	Use the parameters to control physics behavior.
+###
+
 class Editor extends Controller
 
 	constructor: ($timeout, $scope, $state, $stateParams, NetStorage, converterService, formDialogService) ->
+
+		# Set physics
+		charge = -500
+		linkStrength = 0.1 # link distance is set in edge model
+		friction = 0.9
+		gravity = 0.1
 
 		net = NetStorage.getNetByName(decodeURI($stateParams.name))
 		# Go to first net if not found
@@ -8,12 +20,6 @@ class Editor extends Controller
 			$state.go "editor", name: NetStorage.getNets()[0].name
 			return
 		$scope.net = net
-
-		# Set physics
-		charge = -500
-		linkStrength = 0.1 # link distance is set in edge model
-		friction = 0.9
-		gravity = 0.1
 
 		svg = d3.select('#main-canvas svg')
 		force = d3.layout.force()

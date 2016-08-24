@@ -1,3 +1,7 @@
+###
+	This tool is used to label petri nets edges and nodes.
+###
+
 class @LabelPnTool extends @Tool
 	constructor: ->
 		super()

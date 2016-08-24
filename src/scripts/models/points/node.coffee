@@ -1,3 +1,7 @@
+###
+	The node class is used as an abstract class for states, places and transitions
+###
+
 class @Node extends @Point
 	constructor: (options = false) ->
 		{@id = false, @label = ""} = options

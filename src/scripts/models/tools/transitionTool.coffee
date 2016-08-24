@@ -1,3 +1,7 @@
+###
+	This tool creates new transitions in petri nets.
+###
+
 class @TransitionTool extends @Tool
 	constructor: ->
 		super()

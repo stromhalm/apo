@@ -1,7 +1,12 @@
+###
+	This is the topbar directive and its controller.
+	It shows the net's name and a menu with some functionality.
+###
+
 class TopbarController extends Controller
 	constructor: (NetStorage, $mdDialog) ->
 
-		# Confirms the reset via dialog
+		# Delete all nets. Confirms the reset via dialog
 		@resetStorage = (event) ->
 			$mdDialog.show $mdDialog.confirm
 				title: "Delete All Nets"

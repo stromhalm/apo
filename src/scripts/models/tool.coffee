@@ -1,12 +1,15 @@
+###
+	This is an abstract class for all editor tools.
+	ngStorage can't save circle references,
+	therefore we can't save the net reference – it has to be passed with every function call
+###
+
 class @Tool
 	constructor: ->
 		@icon = "help_outline"
 		@draggable = false
 		@name = "Unnamed Tool"
 		@description = ""
-
-	# ngStorage can't save circle references.
-	# Therefore we can't save the net reference – is has to be passed with every function call
 
 	mouseDownOnNode: (net, node, dragLine) ->
 

@@ -1,3 +1,7 @@
+###
+	This tool creates new states in transition systems.
+###
+
 class @StateTool extends @Tool
 	constructor: ->
 		super()

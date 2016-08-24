@@ -1,3 +1,7 @@
+###
+	The synthesizer can generate a transition systems petri net via angular-apt.
+###
+
 class @Synthesizer extends @Analyzer
 	constructor: () ->
 		super()
@@ -5,6 +9,7 @@ class @Synthesizer extends @Analyzer
 		@name = "Synthesizer"
 		@description =  "Synthesize a petri net from a transition system"
 
+	# Ask for the syntesizers options and the new nets name
 	inputOptions: (currentNet, NetStorage) ->
 		[
 			{
@@ -59,6 +64,7 @@ class @Synthesizer extends @Analyzer
 			}
 		]
 
+	# connect to angular-apt
 	analyze: (inputOptions, outputElements, currentNet, apt, converterService, NetStorage, formDialogService) ->
 		aptNet = converterService.getAptFromNet(currentNet)
 		options = []
@@ -106,5 +112,4 @@ class @Synthesizer extends @Analyzer
 					}
 				)
 				formDialogService.scrollToBottom()
-
 		return false # do not close imediatly

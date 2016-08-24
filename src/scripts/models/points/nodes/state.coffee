@@ -1,3 +1,8 @@
+###
+	Transition systems states may have a label.
+	This class also stores the transition labels to itself.
+###
+
 class @State extends @Node
 	constructor: (options) ->
 		super(options)

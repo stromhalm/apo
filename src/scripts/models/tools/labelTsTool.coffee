@@ -1,3 +1,7 @@
+###
+	This tool is used to label transition systems edges and states.
+###
+
 class @LabelTsTool extends @Tool
 	constructor: () ->
 		super()

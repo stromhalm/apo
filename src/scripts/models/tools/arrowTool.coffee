@@ -1,3 +1,8 @@
+###
+	This tool is active in all nets.
+	It is used to draw directed edges between nodes.
+###
+
 class @ArrowTool extends @Tool
 	constructor: ->
 		super()

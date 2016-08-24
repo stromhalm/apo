@@ -1,3 +1,7 @@
+###
+	Petri nets places may have a label and a number of tokens
+###
+
 class @Place extends @Node
 	constructor: (point) ->
 		{@tokens = 0} = point

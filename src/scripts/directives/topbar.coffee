@@ -17,6 +17,16 @@ class TopbarController extends Controller
 			.then ->
 				NetStorage.resetStorage()
 
+		@showAbout = (event) ->
+			$mdDialog.show
+				targetEvent: event
+				templateUrl: 'views/directives/about.html'
+				controller: AboutController
+				controllerAs: "about"
+				clickOutsideToClose: true
+				fullscreen: true
+				bindToController: true
+
 class Topbar extends Directive
 	constructor: ->
 		return {
@@ -24,3 +34,12 @@ class Topbar extends Directive
 			controllerAs: "tb"
 			templateUrl: "/views/directives/topbar.html"
 		}
+
+class AboutController extends Controller
+	constructor: ($mdDialog) ->
+
+		@pn = new PetriNet("PetriNet")
+		@lts = new TransitionSystem("TransitionSystem")
+		@netType = "pn" # Set default list
+
+		@close = -> $mdDialog.hide()

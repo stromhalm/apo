@@ -1,0 +1,55 @@
+<md-dialog aria-label="About This Project" ng-cloak>
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>About This Project</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="about.close()">
+				<ng-md-icon icon="close" style="fill: rgba(255, 255, 255, .87)" size="24" aria-label="close"></ng-md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+	<md-dialog-content>
+		<div class="md-dialog-content">
+			<p>
+				APO is a web interface for <a href="http://github.com/cvo-theory/apt" target="_blank">APT</a>, a powerful software for petri net analysis and synthesis developed at the Carl von Ossietzly University in Oldenburg, Germany.
+				APO is developed by <a href="https://adrian-jagusch.de" target="_blank">Adrian Jagusch</a> and was part of his bachelor thesis.
+			</p>
+			<p>
+				Once loaded, the editor is cached in the browser storage and can be used offline. Only for the analysis modules <a href="http://github.com/stromhalm/angular-apt" target="_blank">angular-apt</a> (which was deleveloped as part of the same thesis) is used as a server side framework.
+				Therefore an internet connection is needed.
+			</p>
+			<p>
+				To navigate in big nets using the browsers built in zoom functions (usually Cmd+'+', Cmd+'-' and Cmd+0) may help.
+			</p>
+			<p>
+				These are the editor tools you can use to create and edit petri nets and transitions systems:
+			</p>
+			<md-input-container class="net-type-input">
+				<label>Select Net Type</label>
+				<md-select ng-model="about.netType">
+					<md-option value="pn">
+						Petri Nets
+					</md-option>
+					<md-option value="lts">
+						Labeled Transition Systems
+					</md-option>
+				</md-select>
+			</md-input-container>
+			<md-list layout="row" layout-wrap>
+				<md-list-item flex="100" flex-gt-md="50" class="md-2-line" ng-repeat="tool in about[about.netType].tools">
+					<ng-md-icon class="about-list-icon" icon="{{ tool.icon }}" size="30" aria-label="{{ tool.name }}"></ng-md-icon>
+					<div class="md-list-item-text">
+						<h3>{{ tool.name }}</h3>
+						<p>{{ tool.description }}</p>
+					</div>
+				</md-list-item>
+			</md-list>
+		</div>
+	</md-dialog-content>
+	<md-dialog-actions layout="row">
+		<span flex></span>
+		<md-button class="md-primary" ng-click="about.close()" style="margin-right:20px;">
+			OK
+		</md-button>
+	</md-dialog-actions>
+</md-dialog>

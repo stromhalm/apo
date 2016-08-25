@@ -1,6 +1,6 @@
 path = require 'path'
 
-cdn = [
+cdnJs = [
 	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js'
 	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js'
 	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js'
@@ -13,6 +13,9 @@ cdn = [
 	'http://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'
 	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js'
 	'http://angular-apt.azurewebsites.net/libs/angular-apt-1.0.js'
+]
+
+cdnCss = [
 	'http://ajax.googleapis.com/ajax/libs/angular_material/1.0.9/angular-material.min.css'
 ]
 
@@ -152,7 +155,7 @@ module.exports = (grunt) ->
 					]
 					captureTimeout: 5000
 					colors: true
-					files: cdn.concat([
+					files: cdnJs.concat([
 						'dist/**/main.js'
 						'dist/**/*.js'
 						'test/**/*.{coffee,js}'
@@ -208,11 +211,14 @@ module.exports = (grunt) ->
 
 		template:
 			dev:
-				files:
-					'.temp/index.html': '.temp/index.html'
+				files: '.temp/index.html': '.temp/index.html'
+				cdnJs: cdnJs
+				cdnCss: cdnCss
 			prod:
 				files: '.temp/index.html': '.temp/index.html'
 				environment: 'prod'
+				cdnJs: cdnJs
+				cdnCss: cdnCss
 
 		ngtemplates:
 			app:
@@ -254,7 +260,7 @@ module.exports = (grunt) ->
 					patterns: [
 						'.temp/**/*'
 						'!.temp/web.config'
-					].concat(cdn).concat(mapFiles)
+					].concat(cdnJs).concat(cdnCss).concat(mapFiles)
 				network: 'http://angular-apt.azurewebsites.net/api/*'
 
 		# Run tasks when monitored files change

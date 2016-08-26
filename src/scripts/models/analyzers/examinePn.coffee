@@ -2,14 +2,13 @@
 	The coverability analyzer can generate the petri nets coverability graph via angular-apt.
 ###
 
-class @PnAnalysis extends @Analyzer
+class @ExaminePn extends @Analyzer
 	constructor: () ->
 		super()
 		@icon = "playlist_add_check"
 		@name = "Petri Net Analysis"
 		@description =  "Perform various tests on a petri net at once."
 		@ok = "Start Tests"
-		@online = true
 
 	# connect to angular-apt
 	analyze: (inputOptions, outputElements, currentNet, apt, converterService, netStorageService, formDialogService) ->

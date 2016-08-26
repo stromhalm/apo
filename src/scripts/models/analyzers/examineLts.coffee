@@ -2,7 +2,7 @@
 	The coverability analyzer can generate the petri nets coverability graph via angular-apt.
 ###
 
-class @LtsAnalysis extends @Analyzer
+class @ExamineLts extends @Analyzer
 	constructor: () ->
 		super()
 		@icon = "playlist_add_check"

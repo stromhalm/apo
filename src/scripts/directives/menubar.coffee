@@ -4,7 +4,7 @@
 ###
 
 class MenubarController extends Controller
-	constructor: ($mdDialog, NetStorage, $state, apt, $http, formDialogService, converterService, $timeout, $rootScope) ->
+	constructor: ($mdDialog, netStorageService, $state, apt, $http, formDialogService, converterService, $timeout, $rootScope) ->
 
 		# Show
 		@createNet = (event, type) ->
@@ -17,7 +17,7 @@ class MenubarController extends Controller
 					name: "Name"
 					validation: (value) ->
 						return "The name can't contain \"" if value and value.replace("\"", "") isnt value
-						return "A net with this name already exists" if value and NetStorage.getNetByName(value)
+						return "A net with this name already exists" if value and netStorageService.getNetByName(value)
 						return true
 				}]
 			.then (formElements) ->
@@ -25,7 +25,7 @@ class MenubarController extends Controller
 					switch type
 						when "petri net" then newNet = new PetriNet({name: formElements[0].value})
 						else newNet = new TransitionSystem({name: formElements[0].value})
-					NetStorage.addNet(newNet)
+					netStorageService.addNet(newNet)
 
 		@renameNet = (oldName, event) ->
 			formDialogService.runDialog({
@@ -38,14 +38,14 @@ class MenubarController extends Controller
 					value: oldName
 					validation: (value) ->
 						return "The name can't contain \"" if value and value.replace("\"", "") isnt value
-						return "A net with this name already exists" if value and NetStorage.getNetByName(value)
+						return "A net with this name already exists" if value and netStorageService.getNetByName(value)
 						return true
 				}]
 			})
 			.then (formElements) ->
 				if formElements
 					newName = formElements[0].value
-					NetStorage.renameNet(oldName, newName)
+					netStorageService.renameNet(oldName, newName)
 					$state.go "editor", name: newName
 
 		@deleteNet = (net, event) ->
@@ -56,7 +56,7 @@ class MenubarController extends Controller
 				cancel: "Cancel"
 				targetEvent: event # To animate the dialog to/from the click
 			.then ->
-				NetStorage.deleteNet(net.name)
+				netStorageService.deleteNet(net.name)
 
 		@showAPT = (net, event) ->
 			formDialogService.runDialog({
@@ -96,7 +96,7 @@ class MenubarController extends Controller
 						validation: (value) ->
 							return "" if not value
 							return "No valid APT net" if not value.split(".name \"")[1]
-							return "A net with this name already exists" if NetStorage.getNetByName(value.split(".name \"")[1].split("\"")[0])
+							return "A net with this name already exists" if netStorageService.getNetByName(value.split(".name \"")[1].split("\"")[0])
 							return true
 					}
 				]
@@ -112,10 +112,10 @@ class MenubarController extends Controller
 								ok: "OK"
 						)
 					else
-						NetStorage.addNet(net)
+						netStorageService.addNet(net)
 
 		@startAnalyzer = (analyzer, net, event) ->
-			analyzer.run(apt, NetStorage, converterService, net, formDialogService, event, $rootScope.online)
+			analyzer.run(apt, netStorageService, converterService, net, formDialogService, event, $rootScope.online)
 
 class Menubar extends Directive
 	constructor: ->

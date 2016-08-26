@@ -6,7 +6,7 @@
 
 class Editor extends Controller
 
-	constructor: ($timeout, $scope, $state, $stateParams, NetStorage, converterService, formDialogService) ->
+	constructor: ($timeout, $scope, $state, $stateParams, netStorageService, converterService, formDialogService) ->
 
 		# Set physics
 		charge = -500
@@ -14,10 +14,10 @@ class Editor extends Controller
 		friction = 0.9
 		gravity = 0.1
 
-		net = NetStorage.getNetByName(decodeURI($stateParams.name))
+		net = netStorageService.getNetByName(decodeURI($stateParams.name))
 		# Go to first net if not found
 		if not net
-			$state.go "editor", name: NetStorage.getNets()[0].name
+			$state.go "editor", name: netStorageService.getNets()[0].name
 			return
 		$scope.net = net
 

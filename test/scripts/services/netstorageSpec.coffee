@@ -1,4 +1,4 @@
-describe 'NetStorage', ->
+describe 'netStorageService', ->
 	beforeEach module 'app'
 
 	beforeEach ->
@@ -8,30 +8,30 @@ describe 'NetStorage', ->
 					pass = angular.equals actual, expected
 					{pass}
 
-	it "should find a created transition system", inject ['NetStorage', (NetStorage) ->
+	it "should find a created transition system", inject ['netStorageService', (netStorageService) ->
 		netName = "foo"
-		NetStorage.addNet(new TransitionSystem({name: netName}))
-		expect(NetStorage.getNetByName(netName).name).toEqualData netName
-		expect(NetStorage.getNetByName(netName).type).toEqualData "lts"
+		netStorageService.addNet(new TransitionSystem({name: netName}))
+		expect(netStorageService.getNetByName(netName).name).toEqualData netName
+		expect(netStorageService.getNetByName(netName).type).toEqualData "lts"
 	]
 
-	it "should find a created petri net", inject ['NetStorage', (NetStorage) ->
+	it "should find a created petri net", inject ['netStorageService', (netStorageService) ->
 		netName = "foo"
-		NetStorage.addNet(new PetriNet({name: netName}))
-		expect(NetStorage.getNetByName(netName).name).toEqualData netName
-		expect(NetStorage.getNetByName(netName).type).toEqualData "pn"
+		netStorageService.addNet(new PetriNet({name: netName}))
+		expect(netStorageService.getNetByName(netName).name).toEqualData netName
+		expect(netStorageService.getNetByName(netName).type).toEqualData "pn"
 	]
 
-	it "should delete a transition system", inject ['NetStorage', (NetStorage) ->
+	it "should delete a transition system", inject ['netStorageService', (netStorageService) ->
 		netName = "foo"
-		NetStorage.addNet(new TransitionSystem({name: netName}))
-		NetStorage.deleteNet(netName)
-		expect(NetStorage.getNetByName(netName)).toEqualData false
+		netStorageService.addNet(new TransitionSystem({name: netName}))
+		netStorageService.deleteNet(netName)
+		expect(netStorageService.getNetByName(netName)).toEqualData false
 	]
 
-	it "should delete a petri net", inject ['NetStorage', (NetStorage) ->
+	it "should delete a petri net", inject ['netStorageService', (netStorageService) ->
 		netName = "foo"
-		NetStorage.addNet(new PetriNet({name: netName}))
-		NetStorage.deleteNet(netName)
-		expect(NetStorage.getNetByName(netName)).toEqualData false
+		netStorageService.addNet(new PetriNet({name: netName}))
+		netStorageService.deleteNet(netName)
+		expect(netStorageService.getNetByName(netName)).toEqualData false
 	]

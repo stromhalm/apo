@@ -10,7 +10,7 @@ class @Synthesizer extends @Analyzer
 		@description =  "Synthesize a petri net from a transition system"
 
 	# Ask for the syntesizers options and the new nets name
-	inputOptions: (currentNet, NetStorage) ->
+	inputOptions: (currentNet, netStorageService) ->
 		[
 			{
 				name: "Name of the new petri net"
@@ -18,7 +18,7 @@ class @Synthesizer extends @Analyzer
 				value: "Synthesis of #{currentNet.name}"
 				validation: (name) ->
 					return "The name can't contain \"" if name and name.replace("\"", "") isnt name
-					return "A net with this name already exists" if name and NetStorage.getNetByName(name)
+					return "A net with this name already exists" if name and netStorageService.getNetByName(name)
 					return true
 			}
 			{
@@ -69,7 +69,7 @@ class @Synthesizer extends @Analyzer
 		return false
 
 	# connect to angular-apt
-	analyze: (inputOptions, outputElements, currentNet, apt, converterService, NetStorage, formDialogService) ->
+	analyze: (inputOptions, outputElements, currentNet, apt, converterService, netStorageService, formDialogService) ->
 		aptNet = converterService.getAptFromNet(currentNet)
 		options = []
 
@@ -84,7 +84,7 @@ class @Synthesizer extends @Analyzer
 			if response.data.success
 				pn = converterService.getNetFromApt(aptPn)
 				pn.name = inputOptions[0].value
-				NetStorage.addNet(pn)
+				netStorageService.addNet(pn)
 				formDialogService.close()
 			else
 				outputElements.splice(0) while outputElements.length > 0 # clear outputElements

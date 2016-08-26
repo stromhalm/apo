@@ -11,9 +11,9 @@ class @Analyzer
 		@cancel = "close"
 		@offlineCapable = false
 
-	run: (apt, NetStorage, converterService, currentNet, formDialogService, event, internetConnection) ->
+	run: (apt, netStorageService, converterService, currentNet, formDialogService, event, internetConnection) ->
 		analyzer = @analyze
-		formElements = @inputOptions(currentNet, NetStorage)
+		formElements = @inputOptions(currentNet, netStorageService)
 		outputElements = []
 		@staticError = @initialError
 		if not @offlineCapable and not internetConnection
@@ -30,8 +30,8 @@ class @Analyzer
 			formElements: formElements
 			outputElements: outputElements
 			onComplete: (inputOptions) ->
-				analyzer(inputOptions, outputElements, currentNet, apt, converterService, NetStorage, formDialogService)
+				analyzer(inputOptions, outputElements, currentNet, apt, converterService, netStorageService, formDialogService)
 
 	initialError: (currentNet) -> false
-	inputOptions: (currentNet, NetStorage) ->
-	analyze: (inputOptions, apt, currentNet, converterService, NetStorage) ->
+	inputOptions: (currentNet, netStorageService) ->
+	analyze: (inputOptions, apt, currentNet, converterService, netStorageService) ->

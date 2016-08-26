@@ -10,7 +10,7 @@ class @CoverabilityAnalyzer extends @Analyzer
 		@description =  "Compute a petri net's coverability graph"
 
 	# Ask for the new nets name
-	inputOptions: (currentNet, NetStorage) ->
+	inputOptions: (currentNet, netStorageService) ->
 		[
 			{
 				name: "Name of the new transition system"
@@ -18,16 +18,16 @@ class @CoverabilityAnalyzer extends @Analyzer
 				value: "CG of #{currentNet.name}"
 				validation: (name) ->
 					return "The name can't contain \"" if name and name.replace("\"", "") isnt name
-					return "A net with this name already exists" if name and NetStorage.getNetByName(name)
+					return "A net with this name already exists" if name and netStorageService.getNetByName(name)
 					return true
 			}
 		]
 
 	# connect to angular-apt
-	analyze: (inputOptions, outputElements, currentNet, apt, converterService, NetStorage, formDialogService) ->
+	analyze: (inputOptions, outputElements, currentNet, apt, converterService, netStorageService, formDialogService) ->
 		aptNet = converterService.getAptFromNet(currentNet)
 		apt.getCoverabilityGraph(aptNet).then (response) ->
 			aptCov = response.data.lts
 			covGraph = converterService.getNetFromApt(aptCov)
 			covGraph.name = inputOptions[0].value
-			NetStorage.addNet(covGraph)
+			netStorageService.addNet(covGraph)

@@ -5,7 +5,7 @@
 
 class SidenavController extends Controller
 
-	constructor: ($mdSidenav, $state, $stateParams, NetStorage, $mdDialog) ->
+	constructor: ($mdSidenav, $state, $stateParams, netStorageService, $mdDialog) ->
 
 		@newName = ""
 
@@ -25,15 +25,15 @@ class SidenavController extends Controller
 		# Validate the name of a new net
 		@nameValidation = (name) ->
 			return "\" is not allowed" if name.replace("\"", "") isnt name
-			return "A net with this name already exists" if NetStorage.getNetByName(name)
+			return "A net with this name already exists" if netStorageService.getNetByName(name)
 			return true
 
 		# Create a new net via the sidenav's form
 		@createNewNet = (name, type, event) ->
 			if (!name or !type or @nameValidation(name) isnt true)
 			else
-				if type is "PN" then success = NetStorage.addNet(new PetriNet({name: name}))
-				else if type is "LTS" then success = NetStorage.addNet(new TransitionSystem({name: name}))
+				if type is "PN" then success = netStorageService.addNet(new PetriNet({name: name}))
+				else if type is "LTS" then success = netStorageService.addNet(new TransitionSystem({name: name}))
 				@newName = ""
 				@newType = ""
 
@@ -46,13 +46,13 @@ class SidenavController extends Controller
 				cancel: "Cancel"
 				targetEvent: event # To animate the dialog to/from the click
 			.then ->
-				NetStorage.deleteNet(net.name)
+				netStorageService.deleteNet(net.name)
 
 		# load all nets, direct acess to storage for 2-way-binding
-		@nets = NetStorage.storageObjects
+		@nets = netStorageService.storageObjects
 
 		# Get selected net from storage
-		net = NetStorage.getNetByName(decodeURI($stateParams.name))
+		net = netStorageService.getNetByName(decodeURI($stateParams.name))
 
 
 class Sidenav extends Directive

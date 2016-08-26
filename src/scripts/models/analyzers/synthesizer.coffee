@@ -64,6 +64,10 @@ class @Synthesizer extends @Analyzer
 			}
 		]
 
+	initialError: (currentNet) ->
+		return "No inital state specified!" if not currentNet.getInitState()
+		return false
+
 	# connect to angular-apt
 	analyze: (inputOptions, outputElements, currentNet, apt, converterService, NetStorage, formDialogService) ->
 		aptNet = converterService.getAptFromNet(currentNet)

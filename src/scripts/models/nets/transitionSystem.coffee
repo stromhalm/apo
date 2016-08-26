@@ -15,6 +15,7 @@ class @TransitionSystem extends @Net
 
 		# Setup for the transition systems analyzers in the right order
 		@setAnalyzers([
+			new LtsAnalysis()
 			new Synthesizer()
 		])
 

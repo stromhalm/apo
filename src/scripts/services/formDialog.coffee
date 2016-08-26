@@ -17,6 +17,8 @@ class FormDialog extends Service
 				cancel = "cancel",
 				event = null
 				onComplete = null
+				staticError = -> false
+				net = null
 			} = options
 
 			# Use $mdDialog to show Dialog
@@ -34,6 +36,8 @@ class FormDialog extends Service
 					formElements: formElements
 					outputElements: outputElements
 					onComplete: onComplete
+					staticError: staticError
+					net: net
 					ok: ok
 					cancel: cancel
 
@@ -62,6 +66,7 @@ class FormDialogController extends Controller
 
 		# Get the input elements width
 		@getInputWidth = (input) ->
+			return input.flex if input.flex
 			switch input.type
 				when "code" then 100
 				when "textArray" then 100

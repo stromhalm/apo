@@ -107,7 +107,10 @@
 			<div id="form-bottom"></div>
 		</div>
 	</md-dialog-content>
-	<md-dialog-actions layout="row">
+	<md-dialog-actions class="static-error-bar" ng-if="dialog.staticError(dialog.net)">
+		{{ dialog.staticError(dialog.net) }}
+	</md-dialog-actions>
+	<md-dialog-actions layout="row" ng-if="!dialog.staticError(dialog.net)">
 		<span flex></span>
 		<md-button ng-if="dialog.cancel" class="md-primary" ng-click="dialog.dismiss()">
 			{{ dialog.cancel }}

@@ -168,7 +168,15 @@ md-dialog {
 	}
 }
 
-
 .editor-layout {
    height: 100%;
+}
+
+// Disable iOS zoom on input focus
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
 }

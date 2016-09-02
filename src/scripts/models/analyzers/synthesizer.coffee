@@ -7,7 +7,7 @@ class @Synthesizer extends @Analyzer
 		super()
 		@icon = "call_merge"
 		@name = "Synthesizer"
-		@description =  "Synthesize a petri net from a transition system"
+		@description =  "Synthesize a Petri Net from a Transition System"
 
 	# Ask for the syntesizers options and the new nets name
 	inputOptions: (currentNet, netStorageService) ->
@@ -54,12 +54,12 @@ class @Synthesizer extends @Analyzer
 					{id: "plain", nicename: "plain", description: "Every flow has a weight of at most one."}
 					{id: "tnet", nicename: "tnet", description: "Every place's preset and postset contains at most one entry."}
 					{id: "generalized-marked-graph", nicename: "generalized marked graph", description: "Every place's preset and postset contains exactly one entry."}
-					{id: "marked-graph", nicename: "marked graph", description: "generalized marked graph + plain."}
+					{id: "marked-graph", nicename: "marked graph", description: "Generalized marked graph + plain."}
 					{id: "generalized-output-nonbranching", nicename: "generalized output nonbranching", description: "Every place's postset contains at most one entry."}
-					{id: "output-nonbranching", nicename: "output nonbranching", description: "generalized output nonbranching + plain."}
-					{id: "conflict-free", nicename: "conflict free", description: "The Petri net is plain and every place either has at most one entry in its postset or its preset is contained in its postset."}
+					{id: "output-nonbranching", nicename: "output nonbranching", description: "Generalized output nonbranching + plain."}
+					{id: "conflict-free", nicename: "conflict free", description: "The petri net is plain and every place either has at most one entry in its postset or its preset is contained in its postset."}
 					{id: "homogeneous", nicename: "homogeneous", description: "All outgoing flows from a place have the same weight."}
-					{id: "minimize", nicename: "minimize", description: "The Petri net has as few places as possible."}
+					{id: "minimize", nicename: "minimize", description: "The petri net has as few places as possible."}
 				]
 			}
 		]

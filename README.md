@@ -1,19 +1,19 @@
 # APO – APT Online [![Build Status](https://travis-ci.org/stromhalm/apo.svg)](https://travis-ci.org/stromhalm/apo)
 <img src="src/images/apo-logo.png" width="250"/>
 
-APO is a web interface for [APT](http://github.com/cvo-theory/apt), a powerful software for petri net analysis and synthesis developed at the Carl von Ossietzly University in Oldenburg, Germany. Visit [apo.adrian-jagusch.de](http://apo.adrian-jagusch.de) in your browser to try it out!
+APO is a web interface for [APT](http://github.com/cvo-theory/apt), a powerful software for Petri net analysis and synthesis developed at the Carl von Ossietzky University in Oldenburg, Germany. Visit [apo.adrian-jagusch.de](http://apo.adrian-jagusch.de) in your browser to try it out!
 
 ## Quickstart
 APO currently supports two types of nets: **[Petri nets](https://en.wikipedia.org/wiki/Petri_net)** (PN) and **[(labeled) transition systems](https://en.wikipedia.org/wiki/Transition_system)** (LTS). At your first visit a sample Petri net is created for you. Use the tools in the toolbar to create places and transitions and combine them with the **Arrows** tool.
 
-Then let APO calculate the properties of your net by using the Petri net analyzer in the menu bar! Is your net safe or bounded? What abour its reversibility?
+Then let APO calculate the properties of your net by using the Petri net analyzer in the menu bar! Is your net safe or bounded? What about its reversibility?
 
 ### Short guide for using APO
-Now let's use APO to mimimize a Petri net! First we create a net for mutual exclusion which is an often used example for the parallel features of Petri nets. See the first image below for what such a net could look like. You may use the **Tokens** tool to fire transitions and elucidate the nets behavior.
+Now let's use APO to minimize a Petri net! First we create a net for mutual exclusion which is an often used example for the parallel features of Petri nets. See the first image below for what such a net could look like. You may use the **Tokens** tool to fire transitions and elucidate the net's behavior.
 
 Then use the **Coverability Graph** module to generate the nets coverability graph. It will be created as a new transition system. Use the **Fix Nodes** tool to unravel the nodes.
 
-Now let's synthesize an Petri net from this transition system which will have the same behavior but needs less nodes. Use APOs **Synthesizer** module and choose **minimize** as an option. Notice all the other options for net synthesis – you may combine them as you like.
+Now let's synthesize a Petri net from this transition system which will have the same behavior but needs fewer nodes. Use APOs **Synthesizer** module and choose **minimize** as an option. Notice all the other options for net synthesis – you may combine them as you like.
 
 Image 4 shows the result which has been created as a new Petri net in the sidebar. It has the same behavior as the often referenced example for mutual exclusion but due to its intelligent use of weighted edges it only has 9 nodes (instead of 13 in the old net).
 
@@ -60,7 +60,7 @@ APO uses several frameworks and libraries:
 * [CoffeeScipt](http://coffeescript.org) – A beautiful programming language for the web
 * [AngularJS](http://angularjs.org) – For a modern and dynamic MVC web application
 * [D3.js](http://d3js.org) – For the physics simulation in your browser
-* [Angular Material](http://material.angularjs.org) – For beautiful design components based on Googles [Material Design](https://material.google.com)
+* [Angular Material](http://material.angularjs.org) – For beautiful design components based on Google's [Material Design](https://material.google.com)
 * [ngClassify](https://github.com/CaryLandholt/ng-classify) – A set of AngularJS classes in CoffeeScript
 * [Less](http://lesscss.org) – For nice CSS code with variables and inheritance.
 * [GitHub](http://github.com) – Here you are ;-)

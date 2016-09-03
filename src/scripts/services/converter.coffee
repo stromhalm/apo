@@ -139,9 +139,9 @@ class Converter extends Service
 					states = @getAptBlockRows("states", aptCode)
 					for stateLabel in states
 						stateLabel = stateLabel.split(" ")[0]
-						if @isPartOfString("[initial]", stateLabel)
+						if @isPartOfString("[initial]", stateLabel) or @isPartOfString("[initial=\"true\"]", stateLabel)
 							initial = true
-							stateLabel = stateLabel.replace("[initial]", "")
+							stateLabel = stateLabel.replace("[initial]", "").replace("[initial=\"true\"]", "")
 						else
 							initial = false
 						state = new State({label: stateLabel})

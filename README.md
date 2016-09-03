@@ -72,6 +72,6 @@ APO uses several frameworks and libraries:
 * [AngularFun](https://github.com/CaryLandholt/AngularFun) – A good starting point for modern web development
 
 ### Contribute
-If you find a bug in the source code or a mistake in the documentation, you can help by submitting an [issue](https://github.com/stromhalm/apo/issues) to the repository.  Even better, you can submit a [Pull Request](#pull-requests) with a fix.
+If you find a bug in the source code or a mistake in the documentation, you can help by submitting an [issue](https://github.com/stromhalm/apo/issues) to the repository.  Even better, you can submit a [Pull Request](https://github.com/stromhalm/apo/pulls) with a fix.
 
-Enhancements like new net types or analysis modules are always welcome! Feel free to cantact me :)
+Enhancements like new net types or analysis modules are always welcome! Feel free to [contact me](https://adrian-jagusch.de/kontakt) :)

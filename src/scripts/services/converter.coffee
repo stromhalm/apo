@@ -4,7 +4,6 @@
 	Therefore (to access class methods) this scervice can recreate classes from its data.
 ###
 
-
 class Converter extends Service
 	constructor: ->
 

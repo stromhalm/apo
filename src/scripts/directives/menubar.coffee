@@ -113,6 +113,7 @@ class MenubarController extends Controller
 						)
 					else
 						netStorageService.addNet(net)
+						$state.go "editor", name: net.name
 
 		@startAnalyzer = (analyzer, net, event) ->
 			analyzer.run(apt, netStorageService, converterService, net, formDialogService, event, $rootScope.online)

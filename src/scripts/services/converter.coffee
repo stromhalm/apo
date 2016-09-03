@@ -56,6 +56,10 @@ class Converter extends Service
 					if edge.type is "tsEdge"
 						labels.push label for label in edge.labelsLeft when labels.indexOf(label) is -1 if edge.left >= 1
 						labels.push label for label in edge.labelsRight when labels.indexOf(label) is -1 if edge.right >= 1
+				for node in net.nodes
+					if node.type is "state"
+						labels.push label for label in node.labelsToSelf when labels.indexOf(label) is -1
+
 				rows.push label for label in labels
 				rows.push ""
 

@@ -22,6 +22,16 @@ class Editor extends Controller
 				return
 
 			$scope.net = net
+
+			# watch for tool changes
+			$scope.$watch 'net.activeTool', ->
+				if net.getActiveTool().draggable # drag and drop
+					nodes.call(drag)
+				else
+					nodes.on('mousedown.drag', null)
+					nodes.on('touchstart.drag', null)
+
+			# Delte net via the error card
 			$scope.deleteNet = () -> netStorageService.deleteNet(net.name)
 
 			svg = d3.select('#main-canvas svg')
@@ -128,8 +138,6 @@ class Editor extends Controller
 
 				.on 'mousedown', (node) ->
 
-					nodes.call(drag) if net.getActiveTool().draggable # drag and drop
-
 					# select node
 					mouseDownNode = node
 					if mouseDownNode == selectedNode
@@ -149,14 +157,33 @@ class Editor extends Controller
 					net.getActiveTool().mouseUpOnNode(net, mouseUpNode, mouseDownNode, dragLine)
 					$scope.$apply() # Quick save net to storage
 
-					nodes.on('mousedown.drag', null)
-
 					selectedNode = null
 					restart()
 
 				.on 'dblclick', (node) ->
 					net.getActiveTool().dblClickOnNode(net, node)
 					restart()
+
+				.on 'touchend', (startNode) ->
+
+					# We need to calculate the nearest node by ourselves
+					smallestDistance = 50
+					nearestNode = null
+					for node in net.nodes
+						xOffset = d3.mouse(this)[0]+startNode.x - node.x
+						yOffset = d3.mouse(this)[1]+startNode.y - node.y
+						distance = Math.sqrt(xOffset*xOffset+yOffset*yOffset)
+						if distance < smallestDistance
+							smallestDistance = distance
+							nearestNode = node
+					
+					if nearestNode
+						mouseUpNode = nearestNode
+						net.getActiveTool().mouseUpOnNode(net, mouseUpNode, mouseDownNode, dragLine)
+						$scope.$apply() # Quick save net to storage
+
+						selectedNode = null
+						restart()
 
 				# show node text
 				newNodes.append('svg:text').attr('x', (node) -> node.labelXoffset).attr('y', (node) -> node.labelYoffset).attr('class', 'label nodeLabel').text((node) -> converterService.getNodeFromData(node).getText())
@@ -220,8 +247,14 @@ class Editor extends Controller
 				edge.target = net.nodes.filter((node) -> node.id == edge.target.id)[0]
 
 			# motion starts here
-			svg.on('mousedown', mousedown).on('mousemove', mousemove).on 'mouseup', mouseup
+			svg.on('mousedown', mousedown)
+			.on('mousemove', mousemove)
+			.on('mouseup', mouseup)
+			.on('touchmove', mousemove)
+			.on('touchend', mouseup)
 			restart()
+
+			document.body.addEventListener('touchmove', (e) -> e.preventDefault())
 
 		catch error
 			console.error error

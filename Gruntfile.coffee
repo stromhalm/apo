@@ -92,7 +92,7 @@ module.exports = (grunt) ->
 			app:
 				options:
 					base: '<%= settings.distDirectory %>'
-					hostname: 'localhost'
+					hostname: '0.0.0.0' # make server accessible via the network
 					livereload: true
 					middleware: (connect, options, middlewares) ->
 

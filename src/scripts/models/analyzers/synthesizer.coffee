@@ -64,6 +64,7 @@ class @Synthesizer extends @Analyzer
 			}
 		]
 
+	# this module needs an initial state
 	initialError: (currentNet) ->
 		return "No inital state specified!" if not currentNet.getInitState()
 		return false

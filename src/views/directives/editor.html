@@ -1,10 +1,23 @@
 <div flex ng-class="['editor-layout', net.activeTool]">
-   <topbar></topbar>
-   <menubar></menubar>
+	<topbar></topbar>
+	<menubar></menubar>
 	<toolbar></toolbar>
-   <div id="main-canvas">
-      <svg>
-         <path class="link dragline hidden"></path>
-      </svg>
-   </div>
+	<div id="main-canvas">
+		<svg ng-hide="error">
+			<path class="link dragline hidden"></path>
+		</svg>
+		<div class="error-canvas" ng-if="error" layout="row" layout-align="center center">
+			<md-card class="error-card" flex>
+				<md-card-title>
+					<md-card-title-text>
+						<span class="md-headline">Rendering Error</span>
+						<span class="md-subhead">The editor couldn't render this net. There was probably a syntax error at the APT import.</span>
+					</md-card-title-text>
+				</md-card-title>
+				<md-card-actions layout="row" layout-align="end center">
+					<md-button ng-click="deleteNet()" class="md-primary">Delete This Net</md-button>
+				</md-card-actions>
+			</md-card>
+		</div>
+	</div>
 </div>

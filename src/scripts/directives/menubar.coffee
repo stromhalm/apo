@@ -4,7 +4,7 @@
 ###
 
 class MenubarController extends Controller
-	constructor: ($mdDialog, netStorageService, $state, apt, $http, formDialogService, converterService, $timeout, $rootScope) ->
+	constructor: ($mdDialog, netStorageService, $state, apt, $http, formDialogService, converterService, $timeout, $rootScope, $scope) ->
 
 		# Show
 		@createNet = (event, type) ->
@@ -82,6 +82,8 @@ class MenubarController extends Controller
 					document.body.removeChild(element)
 					return false # do not close dialog after download
 			})
+		
+		$scope.codeInput = "Naa"
 
 		@importAPT = (event) ->
 			formDialogService.runDialog({
@@ -90,6 +92,12 @@ class MenubarController extends Controller
 				ok: "import"
 				event: event
 				formElements: [
+					{
+						type: "file"
+						name: "Upload .apt-File"
+						onfileload: (text) ->
+							angular.element(document.getElementById('form-bottom')).scope().dialog.setInput(1, text)
+					},
 					{
 						type: "code"
 						name: "Insert Code"

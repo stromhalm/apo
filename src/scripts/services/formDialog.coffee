@@ -83,6 +83,9 @@ class FormDialogController extends Controller
 		# Hide dialog
 		@dismiss = -> $mdDialog.hide(null)
 
+		# Set a specific input field
+		@setInput = (id, value) -> @formElements[id].value = value
+
 		# Checks if all inputs are valid
 		@formIsComplete = -> if not $scope.formDialog then return false else return $scope.formDialog.$valid
 

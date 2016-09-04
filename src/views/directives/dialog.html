@@ -38,6 +38,13 @@
 							touched="input.touched"
 							autocomplete="false"
 							validation="input.validation" />
+						<input
+							ng-if="input.type == 'file'"
+							class="file-upload"
+							type="file"
+							fileread="input.value"
+							error-message="input.error"
+							onfileload="input.onfileload" />
 						<textarea
 							ng-if="input.type == 'code'"
 							required class="code-editor"

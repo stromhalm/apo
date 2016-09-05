@@ -4,7 +4,7 @@
 ###
 
 class MenubarController extends Controller
-	constructor: ($mdDialog, netStorageService, $state, apt, $http, formDialogService, converterService, $timeout, $rootScope, $scope) ->
+	constructor: ($mdDialog, netStorageService, $state, apt, $http, formDialogService, converterService, $timeout, $rootScope) ->
 
 		# Show
 		@createNet = (event, type) ->
@@ -82,8 +82,6 @@ class MenubarController extends Controller
 					document.body.removeChild(element)
 					return false # do not close dialog after download
 			})
-		
-		$scope.codeInput = "Naa"
 
 		@importAPT = (event) ->
 			formDialogService.runDialog({
@@ -97,7 +95,7 @@ class MenubarController extends Controller
 						name: "Upload .apt-File"
 						onfileload: (text) ->
 							angular.element(document.getElementById('form-bottom')).scope().dialog.setInput(1, text)
-					},
+					}
 					{
 						type: "code"
 						name: "Insert Code"
@@ -107,21 +105,44 @@ class MenubarController extends Controller
 							return "A net with this name already exists" if netStorageService.getNetByName(value.split(".name \"")[1].split("\"")[0])
 							return true
 					}
+					{
+						type: "checkbox"
+						name: "Normalize APT Code before import"
+						value: true
+						showIf: () -> $rootScope.online
+					}
 				]
 			})
 			.then (formElements) ->
 				if formElements
-					net = converterService.getNetFromApt(formElements[0].value)
-					if not net
-						$mdDialog.show(
-							$mdDialog.alert
-								title: "Syntax Error"
-								textContent: "Couldn't import the net because of syntax errors in the apt code"
-								ok: "OK"
-						)
+
+					# Normalize online?
+					if formElements[2].value is true and $rootScope.online
+						apt.normalizeApt(formElements[1].value).then (response) ->
+							
+							if response.data.error
+								$mdDialog.show(
+									$mdDialog.alert
+										title: "Syntax Error"
+										textContent: response.data.error
+										ok: "OK"
+								)
+							else
+								net = converterService.getNetFromApt(response.data.apt)
+								netStorageService.addNet(net)
+								$state.go "editor", name: net.name
 					else
-						netStorageService.addNet(net)
-						$state.go "editor", name: net.name
+						net = converterService.getNetFromApt(formElements[1].value)
+						if not net
+							$mdDialog.show(
+								$mdDialog.alert
+									title: "Syntax Error"
+									textContent: "Couldn't import the net because of syntax errors in the apt code"
+									ok: "OK"
+							)
+						else
+							netStorageService.addNet(net)
+							$state.go "editor", name: net.name
 
 		@startAnalyzer = (analyzer, net, event) ->
 			analyzer.run(apt, netStorageService, converterService, net, formDialogService, event, $rootScope.online)

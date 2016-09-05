@@ -18,7 +18,7 @@
 						ng-repeat="(inputId, input) in dialog.formElements"
 						flex-gt-sm="{{ dialog.getInputWidth(input) }}"
 						ng-if="dialog.showInput(input)">
-						<label>{{ input.name }}</label>
+						<label ng-class="'input-label-' + input.type">{{ input.name }}</label>
 						<input
 							ng-if="input.type == 'number'"
 							required type="number"
@@ -38,6 +38,12 @@
 							touched="input.touched"
 							autocomplete="false"
 							validation="input.validation" />
+						<md-checkbox
+							ng-if="input.type == 'checkbox'"
+							class="md-primary"
+							ng-model="input.value">
+							{{ input.name }}
+ 						</md-checkbox>
 						<input
 							ng-if="input.type == 'file'"
 							class="file-upload"

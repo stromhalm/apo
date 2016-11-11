@@ -10,4 +10,4 @@ before_script:
 
 after_success: # deploy to azure
   - "grunt prod"
-  - "find dist -type f -exec curl -u $AZURE_WA_USERNAME:$AZURE_WA_PASSWORD --ftp-create-dirs -T {} $AZURE_WA_URL{} \\;"
+  - "find dist -type f -exec curl -u $AZURE_WA_USERNAME:$AZURE_WA_PASSWORD --ftp-create-dirs -T {} $AZURE_WA_URL{}/site/wwwroot \\;"

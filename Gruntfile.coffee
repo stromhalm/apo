@@ -1,29 +1,29 @@
 path = require 'path'
 
 cdnJs = [
-	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js'
-	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js'
-	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js'
-	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js'
-	'http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js'
-	'http://ajax.googleapis.com/ajax/libs/angular_material/1.0.9/angular-material.min.js'
-	'http://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js'
-	'http://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js'
-	'http://d3js.org/d3.v3.min.js'
-	'http://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'
-	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js'
-	'http://angular-apt.azurewebsites.net/libs/angular-apt-1.0.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js'
+	'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angular_material/1.0.9/angular-material.min.js'
+	'https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js'
+	'https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js'
+	'https://d3js.org/d3.v3.min.js'
+	'https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js'
+	'https://angular-apt.azurewebsites.net/libs/angular-apt-1.0.js'
 ]
 
 cdnCss = [
-	'http://ajax.googleapis.com/ajax/libs/angular_material/1.0.9/angular-material.min.css'
+	'https://ajax.googleapis.com/ajax/libs/angular_material/1.0.9/angular-material.min.css'
 ]
 
 mapFiles = [
-	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js.map'
-	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js.map'
-	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js.map'
-	'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js.map'
 ]
 
 # Build configurations
@@ -261,7 +261,7 @@ module.exports = (grunt) ->
 						'.temp/**/*'
 						'!.temp/web.config'
 					].concat(cdnJs).concat(cdnCss).concat(mapFiles)
-				network: 'http://angular-apt.azurewebsites.net/api/*'
+				network: 'https://angular-apt.azurewebsites.net/api/*'
 
 		# Run tasks when monitored files change
 		watch:

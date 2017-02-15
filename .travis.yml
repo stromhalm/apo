@@ -10,4 +10,5 @@ before_script:
 
 after_success: # deploy to azure
   - grunt prod
+  - npm install -g firebase-tools
   - firebase deploy --token "$FIREBASE_TOKEN"

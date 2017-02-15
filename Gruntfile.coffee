@@ -260,8 +260,10 @@ module.exports = (grunt) ->
 					patterns: [
 						'.temp/**/*'
 						'!.temp/web.config'
-					].concat(cdnJs).concat(cdnCss).concat(mapFiles)
-				network: 'https://angular-apt.azurewebsites.net/api/*'
+					]
+				network: [
+					'https://angular-apt.azurewebsites.net/api/*'
+				].concat(cdnJs).concat(cdnCss).concat(mapFiles)
 
 		# Run tasks when monitored files change
 		watch:

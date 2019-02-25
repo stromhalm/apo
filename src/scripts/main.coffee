@@ -10,5 +10,4 @@ class APO extends App
 			"ui.router"
 			"ngStorage"
 			"ngMdIcons"
-			"apt"
 		]

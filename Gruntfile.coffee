@@ -12,7 +12,6 @@ cdnJs = [
 	'https://d3js.org/d3.v3.min.js'
 	'https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'
 	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js'
-	'https://angular-apt.azurewebsites.net/libs/angular-apt-1.0.js'
 ]
 
 cdnCss = [

@@ -4,7 +4,7 @@
 ###
 
 class MenubarController extends Controller
-	constructor: ($mdDialog, netStorageService, $state, apt, $http, formDialogService, converterService, $timeout, $rootScope) ->
+	constructor: ($mdDialog, netStorageService, $state, aptService, $http, formDialogService, converterService, $timeout, $rootScope) ->
 
 		# Show
 		@createNet = (event, type) ->
@@ -145,7 +145,7 @@ class MenubarController extends Controller
 							$state.go "editor", name: net.name
 
 		@startAnalyzer = (analyzer, net, event) ->
-			analyzer.run(apt, netStorageService, converterService, net, formDialogService, event, $rootScope.online)
+			analyzer.run(aptService, netStorageService, converterService, net, formDialogService, event, $rootScope.online)
 
 class Menubar extends Directive
 	constructor: ->

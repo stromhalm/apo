@@ -133,18 +133,6 @@ module.exports = (grunt) ->
 					expand: true
 				]
 
-		# Compresses image files
-		imagemin:
-			images:
-				files: [
-					cwd: '<%= settings.tempDirectory %>'
-					src: '**/*.{gif,jpeg,jpg}'
-					dest: '<%= settings.tempDirectory %>'
-					expand: true
-				]
-				options:
-					optimizationLevel: 7
-
 		# Runs unit tests using karma
 		karma:
 			unit:
@@ -374,7 +362,6 @@ module.exports = (grunt) ->
 		'copy:app'
 		'ngClassify'
 		'coffee:app'
-		'imagemin'
 		'less'
 		'ngtemplates'
 		'concat'

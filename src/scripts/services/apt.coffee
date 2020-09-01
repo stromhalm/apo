@@ -1,7 +1,7 @@
 class Apt extends Service
 	constructor: ($http) ->
 
-		serverEndpoint = "https://cors-anywhere.herokuapp.com/https://angular-apt.herokuapp.com/api/"
+		serverEndpoint = "https://angular-apt.adrian-jagusch.de/api/"
 
 		@getCoverabilityGraph = (pn) ->
 			$http.post(serverEndpoint + "coverabilityGraph", {pn: pn})

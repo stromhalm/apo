@@ -97,11 +97,10 @@ module.exports = (grunt) ->
 
 						# enable Angular's HTML5 mode
 						modRewrite = require 'connect-modrewrite'
-						middlewares.unshift(modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.appcache|\\.png$ /index.html [L]']));
+						middlewares.unshift(modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png$ /index.html [L]']));
 						return middlewares;
 
 					open: true
-					port: 0
 
 		# Copies directories and files from one location to another
 		copy:
@@ -238,20 +237,6 @@ module.exports = (grunt) ->
 				src: ['.temp/scripts/*.js', '.temp/scripts/**/*.js']
 				dest: '.temp/scripts/scripts.js'
 
-		appcache:
-			options:
-				basePath: '.temp/'
-			all:
-				dest: '.temp/manifest.appcache'
-				cache:
-					patterns: [
-						'.temp/**/*'
-						'!.temp/web.config'
-					]
-				network: [
-					'https://angular-apt.azurewebsites.net/api/*'
-				].concat(cdnJs).concat(cdnCss).concat(mapFiles)
-
 		# Run tasks when monitored files change
 		watch:
 			basic:
@@ -370,7 +355,6 @@ module.exports = (grunt) ->
 		'cacheBust'
 		'template:prod'
 		'includeSource'
-		'appcache'
 		'copy:prod'
 	]
 

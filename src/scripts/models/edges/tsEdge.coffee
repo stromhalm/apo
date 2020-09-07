@@ -4,9 +4,9 @@
 
 class @TsEdge extends @Edge
 	constructor: (options)->
+		super(options)
 		{@labelsLeft = [], @labelsRight = []} = options
 		@type = "tsEdge"
-		super(options)
 
 	getText: ->
 		if @left >= 1 and @right >= 1

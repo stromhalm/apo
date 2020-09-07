@@ -1,28 +1,26 @@
 path = require 'path'
 
 cdnJs = [
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js'
-	'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js'
-	'https://ajax.googleapis.com/ajax/libs/angular_material/1.0.9/angular-material.min.js'
-	'https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js'
-	'https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-animate.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-aria.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-messages.min.js'
+	'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.28/angular-ui-router.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angular_material/1.1.26/angular-material.min.js'
+	'https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.1/angular-material-icons.min.js'
+	'https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js'
 	'https://d3js.org/d3.v3.min.js'
-	'https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js'
 ]
 
 cdnCss = [
-	'https://ajax.googleapis.com/ajax/libs/angular_material/1.0.9/angular-material.min.css'
+	'https://ajax.googleapis.com/ajax/libs/angular_material/1.1.26/angular-material.min.css'
 ]
 
 mapFiles = [
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js.map'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js.map'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js.map'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-messages.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-aria.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-animate.min.js.map'
 ]
 
 # Build configurations

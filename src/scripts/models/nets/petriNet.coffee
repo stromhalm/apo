@@ -4,8 +4,8 @@
 
 class @PetriNet extends @Net
 	constructor: (netObject) ->
-		@type = "pn"
 		super(netObject)
+		@type = "pn"
 
 		# Setup for the petri nets tools in the right order
 		@setTools([

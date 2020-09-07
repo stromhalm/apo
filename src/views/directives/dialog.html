@@ -1,7 +1,7 @@
-<md-dialog aria-label="Form Dialog" ng-cloak>
+<md-dialog aria-label="Form Dialog">
 	<md-toolbar>
 		<div class="md-toolbar-tools">
-			<h2>{{ dialog.title }}</h2>
+			<h2>{{ dialogConfig.title }}</h2>
 			<span flex></span>
 			<md-button class="md-icon-button" ng-click="dialog.dismiss()">
 				<ng-md-icon icon="close" style="fill: rgba(255, 255, 255, .87)" size="24" aria-label="close"></ng-md-icon>
@@ -11,11 +11,11 @@
 	<md-dialog-content>
 		<div class="md-dialog-content">
 			<form name="formDialog" ng-submit="dialog.complete()">
-				<p class="dialog-description">{{ dialog.text }}</p>
+				<p class="dialog-description">{{ dialogConfig.text }}</p>
 				<div layout="row" layout-wrap>
 					<md-input-container
 						class="md-block"
-						ng-repeat="(inputId, input) in dialog.formElements"
+						ng-repeat="(inputId, input) in dialogConfig.formElements"
 						flex-gt-sm="{{ dialog.getInputWidth(input) }}"
 						ng-if="dialog.showInput(input)">
 						<label ng-class="'input-label-' + input.type">{{ input.name }}</label>
@@ -108,7 +108,7 @@
 			<div layout="row" layout-wrap>
 				<md-input-container
 					class="md-block"
-					ng-repeat="output in dialog.outputElements"
+					ng-repeat="output in dialogConfig.outputElements"
 					flex-gt-sm="{{ dialog.getInputWidth(output) }}">
 					<label>{{ output.name }}</label>
 					<input validation="output.validation" touched="output.touched" readonly ng-if="output.type == 'number'" type="number" ng-model="output.value" />
@@ -120,16 +120,16 @@
 			<div id="form-bottom"></div>
 		</div>
 	</md-dialog-content>
-	<md-dialog-actions class="static-error-bar" ng-if="dialog.staticError(dialog.net)">
-		{{ dialog.staticError(dialog.net) }}
+	<md-dialog-actions class="static-error-bar" ng-if="dialogConfig.staticError(dialogConfig.net)">
+		{{ dialogConfig.staticError(dialogConfig.net) }}
 	</md-dialog-actions>
-	<md-dialog-actions layout="row" ng-if="!dialog.staticError(dialog.net)">
+	<md-dialog-actions layout="row" ng-if="!dialogConfig.staticError(dialogConfig.net)">
 		<span flex></span>
-		<md-button ng-if="dialog.cancel" class="md-primary" ng-click="dialog.dismiss()">
-			{{ dialog.cancel }}
+		<md-button ng-if="dialogConfig.cancel" class="md-primary" ng-click="dialog.dismiss()">
+			{{ dialogConfig.cancel }}
 		</md-button>
 		<md-button ng-disabled="!dialog.formIsComplete()" class="md-primary" ng-click="dialog.complete()" style="margin-right:20px;">
-			{{ dialog.ok }}
+			{{ dialogConfig.ok }}
 		</md-button>
 	</md-dialog-actions>
 </md-dialog>

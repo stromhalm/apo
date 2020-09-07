@@ -2,14 +2,14 @@
    <div layout="row" class="file-menubar">
       <md-menu-bar>
          <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
                File
             </button>
             <md-menu-content>
                <md-menu-item class="md-indent">
                   <ng-md-icon icon="insert_drive_file" style="fill: rgba(0, 0, 0, .87)" size="20" aria-label="New"></ng-md-icon>
                   <md-menu>
-                     <md-button ng-click="$mdOpenMenu()">New</md-button>
+                     <md-button ng-click="$mdMenu.open()">New</md-button>
                      <md-menu-content>
                         <md-menu-item>
                            <md-button ng-click="mb.createNet($event, 'petri net')">Petri Net</md-button>
@@ -48,7 +48,7 @@
             </md-menu-content>
          </md-menu>
          <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
                Tools
             </button>
             <md-menu-content>
@@ -61,7 +61,7 @@
             </md-menu-content>
          </md-menu>
          <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
                Analyze
             </button>
 				<md-menu-content>

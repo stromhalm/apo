@@ -4,8 +4,8 @@
 
 class @Place extends @Node
 	constructor: (point) ->
-		{@tokens = 0} = point
 		super(point)
+		{@tokens = 0} = point
 		@type = "place"
 		@connectableTypes = ["transition"]
 		@labelYoffset = 30

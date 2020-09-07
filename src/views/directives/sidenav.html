@@ -3,31 +3,31 @@
    <md-subheader class="md-no-sticky">Your Nets</md-subheader>
    <md-list-item ng-click="sn.goToNet(net)" ng-class="sn.isNet(net) ? 'active' : ''" ng-repeat="(id, net) in sn.nets">
 		<div class="md-list-item-text" layout="column">
-      	<h3>{{ net.name }}</h3>
-			<p ng-if="net.type == 'pn'">petri net</p>
-			<p ng-if="net.type == 'lts'">transition system</p>
+      		<h3>{{ net.name }}</h3>
+			<p ng-if="net.type == 'pn'">Petri Net</p>
+			<p ng-if="net.type == 'lts'">Transition System</p>
 		</div>
       <ng-md-icon class="md-secondary" ng-click="sn.deleteNet(net, $event)" icon="delete" size="22" aria-label="Delete net"></ng-md-icon>
    </md-list-item>
    <md-list-item class="list-form-item">
       <form ng-submit="sn.createNewNet(sn.newName, sn.newType, $event)" layout="row">
-         <md-input-container class="net-name-input">
-            <label>Create New</label>
-            <input ng-model="sn.newName" validation="sn.nameValidation" error-message="sn.error">
-				<ng-message>{{ sn.error }}</ng-message>
-         </md-input-container>
-			<md-input-container class="net-type-input">
-				<label>Type</label>
-				<md-select ng-model="sn.newType">
-					<md-option value="PN">
-						PN
-					</md-option>
-					<md-option value="LTS">
-						LTS
-					</md-option>
-				</md-select>
-			</md-input-container>
-			<ng-md-icon class="md-secondary submit-form" ng-click="sn.createNewNet(sn.newName, sn.newType, $event)" icon="add" size="22" aria-label="Add net"></ng-md-icon>
+		<md-input-container class="net-name-input">
+			<label>Create New</label>
+			<input ng-model="sn.newName" validation="sn.nameValidation" error-message="sn.error">
+			<ng-message>{{ sn.error }}</ng-message>
+		</md-input-container>
+		<md-input-container class="net-type-input">
+			<label>Type</label>
+			<md-select ng-model="sn.newType">
+				<md-option value="PN">
+					PN
+				</md-option>
+				<md-option value="LTS">
+					LTS
+				</md-option>
+			</md-select>
+		</md-input-container>
+		<ng-md-icon class="md-secondary submit-form" ng-click="sn.createNewNet(sn.newName, sn.newType, $event)" icon="add" size="22" aria-label="Add net"></ng-md-icon>
       </form>
 	</md-list-item>
 </md-list>

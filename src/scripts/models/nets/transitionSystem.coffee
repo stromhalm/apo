@@ -1,7 +1,7 @@
 class @TransitionSystem extends @Net
 	constructor: (netObject) ->
-		@type = "lts"
 		super(netObject)
+		@type = "lts"
 
 		# Setup for the transition systems tools in the right order
 		@setTools([

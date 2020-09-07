@@ -31,15 +31,16 @@ class FormDialog extends Service
 				fullscreen: true
 				bindToController: true
 				locals:
-					title: title
-					text: text
-					formElements: formElements
-					outputElements: outputElements
-					onComplete: onComplete
-					staticError: staticError
-					net: net
-					ok: ok
-					cancel: cancel
+					dialog:
+						title: title
+						text: text
+						formElements: formElements
+						outputElements: outputElements
+						onComplete: onComplete
+						staticError: staticError
+						net: net
+						ok: ok
+						cancel: cancel
 
 		# Hide the dialog
 		@close = -> $mdDialog.hide(null)
@@ -55,7 +56,11 @@ class FormDialog extends Service
 ###
 
 class FormDialogController extends Controller
-	constructor: ($mdDialog, $scope, $mdConstant) ->
+	constructor: ($mdDialog, $scope, $mdConstant, dialog) ->
+
+		$scope.dialogConfig = dialog
+		console.log $scope.dialogConfig
+		console.log $scope
 
 		# ChipInput: All selected items are hidden from options list.
 		@chipInput = []
@@ -75,7 +80,7 @@ class FormDialogController extends Controller
 		# Some input elements are only shown under conditions.
 		@showInput = (input) ->
 			return true if not input.showIf
-			return input.showIf(@formElements)
+			return input.showIf(dialog.formElements)
 
 		# Use these keys to seperate chips
 		@arraySeperators = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA, $mdConstant.KEY_CODE.SPACE]
@@ -84,7 +89,7 @@ class FormDialogController extends Controller
 		@dismiss = -> $mdDialog.hide(null)
 
 		# Set a specific input field
-		@setInput = (id, value) -> @formElements[id].value = value
+		@setInput = (id, value) -> dialog.formElements[id].value = value
 
 		# Checks if all inputs are valid
 		@formIsComplete = -> if not $scope.formDialog then return false else return $scope.formDialog.$valid
@@ -92,5 +97,5 @@ class FormDialogController extends Controller
 		# Hide the dialog and run the OnComplete hook
 		@complete = ->
 			if @formIsComplete()
-				completed = @onComplete(@formElements) if @onComplete
-				$mdDialog.hide(@formElements) if completed isnt false # don't hide dialog if @onComplete returns false
+				completed = dialog.onComplete(dialog.formElements) if dialog.onComplete
+				$mdDialog.hide(dialog.formElements) if completed isnt false # don't hide dialog if dialog.onComplete returns false

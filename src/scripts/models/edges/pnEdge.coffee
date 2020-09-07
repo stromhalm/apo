@@ -4,8 +4,8 @@
 
 class @PnEdge extends @Edge
 	constructor: (options)->
-		@type = "pnEdge"
 		super(options)
+		@type = "pnEdge"
 
 	getText: ->
 		if @left >= 1 and @right >= 1

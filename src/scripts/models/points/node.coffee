@@ -4,8 +4,8 @@
 
 class @Node extends @Point
 	constructor: (options = false) ->
-		{@id = false, @label = ""} = options
 		super(options)
+		{@id = false, @label = ""} = options
 		@shape = 'circle'
 		@radius = 18
 		@labelXoffset = 0

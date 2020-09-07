@@ -54,7 +54,7 @@ $ grunt
 ```
 to compile all the CoffeeScipt files and start a local server running APO on your machine. Your default browser is opened automatically and Grunt will watch for file changes and refresh your browser.
 
-For production environments there is a second compiling option. Grunt will compress HTML, JavaScript, CSS and images, concatenate them and add offline support to the web app. Just run `grunt prod` and you can find the compiled output in the `dist` folder. All your other files will remain unchanged.
+For production environments there is a second compiling option. Grunt will compress HTML, JavaScript, CSS and concatenate them. Just run `grunt prod` and you can find the compiled output in the `dist` folder. All your other files will remain unchanged.
 
 APO uses several frameworks and libraries:
 * [CoffeeScipt](http://coffeescript.org) – A beautiful programming language for the web

@@ -7,7 +7,7 @@ class @PetriNet extends @Net
 		super(netObject)
 		@type = "pn"
 
-		# Setup for the petri nets tools in the right order
+		# Setup for the petri nets tools in the correct order
 		@setTools([
 			new MoveTool()
 			new PlaceTool()
@@ -18,7 +18,7 @@ class @PetriNet extends @Net
 			new LabelPnTool()
 		])
 
-		# Setup for the petri nets analyzers in the right order
+		# Setup for the petri nets analyzers in the correct order
 		@setAnalyzers([
 			new ExaminePn()
 			new CoverabilityAnalyzer()

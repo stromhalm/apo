@@ -3,7 +3,19 @@ class NetStorage extends Service
 
 		# Create a sample petri net
 		getDefaultNet = ->
-			new PetriNet({name: "Sample Net"})
+			defaultNet = new PetriNet({name: "Sample Net"})
+			p1 = new Place({tokens: 5, label: "p1"})
+			p2 = new Place({tokens: 3, label: "p2"})
+			t1 = new Transition({label: "t1"})
+
+			p1 = defaultNet.addPlace(p1)
+			p2 = defaultNet.addPlace(p2)
+			t1 = defaultNet.addTransition(t1)
+			
+			defaultNet.addEdge(new PnEdge({source: t1, target: p1, right: 1}))
+			defaultNet.addEdge(new PnEdge({source: p2, target: t1, right: 1}))
+
+			defaultNet
 
 		# Search for a net
 		getNetIdByName = (name) ->

@@ -15,6 +15,7 @@ class @Net
 	addEdge: (edge) ->
 		edge.id = @getMaxEdgeId()+1
 		@edges.push(edge)
+		edge
 
 	deleteEdge: (deleteEdge) ->
 		for edge, id in @edges when edge.id is deleteEdge.id
@@ -25,6 +26,7 @@ class @Net
 	addNode: (node) ->
 		node.id = @getMaxNodeId()+1
 		@nodes.push(node)
+		node
 
 	deleteNode: (deleteNode) ->
 		# Delete connected edges

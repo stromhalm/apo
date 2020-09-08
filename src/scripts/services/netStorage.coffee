@@ -12,7 +12,7 @@ class NetStorage extends Service
 			p2 = defaultNet.addPlace(p2)
 			t1 = defaultNet.addTransition(t1)
 			
-			defaultNet.addEdge(new PnEdge({source: t1, target: p1, right: 1}))
+			defaultNet.addEdge(new PnEdge({source: t1, target: p1, right: 2}))
 			defaultNet.addEdge(new PnEdge({source: p2, target: t1, right: 1}))
 
 			defaultNet

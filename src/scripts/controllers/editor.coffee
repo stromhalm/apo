@@ -89,13 +89,13 @@ class Editor extends Controller
 				edges.enter().append('svg:text').attr('dy', -8).attr('class', 'label edgeLabel')
 				.attr('id', (edge) -> 'edgeLabel-' + edge.id)
 				.append('textPath').attr('startOffset', '50%').attr('class', 'text')
-				.attr('xlink:href', (edge) -> '#' + edge.id).text((edge) -> converterService.getEdgeFromData(edge).getText())
+				.attr('xlink:href', (edge) -> '#edge-' + edge.id).text((edge) -> converterService.getEdgeFromData(edge).getText())
 
 				# add new egdes
 				edges.enter().append('svg:path').attr('class', 'link')
 					.style('marker-start', (edge) -> if edge.left > 0 then 'url(#startArrow)' else '')
 					.style('marker-end', (edge) -> if edge.right > 0 then 'url(#endArrow)' else '')
-					.attr('id', (edge) -> edge.id)
+					.attr('id', (edge) -> 'edge-' + edge.id)
 					.classed('edge', true)
 					.on 'mousedown', (edge) ->
 						mouseDownEdge = edge
@@ -192,7 +192,7 @@ class Editor extends Controller
 				#add edge to self
 				newNodes.append('svg:path').attr('class', 'link edge selfEdge')
 					.style('marker-end', 'url(#endArrow)')
-					.attr('id', (node) -> "selfEdge-#{node.id}")
+					.attr('id', (node) -> 'selfEdge-' + node.id)
 					.attr('d', (node) -> converterService.getNodeFromData(node).getSelfEdgePath())
 					.classed('hidden', (node) -> node.labelsToSelf and node.labelsToSelf.length is 0)
 					.on 'mousedown', (node) ->

@@ -23,15 +23,17 @@ class @ArrowTool extends @Tool
 			return
 
 		for edge in net.edges when edge.source is mouseDownNode and edge.target is mouseUpNode
-			existingEdge = edge
-		if existingEdge
-			existingEdge.right = 1
+			existingLeftEdge = edge
+		if existingLeftEdge
+			existingLeftEdge.right = 1
 		else
 			for edge in net.edges when edge.source is mouseUpNode and edge.target is mouseDownNode
-				existingEdge = edge
-		if existingEdge
-			existingEdge.left = 1
-		else
+				existingRightEdge = edge
+			if existingRightEdge
+				existingRightEdge.left = 1
+		
+		# Create new edge
+		if not existingLeftEdge and not existingRightEdge
 			if net.isConnectable(mouseDownNode, mouseUpNode)
 				if net.type is "pn"
 					edge = new PnEdge({source: mouseDownNode, target: mouseUpNode, right: 1})

@@ -11,5 +11,4 @@ class Router extends Config
 		$stateProvider.state("editor",
 			url: "/:name"
 			templateUrl: "views/directives/editor.html"
-			controller: "editorController"
 		)

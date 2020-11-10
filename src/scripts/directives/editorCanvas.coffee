@@ -1,11 +1,4 @@
-###
-	This is the controller for everything that happens on the editors canvas.
-	It is the connection between the model and the physics library D3.js and handels I/O.
-	Use the parameters to control physics behavior.
-###
-
-class Editor extends Controller
-
+class EditorCanvasController extends Controller
 	constructor: ($timeout, $scope, $state, $stateParams, netStorageService, converterService, formDialogService) ->
 
 		try
@@ -34,10 +27,9 @@ class Editor extends Controller
 			# Delte net via the error card
 			$scope.deleteNet = () -> netStorageService.deleteNet(net.name)
 
-			svg = d3.select('#main-canvas svg')
+			svg = d3.select('.editor-canvas svg')
 			force = d3.layout.force()
 			drag = force.drag()
-			colors = d3.scale.category10()
 			dragLine = svg.select('svg .dragline')
 			edges = svg.append('svg:g').selectAll('.edge')
 			nodes = svg.append('svg:g').selectAll('g')
@@ -55,15 +47,12 @@ class Editor extends Controller
 
 			# Adjust SVG canvas on window resize
 			resize = ->
-				width = if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
-				height = window.innerHeight
-				svg.attr('width', width).attr 'height', height
 				force.size([
-					width
-					height + 80
+					if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
+					$scope.height = window.innerHeight - 146
 				]).resume()
 			resize()
-			d3.select(window).on 'resize', resize
+			window.onresize = resize
 
 			# update net positions (called each iteration)
 			tick = ->
@@ -77,6 +66,7 @@ class Editor extends Controller
 			# update graph layout (called when needed)
 			restart = ->
 				edges = edges.data(net.edges)
+				console.log edges
 
 				# update existing links
 				edges.style('marker-start', (edge) -> if edge.left > 0 then 'url(#startArrow)' else '')
@@ -230,10 +220,7 @@ class Editor extends Controller
 				resetMouseVars()
 
 			# init D3 force layout
-			force = force.nodes(net.nodes).links(net.edges).size([
-				if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
-				window.innerHeight + 80
-			])
+			force = force.nodes(net.nodes).links(net.edges)
 			.linkDistance((edge) -> edge.length)
 			.linkStrength(linkStrength)
 			.friction(friction)
@@ -261,3 +248,11 @@ class Editor extends Controller
 			force.stop()
 			$scope.error = true
 		
+
+class EditorCanvas extends Directive
+	constructor: ->
+		return {
+			templateUrl: "/views/directives/editorCanvas.html"
+			controller: EditorCanvasController
+			controllerAs: "ec"
+		}

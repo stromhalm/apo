@@ -1,12 +1,14 @@
 // out: false
 
-#main-canvas {
+.editor-canvas {
 	svg {
 		-webkit-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;
 		-o-user-select: none;
 		user-select: none;
+		width: 100%;
+		height: 100%;
 	}
 
 	path.link {
@@ -69,7 +71,7 @@
 // Arrow Mode
 .Arrows,
 .Delete {
-	#main-canvas {
+	.editor-canvas {
 		cursor: default;
 		.node {
 			cursor: crosshair;
@@ -78,7 +80,7 @@
 }
 // Delete mode
 .Delete {
-	#main-canvas {
+	.editor-canvas {
 		cursor: default;
 		.edge,
 		.node {
@@ -88,7 +90,7 @@
 }
 // Labels mode
 .Labels {
-	#main-canvas {
+	.editor-canvas {
 		cursor: default;
 		.edge,
 		.node {
@@ -98,7 +100,7 @@
 }
 // Initial State mode
 .Initial {
-	#main-canvas {
+	.editor-canvas {
 		cursor: default;
 		.state {
 			cursor: pointer;

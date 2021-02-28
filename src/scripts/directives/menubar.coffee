@@ -55,8 +55,10 @@ class MenubarController extends Controller
 				ok: "Delete"
 				cancel: "Cancel"
 				targetEvent: event # To animate the dialog to/from the click
-			.then ->
-				netStorageService.deleteNet(net.name)
+			.then(
+				-> netStorageService.deleteNet(net.name)
+				->
+			)
 
 		@showAPT = (net, event) ->
 			formDialogService.runDialog({

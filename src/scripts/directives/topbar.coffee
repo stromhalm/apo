@@ -14,8 +14,11 @@ class TopbarController extends Controller
 				ok: "Reset Storage"
 				cancel: "Cancel"
 				targetEvent: event # To animate the dialog to/from the click
-			.then ->
-				netStorageService.resetStorage()
+			.then(
+				-> netStorageService.resetStorage()
+				->
+			)
+			
 
 		@showAbout = (event) ->
 			$mdDialog.show

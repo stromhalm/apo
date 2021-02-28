@@ -45,8 +45,10 @@ class SidenavController extends Controller
 				ok: "Delete"
 				cancel: "Cancel"
 				targetEvent: event # To animate the dialog to/from the click
-			.then ->
-				netStorageService.deleteNet(net.name)
+			.then(
+				-> netStorageService.deleteNet(net.name)
+				->
+			)
 
 		# load all nets, direct acess to storage for 2-way-binding
 		@nets = netStorageService.storageObjects

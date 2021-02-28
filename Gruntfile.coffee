@@ -1,10 +1,10 @@
 path = require 'path'
 
 cdnJs = [
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-animate.min.js'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-aria.min.js'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-messages.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-aria.min.js'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-messages.min.js'
 	'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.28/angular-ui-router.min.js'
 	'https://ajax.googleapis.com/ajax/libs/angular_material/1.1.26/angular-material.min.js'
 	'https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.1/angular-material-icons.min.js'
@@ -17,10 +17,10 @@ cdnCss = [
 ]
 
 mapFiles = [
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-messages.min.js.map'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-aria.min.js.map'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js.map'
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-animate.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-messages.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-aria.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js.map'
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.min.js.map'
 ]
 
 # Build configurations

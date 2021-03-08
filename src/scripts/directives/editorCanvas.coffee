@@ -1,38 +1,79 @@
 class EditorCanvasController extends Controller
 	constructor: ($timeout, $scope, $state, $stateParams, netStorageService, converterService, formDialogService) ->
 
-		try
-			# Set physics
-			charge = -500
-			linkStrength = 0.1 # link distance is set in edge model
-			friction = 0.9
-			gravity = 0.1
+		# Set physics
+		charge = -500
+		linkStrength = 0.1 # link distance is set in edge model
+		friction = 0.9
+		gravity = 0.1
 
-			net = netStorageService.getNetByName(decodeURI($stateParams.name))
-			# Go to first net if not found
-			if not net
-				$state.go "editor", name: netStorageService.getNets()[0].name
-				return
+		# Delte net via the error card
+		$scope.deleteNet = () -> netStorageService.deleteNet($scope.net.name)
 
-			$scope.net = net
+		$scope.net = netStorageService.getNetByName(decodeURI($stateParams.name))
+
+		# console.log $scope.net
+
+		if not $scope.net
+			$state.go "editor", name: netStorageService.getNets()[0].name
+			return
+
+		# Initialize d3 force graph animation
+		simulation = d3.layout.force()
+			.nodes($scope.net.nodes)
+			.links($scope.net.edges)
+			.linkDistance((edge) -> edge.length)
+			.linkStrength(linkStrength)
+			.friction(friction)
+			.charge(charge)
+			.gravity(gravity)
+			.on('tick', -> $scope.$apply())
+			.start()
+
+		# Adjust SVG canvas on window resize
+		resize = ->
+			simulation.size([
+				if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
+				$scope.height = window.innerHeight - 146
+			]).resume()
+		resize()
+		window.onresize = resize
+
+
+		# Node events
+		$scope.mouseOverNode = (node) ->
+		$scope.mouseOutNode = (node) ->
+		$scope.mouseDownNode = (node, event) ->
+			$scope.activeNode = node
+			# $scope.net.getActiveTool().mouseDownOnNode($scope.net, node)
+		
+		$scope.mouseUpNode = (node) ->
+		$scope.doubleClickNode = (node) ->
+		$scope.touchEndNode = (node) ->
+		$scope.mouseDown = (event) ->
+
+		$scope.mouseUp = (event) ->
+			$scope.activeNode = null
+
+		
+
+			# $scope.net = net
 
 			# watch for tool changes
-			$scope.$watch 'net.activeTool', ->
-				if net.getActiveTool().draggable # drag and drop
-					nodes.call(drag)
-				else
-					nodes.on('mousedown.drag', null)
-					nodes.on('touchstart.drag', null)
+			# $scope.$watch 'net.activeTool', ->
+				#if net.getActiveTool().draggable # drag and drop
+					# nodes.call(drag)
+				#else
+					# nodes.on('mousedown.drag', null)
+					# nodes.on('touchstart.drag', null)
 
-			# Delte net via the error card
-			$scope.deleteNet = () -> netStorageService.deleteNet(net.name)
-
+		###
 			svg = d3.select('.editor-canvas svg')
 			force = d3.layout.force()
 			drag = force.drag()
 			dragLine = svg.select('svg .dragline')
 			edges = svg.append('svg:g').selectAll('.edge')
-			nodes = svg.append('svg:g').selectAll('g')
+			# nodes = svg.append('svg:g').selectAll('g')
 
 			# mouse event vars
 			selectedNode = null
@@ -45,28 +86,18 @@ class EditorCanvasController extends Controller
 				mouseUpNode = null
 				mouseDownEdge = null
 
-			# Adjust SVG canvas on window resize
-			resize = ->
-				force.size([
-					if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
-					$scope.height = window.innerHeight - 146
-				]).resume()
-			resize()
-			window.onresize = resize
-
 			# update net positions (called each iteration)
 			tick = ->
 				# draw directed edges with proper padding from node centers
 				edges.attr 'd', (edge) ->
 					edge = new Edge(edge)
 					edge.getPath()
-				nodes.attr 'transform', (d) ->
-					'translate(' + d.x + ',' + d.y + ')'
+				#nodes.attr 'transform', (d) ->
+				#	'translate(' + d.x + ',' + d.y + ')'
 
 			# update graph layout (called when needed)
 			restart = ->
-				edges = edges.data(net.edges)
-				console.log edges
+				edges = edges.data($scope.net.edges)
 
 				# update existing links
 				edges.style('marker-start', (edge) -> if edge.left > 0 then 'url(#startArrow)' else '')
@@ -92,110 +123,110 @@ class EditorCanvasController extends Controller
 						selectedNode = null
 
 						# call the tools mouseDown listener
-						net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge, formDialogService, restart, converterService)
+						$scope.net.getActiveTool().mouseDownOnEdge(net, mouseDownEdge, formDialogService, restart, converterService)
 						$scope.$apply() # Quick save net to storage
 						restart()
 
 				# remove old links
-				edges.exit().each((edge) -> d3.selectAll('#edgeLabel-' + edge.id).remove()).remove()
+				# edges.exit().each((edge) -> d3.selectAll('#edgeLabel-' + edge.id).remove()).remove()
 
-				nodes = nodes.data(net.nodes, (node) -> node.id)
+				# nodes = nodes.data(net.nodes, (node) -> node.id)
 
 				# update existing nodes
-				nodes.selectAll('.node').classed('firable', (node) ->  net.isFirable(node))
+				# nodes.selectAll('.node').classed('firable', (node) ->  net.isFirable(node))
 
 				# update existing node labels
-				d3.selectAll('.nodeLabel').text((node) -> converterService.getNodeFromData(node).getText())
-				d3.selectAll('.token').text((node) -> converterService.getNodeFromData(node).getTokenLabel())
-				d3.selectAll('.selfEdgeLabel .text').text((node) -> converterService.getNodeFromData(node).getSelfEdgeText())
-				d3.selectAll('.selfEdge').classed('hidden', (node) -> node.labelsToSelf and node.labelsToSelf.length is 0)
+				# d3.selectAll('.nodeLabel').text((node) -> converterService.getNodeFromData(node).getText())
+				# d3.selectAll('.token').text((node) -> converterService.getNodeFromData(node).getTokenLabel())
+				# d3.selectAll('.self-edge-label .text').text((node) -> converterService.getNodeFromData(node).getSelfEdgeText())
+				# d3.selectAll('.self-edge').classed('hidden', (node) -> node.labelsToSelf and node.labelsToSelf.length is 0)
 
 				# add new nodes
-				newNodes = nodes.enter().append('svg:g')
-				newNodes.append((node) -> document.createElementNS("http://www.w3.org/2000/svg", converterService.getNodeFromData(node).shape))
-				.attr('class', (node) -> node.type + ' node')
-				.attr('r', (node) -> node.radius)
-				.attr('width', (node) -> node.width)
-				.attr('height', (node) -> node.height)
-				.classed('firable', (node) ->  net.isFirable(node))
-				.on 'mouseover', (node) ->
-					return if !mouseDownNode or node == mouseDownNode or !net.isConnectable(mouseDownNode, node)
-					d3.select(this).style('fill', 'rgb(235, 235, 235)') # highlight target node
+				# newNodes = nodes.enter().append('svg:g')
+				# newNodes.append((node) -> document.createElementNS("http://www.w3.org/2000/svg", converterService.getNodeFromData(node).shape))
+				# .attr('class', (node) -> node.type + ' node')
+				# .attr('r', (node) -> node.radius)
+				# .attr('width', (node) -> node.width)
+				# .attr('height', (node) -> node.height)
+				# .classed('firable', (node) ->  net.isFirable(node))
+				# .on 'mouseover', (node) ->
+				# 	return if !mouseDownNode or node == mouseDownNode or !net.isConnectable(mouseDownNode, node)
+				# 	d3.select(this).style('fill', 'rgb(235, 235, 235)') # highlight target node
 
-				.on 'mouseout', (node) ->
-					return if !mouseDownNode or node == mouseDownNode
-					d3.select(this).attr 'style', '' # unhighlight target node
+				# .on 'mouseout', (node) ->
+				# 	return if !mouseDownNode or node == mouseDownNode
+				# 	d3.select(this).attr 'style', '' # unhighlight target node
 
-				.on 'mousedown', (node) ->
+				# .on 'mousedown', (node) ->
 
 					# select node
-					mouseDownNode = node
-					if mouseDownNode == selectedNode
-						selectedNode = null
-					else
-						selectedNode = mouseDownNode
+				# 	mouseDownNode = node
+				#	if mouseDownNode == selectedNode
+				#		selectedNode = null
+				#	else
+				#		selectedNode = mouseDownNode
 
 					# call the tools mouseDown listener
-					net.getActiveTool().mouseDownOnNode(net, mouseDownNode, dragLine, formDialogService, restart, converterService)
-					$scope.$apply() # Quick save net to storage
-					restart()
+				#	net.getActiveTool().mouseDownOnNode(net, mouseDownNode, dragLine, formDialogService, restart, converterService)
+				#	$scope.$apply() # Quick save net to storage
+				#	restart()
 
-				.on 'mouseup', (node) ->
-					mouseUpNode = node
+				#.on 'mouseup', (node) ->
+				#	mouseUpNode = node
 
-					d3.select(this).style('fill', '') # unhighlight target node
-					net.getActiveTool().mouseUpOnNode(net, mouseUpNode, mouseDownNode, dragLine)
-					$scope.$apply() # Quick save net to storage
+				#	d3.select(this).style('fill', '') # unhighlight target node
+				#	net.getActiveTool().mouseUpOnNode(net, mouseUpNode, mouseDownNode, dragLine)
+				#	$scope.$apply() # Quick save net to storage
 
-					selectedNode = null
-					restart()
+				#	selectedNode = null
+				#	restart()
 
-				.on 'dblclick', (node) ->
-					net.getActiveTool().dblClickOnNode(net, node)
-					restart()
+				#.on 'dblclick', (node) ->
+				#	net.getActiveTool().dblClickOnNode(net, node)
+				#	restart()
 
-				.on 'touchend', (startNode) ->
+				#.on 'touchend', (startNode) ->
 
 					# We need to calculate the nearest node by ourselves
-					smallestDistance = 50
-					nearestNode = null
-					for node in net.nodes
-						xOffset = d3.mouse(this)[0]+startNode.x - node.x
-						yOffset = d3.mouse(this)[1]+startNode.y - node.y
-						distance = Math.sqrt(xOffset*xOffset+yOffset*yOffset)
-						if distance < smallestDistance
-							smallestDistance = distance
-							nearestNode = node
+				#	smallestDistance = 50
+				#	nearestNode = null
+				#	for node in net.nodes
+				#		xOffset = d3.mouse(this)[0]+startNode.x - node.x
+				#		yOffset = d3.mouse(this)[1]+startNode.y - node.y
+				#		distance = Math.sqrt(xOffset*xOffset+yOffset*yOffset)
+				#		if distance < smallestDistance
+				#			smallestDistance = distance
+				#			nearestNode = node
 					
-					if nearestNode
-						mouseUpNode = nearestNode
-						net.getActiveTool().mouseUpOnNode(net, mouseUpNode, mouseDownNode, dragLine)
-						$scope.$apply() # Quick save net to storage
+				#	if nearestNode
+				#		mouseUpNode = nearestNode
+				#		net.getActiveTool().mouseUpOnNode(net, mouseUpNode, mouseDownNode, dragLine)
+				#		$scope.$apply() # Quick save net to storage
 
-						selectedNode = null
-						restart()
+				#		selectedNode = null
+				#		restart()
 
 				# show node text
-				newNodes.append('svg:text').attr('x', (node) -> node.labelXoffset).attr('y', (node) -> node.labelYoffset).attr('class', 'label nodeLabel').text((node) -> converterService.getNodeFromData(node).getText())
-				newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'label token').text((node) -> converterService.getNodeFromData(node).getTokenLabel())
+				#newNodes.append('svg:text').attr('x', (node) -> node.labelXoffset).attr('y', (node) -> node.labelYoffset).attr('class', 'label nodeLabel').text((node) -> converterService.getNodeFromData(node).getText())
+				#newNodes.append('svg:text').attr('x', 0).attr('y', 4).attr('class', 'label token').text((node) -> converterService.getNodeFromData(node).getTokenLabel())
 
 				#add edge to self
-				newNodes.append('svg:path').attr('class', 'link edge selfEdge')
-					.style('marker-end', 'url(#endArrow)')
-					.attr('id', (node) -> 'selfEdge-' + node.id)
-					.attr('d', (node) -> converterService.getNodeFromData(node).getSelfEdgePath())
-					.classed('hidden', (node) -> node.labelsToSelf and node.labelsToSelf.length is 0)
-					.on 'mousedown', (node) ->
+				#newNodes.append('svg:path').attr('class', 'link edge self-edge')
+				#	.style('marker-end', 'url(#endArrow)')
+				#	.attr('id', (node) -> 'self-edge-' + node.id)
+				#	.attr('d', (node) -> converterService.getNodeFromData(node).getSelfEdgePath())
+				#	.classed('hidden', (node) -> node.labelsToSelf and node.labelsToSelf.length is 0)
+				#	.on 'mousedown', (node) ->
 						# call the tools mouseDown listener
-						net.getActiveTool().mouseDownOnNode(net, node, dragLine, formDialogService, restart, converterService)
+				#		net.getActiveTool().mouseDownOnNode(net, node, dragLine, formDialogService, restart, converterService)
 
-				newNodes.append('svg:text').attr('dy', -4).attr('class', 'label selfEdgeLabel')
-					.append('textPath').attr('startOffset', '50%').attr('class', 'text')
-					.attr('xlink:href', (node) -> '#selfEdge-' + node.id)
-					.text((node) -> converterService.getNodeFromData(node).getSelfEdgeText())
+				#newNodes.append('svg:text').attr('dy', -4).attr('class', 'label self-edge-label')
+				#	.append('textPath').attr('startOffset', '50%').attr('class', 'text')
+				#	.attr('xlink:href', (node) -> '#self-edge-' + node.id)
+				#	.text((node) -> converterService.getNodeFromData(node).getSelfEdgeText())
 
-				nodes.exit().remove() # remove old nodes
-				force.start() # set the graph in motion
+				#nodes.exit().remove() # remove old nodes
+				#force.start() # set the graph in motion
 
 			mousedown = ->
 				svg.classed 'active', true
@@ -203,7 +234,7 @@ class EditorCanvasController extends Controller
 
 				# fire the current tool's mouseDown listener
 				point = new Point({x: d3.mouse(this)[0], y: d3.mouse(this)[1]})
-				net.getActiveTool().mouseDownOnCanvas(net, point)
+				$scope.net.getActiveTool().mouseDownOnCanvas(net, point)
 				$scope.$apply() # Quick save net to storage
 				restart()
 
@@ -219,19 +250,10 @@ class EditorCanvasController extends Controller
 				svg.classed('active', false)
 				resetMouseVars()
 
-			# init D3 force layout
-			force = force.nodes(net.nodes).links(net.edges)
-			.linkDistance((edge) -> edge.length)
-			.linkStrength(linkStrength)
-			.friction(friction)
-			.charge(charge)
-			.gravity(gravity)
-			.on('tick', tick)
-
 			# fix lost references to nodes
-			for edge in net.edges
-				edge.source = net.nodes.filter((node) -> node.id == edge.source.id)[0]
-				edge.target = net.nodes.filter((node) -> node.id == edge.target.id)[0]
+			# for edge in $scope.net.edges
+			#	edge.source = $scope.net.nodes.filter((node) -> node.id == edge.source.id)[0]
+			#	edge.target = $scope.net.nodes.filter((node) -> node.id == edge.target.id)[0]
 
 			# motion starts here
 			svg.on('mousedown', mousedown)
@@ -240,13 +262,15 @@ class EditorCanvasController extends Controller
 			.on('touchmove', mousemove)
 			.on('touchend', mouseup)
 			restart()
+			
 
-			document.body.addEventListener('touchmove', (e) -> e.preventDefault())
+		document.body.addEventListener('touchmove', (e) -> e.preventDefault())
 
 		catch error
 			console.error error
 			force.stop()
 			$scope.error = true
+		###
 		
 
 class EditorCanvas extends Directive

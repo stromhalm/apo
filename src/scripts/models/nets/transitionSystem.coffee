@@ -3,6 +3,16 @@ class @TransitionSystem extends @Net
 		super(netObject)
 		@type = "lts"
 
+		@nodes = (
+			for node in @nodes
+				if node.type == 'initState' then new InitState(node) else new State(node)
+		)
+
+		@edges = (
+			for edge in @edges
+				if edge.type == 'tsInitEdge' then new TsInitEdge(edge) else new TsEdge(node)
+		)
+
 		# Setup for the transition systems tools in the right order
 		@setTools([
 			new MoveTool()

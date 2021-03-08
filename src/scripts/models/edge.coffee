@@ -13,10 +13,12 @@ class @Edge
 		deltaX = @target.x - @source.x
 		deltaY = @target.y - @source.y
 		dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-		normX = deltaX / dist
-		normY = deltaY / dist
-		sourcePadding = if @left >= 1 then @source.radius + 5 else @source.radius
-		targetPadding = if @right >= 1 then @target.radius + 5 else @target.radius
+		normX = if dist == 0 then 0 else deltaX / dist
+		normY = if dist == 0 then 0 else deltaY / dist
+
+		arrowWidth = 5
+		sourcePadding = if @left >= 1 then @source.radius + arrowWidth else @source.radius
+		targetPadding = if @right >= 1 then @target.radius + arrowWidth else @target.radius
 
 		sourceX = @source.x + sourcePadding * normX
 		sourceY = @source.y + sourcePadding * normY

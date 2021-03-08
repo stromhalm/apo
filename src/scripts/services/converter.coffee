@@ -188,7 +188,7 @@ class Converter extends Service
 					places = @getAptBlockRows("places", aptCode)
 					for placeLabel in places
 						place = new Place({label: placeLabel})
-						net.addPlace(place)
+						net.addNode(place)
 
 					# add transitions
 					transitionLabels = new Map()
@@ -200,7 +200,7 @@ class Converter extends Service
 						if @isPartOfString("label=", transitionRow)
 							transitionLabels.set(transitionId, transitionRow.split("label=\"")[1].split("\"")[0])
 						transition = new Transition({label: transitionId})
-						net.addTransition(transition)
+						net.addNode(transition)
 
 					# add edges
 					flows = @getAptBlockRows("flows", aptCode)

@@ -24,16 +24,6 @@ class @PetriNet extends @Net
 			new CoverabilityAnalyzer()
 		])
 
-	# Add a new transition node
-	addTransition: (point) ->
-		transition = new Transition(point)
-		@addNode(transition)
-
-	# Add a new place node
-	addPlace: (point) ->
-		place = new Place(point)
-		@addNode(place)
-
 	# Checks if a transition is firable
 	isFirable: (transition) ->
 		return false if transition.type isnt "transition"

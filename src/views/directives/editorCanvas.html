@@ -1,6 +1,30 @@
 <div class="editor-canvas">
-   <svg ng-hide="error">
+   <svg ng-hide="error" ng-if="net" ng-mousedown="mouseDown($event)" ng-mouseup="mouseUp($event)" ng-touchend="mouseUp($event)">
       <path class="link dragline hidden"></path>
+      <g ng-if="net.edges">
+         <g ng-repeat="edge in net.edges">
+            <path class="link edge" ng-attr-d="{{ edge.getPath() }}" ng-class="{ 'start-arrow': edge.left > 0, 'end-arrow': edge.right > 0 }">
+            </path>
+            <text dy="-8" class="label edge-label" id="edge-label-{{ edge.id }}">
+               <textPath startOffset="50%" class="text" xlink:href="{{ '#edge-label-' + edge.id }}">{{ edge.getText() }}</textPath>
+            </text>
+         </g>
+      </g>
+      <g ng-if="net.nodes">
+         <g ng-repeat="node in net.nodes" ng-attr-transform="translate({{ node.x }},{{ node.y }})"
+            ng-mouseover="mouseOverNode(node)" ng-mouseout="mouseOutNode(node)"
+            ng-mousedown="mouseDownNode(node, $event)" ng-mouseup="mouseUpNode(node)"
+            ng-dblclick="doubleClickNode(node)" ng-touchend="touchEndNode(node)">
+            <circle ng-if="node.shape == 'circle'" class="{{ node.type }} node" ng-attr-r="{{ node.radius }}"></circle>
+            <rect ng-if="node.shape == 'rect'" class="{{ node.type }} node firable" ng-attr-width="{{ node.width }}" ng-attr-height="{{ node.height }}"></rect>
+            <text ng-attr-x="{{ node.labelXoffset }}" ng-attr-y="{{ node.labelYoffset }}" class="label nodeLabel">{{ node.getText() }}</text>
+            <text x="0" y="4" class="label token">{{ node.getTokenLabel() }}</text>
+            <path class="link edge self-edge" id="self-edge-{{ node.id }}" d="" style="marker-end: url('#endArrow');"></path>
+            <text dy="-4" class="label self-edge-label">
+               <textPath startOffset="50%" class="text" xlink:href="{{ '#self-edge-' + node.id }}">{{ node.getSelfEdgeText() }}</textPath>
+            </text>
+         </g>
+      </g>
    </svg>
    <div class="error-canvas" ng-if="error" layout="row" layout-align="center center">
       <md-card class="error-card" flex>

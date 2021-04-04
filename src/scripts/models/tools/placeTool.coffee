@@ -10,6 +10,4 @@ class @PlaceTool extends @Tool
 		@description = "Create places"
 		@draggable = true
 
-	clickOnCanvas: (net, event) ->
-		net.addNode(new Place({x: event.offsetX, y: event.offsetY}))
-		net.refresh()
+	clickOnCanvas: (net, event) -> net.addNode(new Place({x: event.offsetX, y: event.offsetY}))

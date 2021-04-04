@@ -27,7 +27,6 @@ class EditorCanvasController extends Controller
 		window.onresize = resize
 
 		# Initialize d3 force layout
-		# Refresh manually when the number of nodes/edges changes
 		$scope.net.refresh = ->
 			$scope.net.simulation = d3.layout.force()
 				.nodes($scope.net.nodes)
@@ -41,7 +40,9 @@ class EditorCanvasController extends Controller
 				.start()
 			resize()
 		$scope.net.refresh()
-
+		# Refresh layout when the number of nodes/edges changes
+		$scope.$watchGroup ['net.nodes.length', 'net.edges.length'], $scope.net.refresh
+		
 		###
 			svg = d3.select('.editor-canvas svg')
 			force = d3.layout.force()

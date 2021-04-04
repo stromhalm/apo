@@ -9,10 +9,6 @@ class @DeleteTool extends @Tool
 		@icon = "delete"
 		@description = "Delete nodes and arrows in the graph"
 
-	clickOnNode: (net, node) ->
-		net.deleteNode(node)
-		net.refresh()
+	clickOnNode: (net, node) -> net.deleteNode(node)
 
-	mouseDownOnEdge: (net, edge) ->
-		net.deleteEdge(edge)
-		net.refresh()
+	mouseDownOnEdge: (net, edge) -> net.deleteEdge(edge)

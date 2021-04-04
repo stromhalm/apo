@@ -9,7 +9,7 @@ cdnJs = [
 	'https://ajax.googleapis.com/ajax/libs/angular_material/1.1.26/angular-material.min.js'
 	'https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.1/angular-material-icons.min.js'
 	'https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js'
-	'https://d3js.org/d3.v3.js'
+	'https://d3js.org/d3.v3.min.js'
 ]
 
 cdnCss = [

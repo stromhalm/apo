@@ -5,7 +5,7 @@
 class @Node extends @Point
 	constructor: (options = false) ->
 		super(options)
-		{@id = false, @label = ""} = options
+		{@id = false, @fixed = false, @label = "", @px = options.x, @py = options.y} = options
 		@shape = 'circle'
 		@radius = 18
 		@labelXoffset = 0

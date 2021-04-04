@@ -5,23 +5,16 @@
 
 class @Net
 	constructor: (netObject) ->
-		{@name, @nodes = [], @edges = [], @tools = []} = netObject
+		{@name, @nodes = [], @edges = [], @tools = [], @analyzers = [], @activeTool = false} = netObject
 
-	setTools: (@tools) ->
-		@activeTool = @tools[0].name if not @activeTool and @tools.length > 0
-
-	setAnalyzers: (@analyzers) ->
+	setActiveTool: (tool) -> @activeTool = tool.name
 
 	addEdge: (edge) ->
 		edge.id = @getMaxEdgeId()+1
 		@edges.push(edge)
 		edge
 
-	deleteEdge: (deleteEdge) ->
-		for edge, id in @edges when edge.id is deleteEdge.id
-			@edges.splice(id, 1)
-			return true
-		return false
+	deleteEdge: (deleteEdge) -> @edges = (edge for edge in @edges when edge isnt deleteEdge)
 
 	addNode: (node) ->
 		node.id = @getMaxNodeId()+1
@@ -30,37 +23,30 @@ class @Net
 
 	deleteNode: (deleteNode) ->
 		# Delete connected edges
-		oldEdges = []
-		for edge in @edges
-			if (edge.source.id is deleteNode.id) or (edge.target.id is deleteNode.id)
-				if oldEdges.indexOf(edge) is -1
-					oldEdges.push(edge)
-		for edge in oldEdges
-			@deleteEdge(edge)
+		@edges = (edge for edge in @edges when edge.source isnt deleteNode and edge.target isnt deleteNode)
 
 		#delete node
-		for node, index in @nodes when node.id is deleteNode.id
-			@nodes.splice(index, 1)
-			return true
-		return false
+		@nodes = (node for node in @nodes when node isnt deleteNode)
 
-	getActiveTool: ->	return tool for tool in @tools when tool.name is @activeTool
+	getActiveTool: ->
+		return tool for tool in @tools when tool.name is @activeTool
+		if @tools.length > 0 then @tools[0] else false
 
 	getPreset: (node) ->
 		preset = []
 		for edge in @edges
-			if (edge.target.id is node.id and edge.right >= 1)
+			if (edge.target is node and edge.right >= 1)
 				preset.push(edge.source)
-			else if (edge.source.id is node.id and edge.left >= 1)
+			else if (edge.source is node and edge.left >= 1)
 				preset.push(edge.target)
 		return preset
 
 	getPostset: (node) ->
 		preset = []
 		for edge in @edges
-			if (edge.target.id is node.id and edge.left >= 1)
+			if (edge.target is node and edge.left >= 1)
 				preset.push(edge.source)
-			else if (edge.source.id is node.id and edge.right >= 1)
+			else if (edge.source is node and edge.right >= 1)
 				preset.push(edge.target)
 		return preset
 

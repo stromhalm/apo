@@ -14,20 +14,20 @@ class @TransitionSystem extends @Net
 		)
 
 		# Setup for the transition systems tools in the right order
-		@setTools([
+		@tools = [
 			new MoveTool()
 			new StateTool()
 			new ArrowTool()
 			new DeleteTool()
 			new InitStateTool()
 			new LabelTsTool()
-		])
+		]
 
 		# Setup for the transition systems analyzers in the right order
-		@setAnalyzers([
+		@analyzers = [
 			new ExamineLts()
 			new Synthesizer()
-		])
+		]
 
 	# Add a state to the net
 	addState: (point) ->

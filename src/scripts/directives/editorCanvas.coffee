@@ -1,9 +1,9 @@
 class EditorCanvasController extends Controller
 	constructor: ($timeout, $scope, $state, $stateParams, netStorageService, converterService, formDialogService) ->
 
-		# Set physics
+		# Set net model physics
 		charge = -500
-		linkStrength = 0.1 # link distance is set in edge model
+		linkStrength = 0.1
 		friction = 0.9
 		gravity = 0.1
 
@@ -12,60 +12,35 @@ class EditorCanvasController extends Controller
 
 		$scope.net = netStorageService.getNetByName(decodeURI($stateParams.name))
 
-		# console.log $scope.net
+		console.log $scope.net
 
 		if not $scope.net
-			$state.go "editor", name: netStorageService.getNets()[0].name
+			$state.go "editor", name: netStorageService.nets[0].name
 			return
-
-		# Initialize d3 force graph animation
-		simulation = d3.layout.force()
-			.nodes($scope.net.nodes)
-			.links($scope.net.edges)
-			.linkDistance((edge) -> edge.length)
-			.linkStrength(linkStrength)
-			.friction(friction)
-			.charge(charge)
-			.gravity(gravity)
-			.on('tick', -> $scope.$apply())
-			.start()
 
 		# Adjust SVG canvas on window resize
 		resize = ->
-			simulation.size([
+			$scope.net.simulation.size([
 				if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
 				$scope.height = window.innerHeight - 146
 			]).resume()
-		resize()
 		window.onresize = resize
 
-
-		# Node events
-		$scope.mouseOverNode = (node) ->
-		$scope.mouseOutNode = (node) ->
-		$scope.mouseDownNode = (node, event) ->
-			$scope.activeNode = node
-			# $scope.net.getActiveTool().mouseDownOnNode($scope.net, node)
-		
-		$scope.mouseUpNode = (node) ->
-		$scope.doubleClickNode = (node) ->
-		$scope.touchEndNode = (node) ->
-		$scope.mouseDown = (event) ->
-
-		$scope.mouseUp = (event) ->
-			$scope.activeNode = null
-
-		
-
-			# $scope.net = net
-
-			# watch for tool changes
-			# $scope.$watch 'net.activeTool', ->
-				#if net.getActiveTool().draggable # drag and drop
-					# nodes.call(drag)
-				#else
-					# nodes.on('mousedown.drag', null)
-					# nodes.on('touchstart.drag', null)
+		# Initialize d3 force layout
+		# Refresh manually when the number of nodes/edges changes
+		$scope.net.refresh = ->
+			$scope.net.simulation = d3.layout.force()
+				.nodes($scope.net.nodes)
+				.links($scope.net.edges)
+				.linkDistance((edge) -> edge.length)
+				.linkStrength(linkStrength)
+				.friction(friction)
+				.charge(charge)
+				.gravity(gravity)
+				.on('tick', -> $scope.$apply())
+				.start()
+			resize()
+		$scope.net.refresh()
 
 		###
 			svg = d3.select('.editor-canvas svg')
@@ -278,5 +253,4 @@ class EditorCanvas extends Directive
 		return {
 			templateUrl: "/views/directives/editorCanvas.html"
 			controller: EditorCanvasController
-			controllerAs: "ec"
 		}

@@ -59,8 +59,6 @@ class FormDialogController extends Controller
 	constructor: ($mdDialog, $scope, $mdConstant, dialog) ->
 
 		$scope.dialogConfig = dialog
-		console.log $scope.dialogConfig
-		console.log $scope
 
 		# ChipInput: All selected items are hidden from options list.
 		@chipInput = []

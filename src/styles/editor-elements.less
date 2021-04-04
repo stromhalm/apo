@@ -11,7 +11,7 @@
 		height: 100%;
 	}
 
-	path.link {
+	path.edge {
 		fill: none;
 		stroke: #000;
 		stroke-width: 4px;
@@ -44,14 +44,22 @@
 		}
 	}
 }
-.node {
-	fill: white;
-	stroke: black;
-	stroke-width: 1.5px;
-	cursor: auto;
 
-	&.transition {
-		transform: translate(-18px, -18px);
+.node-group {
+
+	&:focus {
+		outline: none;
+	}
+
+	.node {
+		fill: white;
+		stroke: black;
+		stroke-width: 1.5px;
+		cursor: auto;
+	
+		&.transition {
+			transform: translate(-18px, -18px);
+		}
 	}
 }
 
@@ -61,7 +69,6 @@
 	}
 }
 
-// Token mode
 .Tokens {
 	.place {
 		cursor: text;
@@ -76,9 +83,7 @@
 		}
 	}
 }
-// Arrow Mode
-.Arrows,
-.Delete {
+.Arrows {
 	.editor-canvas {
 		cursor: default;
 		.node {
@@ -86,36 +91,23 @@
 		}
 	}
 }
-// Delete mode
-.Delete {
-	.editor-canvas {
-		cursor: default;
-		.edge,
-		.node {
-			cursor: crosshair;
-		}
-	}
-}
-// Labels mode
 .Labels {
 	.editor-canvas {
 		cursor: default;
-		.edge,
-		.node {
+		.edge, .node {
 			cursor: text;
 		}
 	}
 }
-// Initial State mode
-.Initial {
+.Initial,
+.Delete {
 	.editor-canvas {
 		cursor: default;
-		.state {
+		.edge, .node {
 			cursor: pointer;
 		}
 	}
 }
-// Node modes
 .Places,
 .States,
 .Transitions {

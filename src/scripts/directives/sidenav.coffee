@@ -51,7 +51,7 @@ class SidenavController extends Controller
 			)
 
 		# load all nets, direct acess to storage for 2-way-binding
-		@nets = netStorageService.storageObjects
+		@nets = netStorageService.nets
 
 		# Get selected net from storage
 		net = netStorageService.getNetByName(decodeURI($stateParams.name))

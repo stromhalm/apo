@@ -9,9 +9,9 @@ class @TokenTool extends @Tool
 		@description = "Set the number of tokens on places and fire transitions"
 		@icon = "play_circle_outline"
 
-	mouseDownOnNode: (net, mouseDownNode, dragLine, formDialogService, restart) ->
+	clickOnNode: (net, node, dragLine, formDialogService, restart) ->
 
-		if mouseDownNode.type is "place"
+		if node.type is "place"
 			formDialogService.runDialog({
 				title: "Set Tokens"
 				text: "Enter a number of tokens for this place"
@@ -20,7 +20,7 @@ class @TokenTool extends @Tool
 						name: "Integer ≥ 0"
 						type: "number"
 						min: 0
-						value: parseInt(mouseDownNode.tokens)
+						value: parseInt(node.tokens)
 					}
 				]
 			})
@@ -28,8 +28,8 @@ class @TokenTool extends @Tool
 				if formElements
 					tokens = formElements[0].value
 					if tokens >= 0
-						mouseDownNode.tokens = tokens
+						node.tokens = tokens
 						restart()
 
-		else if mouseDownNode.type is "transition"
-			net.fireTransition(mouseDownNode)
+		else if node.type is "transition"
+			net.fireTransition(node)

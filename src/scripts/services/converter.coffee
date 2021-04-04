@@ -7,18 +7,22 @@
 class Converter extends Service
 	constructor: ->
 
+		# Restore any net object from serialized data
 		@getNetFromData = (netData) ->
-			switch netData.type
-				when "lts" then return new TransitionSystem(netData)
-				when "pn" then return new PetriNet(netData)
-				else return new TransitionSystem(netData)
 
-		@getEdgeFromData = (edgeData) ->
-			switch edgeData.type
-				when "pnEdge" then return new PnEdge(edgeData)
-				when "tsEdge" then return new TsEdge(edgeData)
-				else return new Edge(edgeData)
+			net = new TransitionSystem(netData) if netData.type == "lts"
+			net = new PetriNet(netData) if netData.type == "pn"
 
+			net.nodes = (@getNodeFromData(node) for node in net.nodes)
+			net.edges = (@getEdgeFromData(edge) for edge in net.edges)
+
+			# Restore edge's node pointers
+			for edge in net.edges
+				(edge.source = node) for node in net.nodes when node.id == edge.source.id
+				(edge.target = node) for node in net.nodes when node.id == edge.target.id
+			
+			return net
+		
 		@getNodeFromData = (nodeData) ->
 			switch nodeData.type
 				when "transition" then return new Transition(nodeData)
@@ -26,6 +30,12 @@ class Converter extends Service
 				when "state" then return new State(nodeData)
 				when "initState" then return new InitState(nodeData)
 				else return new Node(nodeData)
+
+		@getEdgeFromData = (edgeData) ->
+			switch edgeData.type
+				when "pnEdge" then return new PnEdge(edgeData)
+				when "tsEdge" then return new TsEdge(edgeData)
+				else return new Edge(edgeData)
 
 		@getAptFromNet = (net) ->
 			code = ""
@@ -45,7 +55,6 @@ class Converter extends Service
 						initial = "[initial]"
 					else
 						initial = ""
-					state = @getNodeFromData(state)
 					rows.push state.getText() + initial
 				rows.push ""
 
@@ -66,13 +75,10 @@ class Converter extends Service
 				# add arcs
 				rows.push ".arcs"
 				for state in net.nodes when state.type is "state"
-					state = @getNodeFromData(state)
 					for labelToSelf in state.labelsToSelf
 						rows.push state.getText() + " " + labelToSelf + " " + state.getText()
 				for edge in net.edges
 					if edge.type is "tsEdge"
-						source = @getNodeFromData(edge.source)
-						target = @getNodeFromData(edge.target)
 						if edge.left >= 1 and edge.labelsLeft.length isnt 0
 							rows.push "" + target.getText() + " " + label + " " + source.getText() for label in edge.labelsLeft
 						if edge.right >= 1 and edge.labelsRight.length isnt 0
@@ -86,31 +92,26 @@ class Converter extends Service
 				# add places
 				rows.push ".places"
 				for place in net.nodes when place.type is "place"
-					place = @getNodeFromData(place)
 					rows.push place.getText()
 				rows.push ""
 
 				# add transitions
 				rows.push ".transitions"
 				for transition in net.nodes when transition.type is "transition"
-					transition = @getNodeFromData(transition)
 					rows.push transition.getText()
 				rows.push ""
 
 				# add flows
 				rows.push ".flows"
 				for transition in net.nodes when transition.type is "transition"
-					transition = @getNodeFromData(transition)
 					row = transition.getText() + ": {"
 					preset = net.getPreset(transition)
 					for place, index in preset
-						place = @getNodeFromData(place)
 						row += net.getEdgeWeight(place, transition) + "*" + place.getText()
 						row += ", " if index isnt preset.length - 1
 					row += "} -> {"
 					postset = net.getPostset(transition)
 					for place, index in postset
-						place = @getNodeFromData(place)
 						row += net.getEdgeWeight(transition, place) + "*" + place.getText()
 						row += ", " if index isnt postset.length - 1
 					row += "}"
@@ -122,7 +123,6 @@ class Converter extends Service
 				placesWithTokens = []
 				placesWithTokens.push place for place in net.nodes when place.type is "place" and place.tokens >= 1
 				for place, index in placesWithTokens
-					place = @getNodeFromData(place)
 					row += place.tokens + "*" + place.getText()
 					row += ", " if index isnt placesWithTokens.length - 1
 				row += "}"
@@ -268,8 +268,6 @@ class Converter extends Service
 					# rename transitions from id's to labels
 					transitionLabels.forEach (label, transitionId) ->
 						net.getNodeByText(transitionId).label = label
-
-				console.log net
 
 			catch error
 				console.error error

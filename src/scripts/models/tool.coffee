@@ -11,15 +11,20 @@ class @Tool
 		@name = "Unnamed Tool"
 		@description = ""
 
-	mouseDownOnNode: (net, node, dragLine) ->
-
-	mouseUpOnNode: (net, mouseUpNode, mouseDownNode, dragLine) ->
-
-	mouseDownOnEdge: (net, edge) ->
-
-	mouseDownOnCanvas: (net, point, dragLine) ->
-
+	clickOnNode: (net, node) ->
 	dblClickOnNode: (net, node) ->
+	mouseDownOnNode: (net, node) ->
+	mouseUpOnNode: (net, node) ->
+
+	clickOnEdge: (net, edge) ->
+	dblClickOnEdge: (net, edge) ->
+	mouseDownOnEdge: (net, edge) ->
+	mouseUpOnEdge: (net, edge) ->
+
+	clickOnCanvas: (net, event) ->
+	dblClickOnCanvas: (net, event) ->
+	mouseDownOnCanvas: (net, event) ->
+	mouseUpOnCanvas: (net, event) ->
 
 	# General validator for APT labels
 	labelValidator: (labelName) ->

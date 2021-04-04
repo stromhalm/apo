@@ -7,8 +7,7 @@ class @PetriNet extends @Net
 		super(netObject)
 		@type = "pn"
 
-		# Setup for the petri nets tools in the correct order
-		@setTools([
+		@tools = [
 			new MoveTool()
 			new PlaceTool()
 			new TransitionTool()
@@ -16,22 +15,21 @@ class @PetriNet extends @Net
 			new TokenTool()
 			new DeleteTool()
 			new LabelPnTool()
-		])
+		]
 
-		# Setup for the petri nets analyzers in the correct order
-		@setAnalyzers([
+		@analyzers = [
 			new ExaminePn()
 			new CoverabilityAnalyzer()
-		])
+		]
 
-	# Checks if a transition is firable
+	# Check if a transition is firable
 	isFirable: (transition) ->
 		return false if transition.type isnt "transition"
 		preset = @getPreset(transition)
 		return false for place in preset when parseInt(place.tokens) < @getEdgeWeight(place, transition)
 		return true
 
-	# Gets the weight of an edge between two nodes
+	# Get the weight of an edge between two nodes
 	getEdgeWeight: (source, target) ->
 		for edge in @edges
 			if edge.source.id is source.id and edge.target.id is target.id
@@ -40,7 +38,7 @@ class @PetriNet extends @Net
 				return parseInt(edge.left)
 		return 0
 
-	# Fires a transition
+	# Fire a transition
 	fireTransition: (transition) ->
 		return false if not @isFirable(transition)
 		preset = @getPreset(transition)

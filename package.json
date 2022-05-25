@@ -22,7 +22,7 @@
 		"coffeescript": "1.x",
 		"coffeelint": "2.1.x",
 		"connect-modrewrite": "^0.10.2",
-		"grunt": "1.3.x",
+		"grunt": "1.5.x",
 		"grunt-cache-bust": "1.7.x",
 		"grunt-coffeelint": "0.0.16",
 		"grunt-contrib-clean": "2.0.0",

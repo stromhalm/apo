@@ -1,4 +1,4 @@
-# APO – APT Online [![Build Status](https://travis-ci.org/stromhalm/apo.svg)](https://travis-ci.org/stromhalm/apo)
+# APO – APT Online [![Netlify Status](https://api.netlify.com/api/v1/badges/611ea8d9-b26b-422e-8186-c7c7f7b4c51f/deploy-status)](https://app.netlify.com/sites/friendly-goldwasser-1e5193/deploys)
 <img src="src/images/apo-logo.png" width="250"/>
 
 APO is a web interface for [APT](http://github.com/cvo-theory/apt), a powerful software for Petri net analysis and synthesis developed at the Carl von Ossietzky University in Oldenburg, Germany. Visit [apo.adrian-jagusch.de](http://apo.adrian-jagusch.de) in your browser to try it out!
@@ -64,12 +64,12 @@ APO uses several frameworks and libraries:
 * [ngClassify](https://github.com/CaryLandholt/ng-classify) – A set of AngularJS classes in CoffeeScript
 * [Less](http://lesscss.org) – For nice CSS code with variables and inheritance.
 * [GitHub](http://github.com) – Here you are ;-)
-* [Travis CI](http://travis-ci.org) – For testing and continuous deployment
 * [Angular APT](https://github.com/stromhalm/angular-apt) – The APT interface for web applications
 * [CoffeeLint](http://coffeelint.org) – For linting CoffeeScipt
 * [Jasmine](http://jasmine.github.io) – A JavaScript testing framework
 * [Karma](http://karma-runner.github.io) – A JavaScript test runner with AngularJS in mind
 * [AngularFun](https://github.com/CaryLandholt/AngularFun) – A good starting point for modern web development
+* [Netlify](http://netlify.com) – Hosting and Continuous Deployment
 
 ### Contribute
 If you find a bug in the source code or a mistake in the documentation, you can help by submitting an [issue](https://github.com/stromhalm/apo/issues) to the repository.  Even better, you can submit a [Pull Request](https://github.com/stromhalm/apo/pulls) with a fix.

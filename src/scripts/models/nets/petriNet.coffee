@@ -38,7 +38,9 @@ class @PetriNet extends @Net
 	isFirable: (transition) ->
 		return false if transition.type isnt "transition"
 		preset = @getPreset(transition)
+		postset = @getPostset(transition)
 		return false for place in preset when parseInt(place.tokens) < @getEdgeWeight(place, transition)
+		return false for place in postset when parseInt(place.tokens) + @getEdgeWeight(transition, place) > parseInt(place.tokensCap)
 		return true
 
 	# Gets the weight of an edge between two nodes

@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for the APO editor */
+.canvas-container {
+  @apply w-full h-full relative overflow-hidden;
+}
+
+.editor-canvas svg {
+  @apply w-full h-full cursor-default;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.editor-canvas path.link {
+  @apply fill-none stroke-gray-800 stroke-4;
+}
+
+.editor-canvas path.dragline {
+  pointer-events: none;
+}
+
+.editor-canvas path.hidden {
+  stroke-width: 0;
+}
+
+.editor-canvas text {
+  @apply text-xs fill-gray-800 pointer-events-none font-bold text-center;
+}
+
+.node {
+  @apply fill-white stroke-gray-800 stroke-2 cursor-auto;
+}
+
+.node.transition {
+  transform: translate(-18px, -18px);
+}
+
+.node.firable {
+  @apply stroke-green-600 stroke-4;
+}
+
+/* Tool-specific cursors */
+.tool-arrows .node,
+.tool-delete .node,
+.tool-delete .edge {
+  @apply cursor-crosshair;
+}
+
+.tool-labels .node,
+.tool-labels .edge {
+  @apply cursor-text;
+}
+
+.tool-tokens .place {
+  @apply cursor-text;
+}
+
+.tool-tokens .transition {
+  @apply stroke-red-600 stroke-4 cursor-not-allowed;
+}
+
+.tool-tokens .transition.firable {
+  @apply stroke-green-600 cursor-e-resize;
+}
+
+.tool-initial .state {
+  @apply cursor-pointer;
+}
+
+.tool-places .node,
+.tool-states .node,
+.tool-transitions .node,
+.tool-move .node {
+  @apply cursor-move;
+}
+
+.initState {
+  @apply hidden;
+}

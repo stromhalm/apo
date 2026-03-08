@@ -10,15 +10,15 @@
       <ng-md-icon class="md-secondary" ng-click="sn.deleteNet(net, $event)" icon="delete" size="22" aria-label="Delete net"></ng-md-icon>
    </md-list-item>
    <md-list-item class="list-form-item">
-      <form ng-submit="sn.createNewNet(sn.newName, sn.newType, $event)" layout="row">
-		<md-input-container class="net-name-input">
+      <form name="newNetForm" ng-submit="sn.createNewNet(sn.newName, sn.newType, newNetForm, $event)" layout="row" novalidate>
+		<md-input-container class="net-name-input" ng-class="{ 'md-input-invalid': sn.showNameError(newNetForm) }">
 			<label>Create New</label>
-			<input ng-model="sn.newName" validation="sn.nameValidation" error-message="sn.error">
+			<input name="netName" ng-model="sn.newName" required validation="sn.nameValidation" error-message="sn.error">
 			<ng-message>{{ sn.error }}</ng-message>
 		</md-input-container>
-		<md-input-container class="net-type-input">
+		<md-input-container class="net-type-input" ng-class="{ 'md-input-invalid': sn.showTypeError(newNetForm) }">
 			<label>Type</label>
-			<md-select ng-model="sn.newType">
+			<md-select name="netType" ng-model="sn.newType" required>
 				<md-option value="PN">
 					PN
 				</md-option>
@@ -27,7 +27,7 @@
 				</md-option>
 			</md-select>
 		</md-input-container>
-		<ng-md-icon class="md-secondary submit-form" ng-click="sn.createNewNet(sn.newName, sn.newType, $event)" icon="add" size="22" aria-label="Add net"></ng-md-icon>
+		<ng-md-icon class="md-secondary submit-form" ng-click="sn.createNewNet(sn.newName, sn.newType, newNetForm, $event)" icon="add" size="22" aria-label="Add net"></ng-md-icon>
       </form>
 	</md-list-item>
 </md-list>

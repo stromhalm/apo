@@ -24,18 +24,32 @@ class SidenavController extends Controller
 
 		# Validate the name of a new net
 		@nameValidation = (name) ->
+			return true if not name
 			return "\" is not allowed" if name.replace("\"", "") isnt name
 			return "A net with this name already exists" if netStorageService.getNetByName(name)
 			return true
 
+		@showNameError = (form) ->
+			return false if not form?.netName
+			(form.$submitted or form.netName.$touched) and form.netName.$invalid
+
+		@showTypeError = (form) ->
+			return false if not form?.netType
+			(form.$submitted or form.netType.$touched) and form.netType.$invalid
+
 		# Create a new net via the sidenav's form
-		@createNewNet = (name, type, event) ->
+		@createNewNet = (name, type, form, event) ->
+			form.$setSubmitted?()
+			form.netName.$setTouched?() if not name
+			form.netType.$setTouched?() if not type
 			if (!name or !type or @nameValidation(name) isnt true)
 			else
 				if type is "PN" then success = netStorageService.addNet(new PetriNet({name: name}))
 				else if type is "LTS" then success = netStorageService.addNet(new TransitionSystem({name: name}))
 				@newName = ""
 				@newType = ""
+				form.$setPristine?()
+				form.$setUntouched?()
 
 		# Delte a net via the sidebar
 		@deleteNet = (net, event) ->

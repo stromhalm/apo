@@ -10,6 +10,8 @@ class @Edge
 	getText: -> ''
 
 	getPath: ->
+		return '' if not isFinite(@source?.x) or not isFinite(@source?.y) or not isFinite(@target?.x) or not isFinite(@target?.y)
+
 		deltaX = @target.x - @source.x
 		deltaY = @target.y - @source.y
 		dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)

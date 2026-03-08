@@ -18,6 +18,16 @@ class EditorCanvasController extends Controller
 			$state.go "editor", name: netStorageService.nets[0].name
 			return
 
+		isFiniteNumber = (value) ->
+			isFinite(value)
+
+		normalizeNodePosition = (node) ->
+			node.x = if isFiniteNumber(node.x) then node.x else if isFiniteNumber(node.px) then node.px else 0
+			node.y = if isFiniteNumber(node.y) then node.y else if isFiniteNumber(node.py) then node.py else 0
+			node.px = if isFiniteNumber(node.px) then node.px else node.x
+			node.py = if isFiniteNumber(node.py) then node.py else node.y
+			node
+
 		# Adjust SVG canvas on window resize
 		resize = ->
 			$scope.net.simulation.size([
@@ -28,6 +38,8 @@ class EditorCanvasController extends Controller
 
 		# Initialize d3 force layout
 		$scope.net.refresh = ->
+			$scope.net.simulation?.stop()
+			normalizeNodePosition(node) for node in $scope.net.nodes
 			$scope.net.simulation = d3.layout.force()
 				.nodes($scope.net.nodes)
 				.links($scope.net.edges)
@@ -58,9 +70,20 @@ class EditorCanvasController extends Controller
 			$scope.$evalAsync()
 
 		getPoint = (event) ->
+			svgElement = document.querySelector('.editor-canvas svg')
+			rect = svgElement?.getBoundingClientRect()
+			touch = event.touches?[0] or event.changedTouches?[0]
+			clientX = touch?.clientX ? event.clientX
+			clientY = touch?.clientY ? event.clientY
+			left = rect?.left ? 0
+			top = rect?.top ? 0
+
+			x = if isFiniteNumber(clientX) then clientX - left else event.offsetX
+			y = if isFiniteNumber(clientY) then clientY - top else event.offsetY
+
 			new Point({
-				x: event.offsetX
-				y: event.offsetY
+				x: if isFiniteNumber(x) then x else 0
+				y: if isFiniteNumber(y) then y else 0
 			})
 
 		stopEvent = (event) ->
@@ -82,7 +105,8 @@ class EditorCanvasController extends Controller
 
 		$scope.mouseMoveOnCanvas = (event) ->
 			return if not mouseDownNode
-			getDragLine().attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + event.offsetX + ',' + event.offsetY)
+			point = getPoint(event)
+			getDragLine().attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + point.x + ',' + point.y)
 
 		$scope.mouseUpOnCanvas = (event) ->
 			getDragLine().classed('hidden', true).style('marker-end', '') if mouseDownNode

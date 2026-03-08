@@ -122,13 +122,21 @@ class EditorCanvasController extends Controller
 
 		$scope.mouseDownOnNode = (node, event) ->
 			stopEvent(event)
-			mouseDownNode = node
+			activeTool = $scope.net.getActiveTool()
 			mouseDownEdge = null
-			$scope.net.getActiveTool().mouseDownOnNode($scope.net, node, getDragLine(), formDialogService, restart, converterService)
+			if activeTool.draggable
+				activeTool.mouseDownOnNode($scope.net, node, getDragLine(), formDialogService, restart, converterService)
+				return
+			mouseDownNode = node
+			activeTool.mouseDownOnNode($scope.net, node, getDragLine(), formDialogService, restart, converterService)
 
 		$scope.mouseUpOnNode = (node, event) ->
+			activeTool = $scope.net.getActiveTool()
+			if activeTool.draggable
+				resetMouseVars()
+				return
 			stopEvent(event)
-			$scope.net.getActiveTool().mouseUpOnNode($scope.net, node, mouseDownNode, getDragLine(), formDialogService, restart, converterService)
+			activeTool.mouseUpOnNode($scope.net, node, mouseDownNode, getDragLine(), formDialogService, restart, converterService)
 			resetMouseVars()
 
 		$scope.clickOnEdge = (edge, event) ->

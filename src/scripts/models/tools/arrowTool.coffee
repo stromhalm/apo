@@ -11,14 +11,14 @@ class @ArrowTool extends @Tool
 		@description = "Connect nodes in the graph via arrows"
 
 	mouseDownOnNode: (net, node, dragLine) ->
-		dragLine.style('marker-end', 'url(#endArrow)').classed('hidden', false).attr('d', 'M' + node.x + ',' + node.y + 'L' + node.x + ',' + node.y)
+		dragLine.style('marker-start', '').style('marker-end', 'url(#endArrow)').classed('hidden', false).attr('d', 'M' + node.x + ',' + node.y + 'L' + node.x + ',' + node.y)
 
 	mouseUpOnNode: (net, mouseUpNode, mouseDownNode, dragLine) ->
 		markEdgeChanged = (edge) ->
 			edge.renderVersion = (edge.renderVersion ? 0) + 1
 			edge
 		return if not mouseDownNode
-		dragLine.classed('hidden', true).style('marker-end', '') # needed by FF
+		dragLine.classed('hidden', true).style('marker-start', '').style('marker-end', '') # needed by FF
 
 		# check for drag-to-self
 		if mouseUpNode == mouseDownNode

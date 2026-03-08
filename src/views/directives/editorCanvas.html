@@ -30,7 +30,7 @@
          </g>
       </g>
       <g ng-if="net.nodes">
-         <g class="node-group" ng-repeat="node in net.nodes" draggable="node" net="net" ng-attr-data-node-id="{{ node.id }}" ng-attr-transform="translate({{ node.x }},{{ node.y }})"
+         <g class="node-group" ng-class="{ 'connect-target': isSnapTarget(node) }" ng-repeat="node in net.nodes" draggable="node" net="net" ng-attr-data-node-id="{{ node.id }}" ng-attr-transform="translate({{ node.x }},{{ node.y }})"
             ng-click="clickOnNode(node, $event)"
             ng-dblclick="dblClickOnNode(node, $event)"
             ng-mousedown="mouseDownOnNode(node, $event)"

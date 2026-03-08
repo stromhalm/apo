@@ -57,6 +57,7 @@ class EditorCanvasController extends Controller
 
 		mouseDownNode = null
 		mouseDownEdge = null
+		snapTargetNode = null
 		dragLine = null
 		touchCanvas = null
 		touchStartHandler = null
@@ -69,6 +70,7 @@ class EditorCanvasController extends Controller
 		resetMouseVars = ->
 			mouseDownNode = null
 			mouseDownEdge = null
+			snapTargetNode = null
 
 		restart = ->
 			$scope.$evalAsync()
@@ -104,6 +106,72 @@ class EditorCanvasController extends Controller
 			touch = event.changedTouches?[0] or event.touches?[0]
 			return document.elementFromPoint(touch.clientX, touch.clientY) if touch and document.elementFromPoint
 			event.target
+
+		getPointerTarget = (event) ->
+			return getTouchTarget(event) if event.touches or event.changedTouches
+			event.target
+
+		getSnapTarget = (node) ->
+			return null if not mouseDownNode
+			return null if $scope.net.getActiveTool().name isnt "Arrows"
+			return null if not node or node is mouseDownNode
+			return null if not $scope.net.isConnectable(mouseDownNode, node)
+			node
+
+		updateSnapTarget = (eventOrTarget) ->
+			target = if eventOrTarget?.target or eventOrTarget?.touches or eventOrTarget?.changedTouches then getPointerTarget(eventOrTarget) else eventOrTarget
+			snapTargetNode = getSnapTarget(getEventNode(target))
+			snapTargetNode
+
+		getDragTargetPoint = (event) ->
+			updateSnapTarget(event)
+			return new Point({x: snapTargetNode.x, y: snapTargetNode.y}) if snapTargetNode
+			getPoint(event)
+
+		getDragPreviewMarkers = (targetNode) ->
+			return {start: false, end: true} if not mouseDownNode or not targetNode
+
+			existingSame = null
+			existingReverse = null
+
+			for edge in $scope.net.edges when edge.source is mouseDownNode and edge.target is targetNode
+				existingSame = edge
+
+			for edge in $scope.net.edges when edge.source is targetNode and edge.target is mouseDownNode
+				existingReverse = edge
+
+			if existingSame
+				return {
+					start: existingSame.left > 0
+					end: true
+				}
+
+			if existingReverse
+				return {
+					start: existingReverse.right > 0
+					end: true
+				}
+
+			{
+				start: false
+				end: true
+			}
+
+		renderDragPreview = (point, targetNode = null) ->
+			markers = getDragPreviewMarkers(targetNode)
+			path = 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + point.x + ',' + point.y
+			if targetNode
+				previewEdge = new Edge({
+					source: mouseDownNode
+					target: targetNode
+					left: if markers.start then 1 else 0
+					right: if markers.end then 1 else 0
+				})
+				path = previewEdge.getPath()
+			getDragLine()
+				.style('marker-start', if markers.start then 'url(#startArrow)' else '')
+				.style('marker-end', if markers.end then 'url(#endArrow)' else '')
+				.attr('d', path)
 
 		installTouchHandlers = ->
 			touchCanvas = document.querySelector('.editor-canvas svg')
@@ -157,11 +225,15 @@ class EditorCanvasController extends Controller
 
 		$scope.mouseMoveOnCanvas = (event) ->
 			return if not mouseDownNode
-			point = getPoint(event)
-			getDragLine().attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + point.x + ',' + point.y)
+			point = getDragTargetPoint(event)
+			renderDragPreview(point, snapTargetNode)
 
 		$scope.mouseUpOnCanvas = (event) ->
-			getDragLine().classed('hidden', true).style('marker-end', '') if mouseDownNode
+			activeTool = $scope.net.getActiveTool()
+			if mouseDownNode and snapTargetNode and activeTool.name is "Arrows"
+				activeTool.mouseUpOnNode($scope.net, snapTargetNode, mouseDownNode, getDragLine(), formDialogService, restart, converterService)
+			else if mouseDownNode
+				getDragLine().classed('hidden', true).style('marker-start', '').style('marker-end', '')
 			resetMouseVars()
 
 		$scope.clickOnNode = (node, event) ->
@@ -176,6 +248,7 @@ class EditorCanvasController extends Controller
 			stopEvent(event)
 			activeTool = $scope.net.getActiveTool()
 			mouseDownEdge = null
+			snapTargetNode = null
 			if activeTool.draggable
 				activeTool.mouseDownOnNode($scope.net, node, getDragLine(), formDialogService, restart, converterService)
 				return
@@ -209,6 +282,9 @@ class EditorCanvasController extends Controller
 			stopEvent(event)
 			$scope.net.getActiveTool().mouseUpOnEdge($scope.net, edge, getDragLine(), formDialogService, restart, converterService)
 			resetMouseVars()
+
+		$scope.isSnapTarget = (node) ->
+			snapTargetNode is node
 
 		$timeout(installTouchHandlers)
 

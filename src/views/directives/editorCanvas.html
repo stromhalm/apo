@@ -14,12 +14,18 @@
             ng-dblclick="dblClickOnEdge(edge, $event)"
             ng-mousedown="mouseDownOnEdge(edge, $event)"
             ng-mouseup="mouseUpOnEdge(edge, $event)">
-            <path class="edge" ng-attr-d="{{ edge.getPath() }}"
+            <path class="edge"
+               ng-attr-id="{{ 'edge-path-' + edge.id + '-' + (edge.renderVersion || 0) }}"
+               ng-attr-d="{{ edge.getPath() }}"
                ng-attr-marker-start="{{ edge.left > 0 ? 'url(#startArrow)' : undefined }}"
                ng-attr-marker-end="{{ edge.right > 0 ? 'url(#endArrow)' : undefined }}">
             </path>
-            <text dy="-8" class="label edge-label" id="edge-label-{{ edge.id }}">
-               <textPath startOffset="50%" class="text" xlink:href="{{ '#edge-label-' + edge.id }}">{{ edge.getText() }}</textPath>
+            <path class="edge-label-path"
+               ng-attr-id="{{ 'edge-label-path-' + edge.id + '-' + (edge.renderVersion || 0) }}"
+               ng-attr-d="{{ edge.getLabelPath() }}">
+            </path>
+            <text class="label edge-label">
+               <textPath startOffset="50%" class="text" xlink:href="{{ '#edge-label-path-' + edge.id + '-' + (edge.renderVersion || 0) }}">{{ edge.getLabelText() }}</textPath>
             </text>
          </g>
       </g>

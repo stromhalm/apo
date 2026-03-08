@@ -15,3 +15,8 @@ class @PnEdge extends @Edge
 		else if @right >= 2
 			return @right
 		return ""
+
+	getLabelText: ->
+		if @isLabelReversed() and @left >= 1 and @right >= 1
+			return "← #{@right} | #{@left} →"
+		@getText()

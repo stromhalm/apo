@@ -50,6 +50,7 @@ class SidenavController extends Controller
 				@newType = ""
 				form.$setPristine?()
 				form.$setUntouched?()
+				$state.go "editor", name: name if success isnt false
 
 		# Delte a net via the sidebar
 		@deleteNet = (net, event) ->

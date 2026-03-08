@@ -30,9 +30,10 @@ class NetStorage extends Service
 			@nets.push(converterService.getNetFromData(net))
 
 		# Search for a net
-		getNetIdByName = (name) ->
-			return id for net, id in @nets when net.name is name
-			return false
+		getNetIdByName = (name) =>
+			for net, id in @nets when net.name is name
+				return id
+			return -1
 
 		# Add a new net to the storage
 		@addNet = (net) ->
@@ -49,11 +50,13 @@ class NetStorage extends Service
 
 		# Delete a net and its references in the storage
 		@deleteNet = (name) ->
-			@nets.splice(getNetIdByName(name), 1)
+			netId = getNetIdByName(name)
+			return false if netId < 0
+			@nets.splice(netId, 1)
 			@nets.push(getDefaultNet()) if @nets.length is 0
 			# Go to first net if current net has been deleted
 			if name is decodeURI($stateParams.name)
-				$state.go "editor", name: ""
+				$state.go "editor", name: @nets[0].name
 
 		# Search for a net in the storage by name
 		@getNetByName = (name) ->
@@ -64,4 +67,4 @@ class NetStorage extends Service
 		@resetStorage = ->
 			@nets.splice(0, 1) while @nets.length > 0
 			@nets.push(getDefaultNet())
-			$state.go "editor", name: ""
+			$state.go "editor", name: @nets[0].name

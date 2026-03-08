@@ -25,7 +25,8 @@ class MenubarController extends Controller
 					switch type
 						when "petri net" then newNet = new PetriNet({name: formElements[0].value})
 						else newNet = new TransitionSystem({name: formElements[0].value})
-					netStorageService.addNet(newNet)
+					success = netStorageService.addNet(newNet)
+					$state.go "editor", name: newNet.name if success isnt false
 
 		@renameNet = (oldName, event) ->
 			formDialogService.runDialog({

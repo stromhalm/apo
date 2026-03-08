@@ -21,6 +21,9 @@ class EditorCanvasController extends Controller
 		isFiniteNumber = (value) ->
 			isFinite(value)
 
+		isForceSimulation = (simulation) ->
+			typeof simulation?.stop is 'function' and typeof simulation?.size is 'function' and typeof simulation?.resume is 'function'
+
 		normalizeNodePosition = (node) ->
 			node.x = if isFiniteNumber(node.x) then node.x else if isFiniteNumber(node.px) then node.px else 0
 			node.y = if isFiniteNumber(node.y) then node.y else if isFiniteNumber(node.py) then node.py else 0
@@ -30,6 +33,7 @@ class EditorCanvasController extends Controller
 
 		# Adjust SVG canvas on window resize
 		resize = ->
+			return if not isForceSimulation($scope.net.simulation)
 			$scope.net.simulation.size([
 				if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
 				$scope.height = window.innerHeight - 146
@@ -38,7 +42,7 @@ class EditorCanvasController extends Controller
 
 		# Initialize d3 force layout
 		$scope.net.refresh = ->
-			$scope.net.simulation?.stop()
+			$scope.net.simulation.stop() if isForceSimulation($scope.net.simulation)
 			normalizeNodePosition(node) for node in $scope.net.nodes
 			$scope.net.simulation = d3.layout.force()
 				.nodes($scope.net.nodes)

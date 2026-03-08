@@ -58,6 +58,10 @@ class EditorCanvasController extends Controller
 		mouseDownNode = null
 		mouseDownEdge = null
 		dragLine = null
+		touchCanvas = null
+		touchStartHandler = null
+		touchMoveHandler = null
+		touchEndHandler = null
 
 		getDragLine = ->
 			dragLine = d3.select('.editor-canvas .dragline')
@@ -85,6 +89,54 @@ class EditorCanvasController extends Controller
 				x: if isFiniteNumber(x) then x else 0
 				y: if isFiniteNumber(y) then y else 0
 			})
+
+		getNodeById = (id) ->
+			return false if not isFiniteNumber(id)
+			return node for node in $scope.net.nodes when node.id is id
+			false
+
+		getEventNode = (eventTarget) ->
+			nodeElement = eventTarget?.closest?('.node-group')
+			nodeId = parseInt(nodeElement?.getAttribute('data-node-id'), 10)
+			getNodeById(nodeId)
+
+		getTouchTarget = (event) ->
+			touch = event.changedTouches?[0] or event.touches?[0]
+			return document.elementFromPoint(touch.clientX, touch.clientY) if touch and document.elementFromPoint
+			event.target
+
+		installTouchHandlers = ->
+			touchCanvas = document.querySelector('.editor-canvas svg')
+			return if not touchCanvas
+
+			touchStartHandler = (event) ->
+				return if $scope.net.getActiveTool().name isnt "Arrows"
+				node = getEventNode(event.target)
+				return if not node
+				event.preventDefault()
+				$scope.$evalAsync(-> $scope.mouseDownOnNode(node, event))
+
+			touchMoveHandler = (event) ->
+				return if $scope.net.getActiveTool().name isnt "Arrows"
+				return if not mouseDownNode
+				event.preventDefault()
+				$scope.$evalAsync(-> $scope.mouseMoveOnCanvas(event))
+
+			touchEndHandler = (event) ->
+				return if $scope.net.getActiveTool().name isnt "Arrows"
+				return if not mouseDownNode
+				event.preventDefault()
+				targetNode = getEventNode(getTouchTarget(event))
+				$scope.$evalAsync ->
+					if targetNode
+						$scope.mouseUpOnNode(targetNode, event)
+					else
+						$scope.mouseUpOnCanvas(event)
+
+			touchCanvas.addEventListener('touchstart', touchStartHandler, {passive: false})
+			touchCanvas.addEventListener('touchmove', touchMoveHandler, {passive: false})
+			touchCanvas.addEventListener('touchend', touchEndHandler, {passive: false})
+			touchCanvas.addEventListener('touchcancel', touchEndHandler, {passive: false})
 
 		stopEvent = (event) ->
 			return if not event
@@ -157,6 +209,15 @@ class EditorCanvasController extends Controller
 			stopEvent(event)
 			$scope.net.getActiveTool().mouseUpOnEdge($scope.net, edge, getDragLine(), formDialogService, restart, converterService)
 			resetMouseVars()
+
+		$timeout(installTouchHandlers)
+
+		$scope.$on '$destroy', ->
+			return if not touchCanvas
+			touchCanvas.removeEventListener('touchstart', touchStartHandler, {passive: false}) if touchStartHandler
+			touchCanvas.removeEventListener('touchmove', touchMoveHandler, {passive: false}) if touchMoveHandler
+			touchCanvas.removeEventListener('touchend', touchEndHandler, {passive: false}) if touchEndHandler
+			touchCanvas.removeEventListener('touchcancel', touchEndHandler, {passive: false}) if touchEndHandler
 		
 		###
 			svg = d3.select('.editor-canvas svg')

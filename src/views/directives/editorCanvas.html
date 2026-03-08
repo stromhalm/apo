@@ -9,6 +9,7 @@
       <path class="edge dragline hidden"></path>
       <g ng-if="net.edges">
          <g ng-repeat="edge in net.edges"
+            ng-attr-data-edge-id="{{ edge.id }}"
             ng-click="clickOnEdge(edge, $event)"
             ng-dblclick="dblClickOnEdge(edge, $event)"
             ng-mousedown="mouseDownOnEdge(edge, $event)"
@@ -21,7 +22,7 @@
          </g>
       </g>
       <g ng-if="net.nodes">
-         <g class="node-group" ng-repeat="node in net.nodes" draggable="node" net="net" ng-attr-transform="translate({{ node.x }},{{ node.y }})"
+         <g class="node-group" ng-repeat="node in net.nodes" draggable="node" net="net" ng-attr-data-node-id="{{ node.id }}" ng-attr-transform="translate({{ node.x }},{{ node.y }})"
             ng-click="clickOnNode(node, $event)"
             ng-dblclick="dblClickOnNode(node, $event)"
             ng-mousedown="mouseDownOnNode(node, $event)"

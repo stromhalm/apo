@@ -14,7 +14,9 @@
             ng-dblclick="dblClickOnEdge(edge, $event)"
             ng-mousedown="mouseDownOnEdge(edge, $event)"
             ng-mouseup="mouseUpOnEdge(edge, $event)">
-            <path class="edge" ng-attr-d="{{ edge.getPath() }}" ng-class="{ 'start-arrow': edge.left > 0, 'end-arrow': edge.right > 0 }">
+            <path class="edge" ng-attr-d="{{ edge.getPath() }}"
+               ng-attr-marker-start="{{ edge.left > 0 ? 'url(#startArrow)' : undefined }}"
+               ng-attr-marker-end="{{ edge.right > 0 ? 'url(#endArrow)' : undefined }}">
             </path>
             <text dy="-8" class="label edge-label" id="edge-label-{{ edge.id }}">
                <textPath startOffset="50%" class="text" xlink:href="{{ '#edge-label-' + edge.id }}">{{ edge.getText() }}</textPath>

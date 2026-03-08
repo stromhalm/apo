@@ -42,6 +42,89 @@ class EditorCanvasController extends Controller
 		$scope.net.refresh()
 		# Refresh layout when the number of nodes/edges changes
 		$scope.$watchGroup ['net.nodes.length', 'net.edges.length'], $scope.net.refresh
+
+		mouseDownNode = null
+		mouseDownEdge = null
+		dragLine = null
+
+		getDragLine = ->
+			dragLine = d3.select('.editor-canvas .dragline')
+
+		resetMouseVars = ->
+			mouseDownNode = null
+			mouseDownEdge = null
+
+		restart = ->
+			$scope.$evalAsync()
+
+		getPoint = (event) ->
+			new Point({
+				x: event.offsetX
+				y: event.offsetY
+			})
+
+		stopEvent = (event) ->
+			return if not event
+			event.preventDefault()
+			event.stopPropagation()
+
+		$scope.clickOnCanvas = (event) ->
+			return if mouseDownNode or mouseDownEdge
+			$scope.net.getActiveTool().clickOnCanvas($scope.net, getPoint(event), getDragLine(), formDialogService, restart, converterService)
+
+		$scope.dblClickOnCanvas = (event) ->
+			return if mouseDownNode or mouseDownEdge
+			$scope.net.getActiveTool().dblClickOnCanvas($scope.net, getPoint(event), getDragLine(), formDialogService, restart, converterService)
+
+		$scope.mouseDownOnCanvas = (event) ->
+			return if mouseDownNode or mouseDownEdge
+			$scope.net.getActiveTool().mouseDownOnCanvas($scope.net, getPoint(event), getDragLine(), formDialogService, restart, converterService)
+
+		$scope.mouseMoveOnCanvas = (event) ->
+			return if not mouseDownNode
+			getDragLine().attr('d', 'M' + mouseDownNode.x + ',' + mouseDownNode.y + 'L' + event.offsetX + ',' + event.offsetY)
+
+		$scope.mouseUpOnCanvas = (event) ->
+			getDragLine().classed('hidden', true).style('marker-end', '') if mouseDownNode
+			resetMouseVars()
+
+		$scope.clickOnNode = (node, event) ->
+			stopEvent(event)
+			$scope.net.getActiveTool().clickOnNode($scope.net, node, getDragLine(), formDialogService, restart, converterService)
+
+		$scope.dblClickOnNode = (node, event) ->
+			stopEvent(event)
+			$scope.net.getActiveTool().dblClickOnNode($scope.net, node, getDragLine(), formDialogService, restart, converterService)
+
+		$scope.mouseDownOnNode = (node, event) ->
+			stopEvent(event)
+			mouseDownNode = node
+			mouseDownEdge = null
+			$scope.net.getActiveTool().mouseDownOnNode($scope.net, node, getDragLine(), formDialogService, restart, converterService)
+
+		$scope.mouseUpOnNode = (node, event) ->
+			stopEvent(event)
+			$scope.net.getActiveTool().mouseUpOnNode($scope.net, node, mouseDownNode, getDragLine(), formDialogService, restart, converterService)
+			resetMouseVars()
+
+		$scope.clickOnEdge = (edge, event) ->
+			stopEvent(event)
+			$scope.net.getActiveTool().clickOnEdge($scope.net, edge, getDragLine(), formDialogService, restart, converterService)
+
+		$scope.dblClickOnEdge = (edge, event) ->
+			stopEvent(event)
+			$scope.net.getActiveTool().dblClickOnEdge($scope.net, edge, getDragLine(), formDialogService, restart, converterService)
+
+		$scope.mouseDownOnEdge = (edge, event) ->
+			stopEvent(event)
+			mouseDownEdge = edge
+			mouseDownNode = null
+			$scope.net.getActiveTool().mouseDownOnEdge($scope.net, edge, formDialogService, restart, converterService)
+
+		$scope.mouseUpOnEdge = (edge, event) ->
+			stopEvent(event)
+			$scope.net.getActiveTool().mouseUpOnEdge($scope.net, edge, getDragLine(), formDialogService, restart, converterService)
+			resetMouseVars()
 		
 		###
 			svg = d3.select('.editor-canvas svg')

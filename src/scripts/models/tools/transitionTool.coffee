@@ -10,4 +10,4 @@ class @TransitionTool extends @Tool
 		@description = "Create transitions"
 		@draggable = true
 
-	clickOnCanvas: (net, event) -> net.addNode(new Transition({x: event.offsetX, y: event.offsetY}))
+	clickOnCanvas: (net, point) -> net.addNode(new Transition({x: point.x, y: point.y}))

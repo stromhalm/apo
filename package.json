@@ -37,7 +37,7 @@
 		"grunt-hash": "0.5.x",
 		"grunt-hustler": "4.0.x",
 		"grunt-include-source": "1.1.x",
-		"grunt-karma": "4.0.x",
+		"grunt-karma": "2.0.0",
 		"grunt-ng-classify": "^3.0.x",
 		"karma": "~0.13.22",
 		"karma-coffee-preprocessor": "0.2.1",

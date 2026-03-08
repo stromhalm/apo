@@ -14,7 +14,9 @@ class @ArrowTool extends @Tool
 		dragLine.style('marker-end', 'url(#endArrow)').classed('hidden', false).attr('d', 'M' + node.x + ',' + node.y + 'L' + node.x + ',' + node.y)
 
 	mouseUpOnNode: (net, mouseUpNode, mouseDownNode, dragLine) ->
-
+		markEdgeChanged = (edge) ->
+			edge.renderVersion = (edge.renderVersion ? 0) + 1
+			edge
 		return if not mouseDownNode
 		dragLine.classed('hidden', true).style('marker-end', '') # needed by FF
 
@@ -26,11 +28,13 @@ class @ArrowTool extends @Tool
 			existingLeftEdge = edge
 		if existingLeftEdge
 			existingLeftEdge.right = 1
+			markEdgeChanged(existingLeftEdge)
 		else
 			for edge in net.edges when edge.source is mouseUpNode and edge.target is mouseDownNode
 				existingRightEdge = edge
 			if existingRightEdge
 				existingRightEdge.left = 1
+				markEdgeChanged(existingRightEdge)
 		
 		# Create new edge
 		if not existingLeftEdge and not existingRightEdge

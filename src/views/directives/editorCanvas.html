@@ -8,7 +8,7 @@
       ng-mouseleave="mouseUpOnCanvas($event)">
       <path class="edge dragline hidden"></path>
       <g ng-if="net.edges">
-         <g ng-repeat="edge in net.edges"
+         <g ng-repeat="edge in net.edges track by (edge.id + '-' + (edge.renderVersion || 0))"
             ng-attr-data-edge-id="{{ edge.id }}"
             ng-click="clickOnEdge(edge, $event)"
             ng-dblclick="dblClickOnEdge(edge, $event)"

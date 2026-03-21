@@ -6,6 +6,12 @@
 class MenubarController extends Controller
 	constructor: ($mdDialog, netStorageService, $state, aptService, $http, formDialogService, converterService, $timeout, $rootScope) ->
 
+		@releaseMenuFocus = (event) ->
+			button = event?.currentTarget ? event?.target?.closest?('button')
+			button?.blur?()
+			document.activeElement?.blur?()
+			return
+
 		# Show
 		@createNet = (event, type) ->
 			formDialogService.runDialog

@@ -6,6 +6,12 @@
 class TopbarController extends Controller
 	constructor: (netStorageService, $mdDialog, formDialogService, $state) ->
 
+		@releaseMenuFocus = (event) ->
+			button = event?.currentTarget ? event?.target?.closest?('button')
+			button?.blur?()
+			document.activeElement?.blur?()
+			return
+
 		@renameNet = (oldName, event) ->
 			formDialogService.runDialog({
 				title: "Rename Net"

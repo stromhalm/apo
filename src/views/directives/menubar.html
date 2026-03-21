@@ -22,26 +22,26 @@
                </md-menu-item>
                <md-menu-item class="md-indent">
                   <ng-md-icon icon="cloud_upload" style="fill: rgba(0, 0, 0, .87)" size="20" aria-label="Import"></ng-md-icon>
-                  <md-button ng-click="mb.importAPT($event)">
+                  <md-button ng-click="mb.releaseMenuFocus($event); mb.importAPT($event)">
                      Import APT
                   </md-button>
                </md-menu-item>
 					<md-menu-item class="md-indent">
                   <ng-md-icon icon="cloud_download" style="fill: rgba(0, 0, 0, .87)" size="20" aria-label="Export"></ng-md-icon>
-                  <md-button ng-click="mb.showAPT(net, $event)">
+                  <md-button ng-click="mb.releaseMenuFocus($event); mb.showAPT(net, $event)">
                      Export APT
                   </md-button>
                </md-menu-item>
                <md-menu-divider></md-menu-divider>
                <md-menu-item class="md-indent">
                   <ng-md-icon icon="text_fields" style="fill: rgba(0, 0, 0, .87)" size="20" aria-label="Rename"></ng-md-icon>
-                  <md-button ng-click="mb.renameNet(net.name, $event)">
+                  <md-button ng-click="mb.releaseMenuFocus($event); mb.renameNet(net.name, $event)">
                      Rename Net
                   </md-button>
                </md-menu-item>
 					<md-menu-item class="md-indent">
                   <ng-md-icon icon="delete" style="fill: rgba(0, 0, 0, .87)" size="20" aria-label="Delete"></ng-md-icon>
-                  <md-button ng-click="mb.deleteNet(net, $event)">
+                  <md-button ng-click="mb.releaseMenuFocus($event); mb.deleteNet(net, $event)">
                      Delete Net
                   </md-button>
                </md-menu-item>
@@ -54,7 +54,7 @@
             <md-menu-content>
                <md-menu-item class="md-indent" ng-repeat="tool in net.tools">
                   <ng-md-icon icon="{{tool.icon}}" style="fill: rgba(0, 0, 0, .87)" size="20" aria-label="Tools"></ng-md-icon>
-                  <md-button ng-click="net.setActiveTool(tool)" title="{{ tool.description }}">
+                  <md-button ng-click="mb.releaseMenuFocus($event); net.setActiveTool(tool)" title="{{ tool.description }}">
                      {{tool.name}}
                   </md-button>
                </md-menu-item>
@@ -67,7 +67,7 @@
 				<md-menu-content>
                <md-menu-item class="md-indent" ng-repeat="analyzer in net.analyzers">
                   <ng-md-icon icon="{{analyzer.icon}}" style="fill: rgba(0, 0, 0, .87)" size="20" aria-label="Analyze"></ng-md-icon>
-                  <md-button ng-click="mb.startAnalyzer(analyzer, net, $event)">
+                  <md-button ng-click="mb.releaseMenuFocus($event); mb.startAnalyzer(analyzer, net, $event)">
                      {{analyzer.name}}
                   </md-button>
                </md-menu-item>

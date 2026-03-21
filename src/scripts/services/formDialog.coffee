@@ -41,6 +41,10 @@ class FormDialog extends Service
 						net: net
 						ok: ok
 						cancel: cancel
+			.then(
+				(result) -> result
+				-> null
+			)
 
 		# Hide the dialog
 		@close = -> $mdDialog.hide(null)

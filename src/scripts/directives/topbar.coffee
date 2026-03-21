@@ -4,7 +4,28 @@
 ###
 
 class TopbarController extends Controller
-	constructor: (netStorageService, $mdDialog) ->
+	constructor: (netStorageService, $mdDialog, formDialogService, $state) ->
+
+		@renameNet = (oldName, event) ->
+			formDialogService.runDialog({
+				title: "Rename Net"
+				text: "Enter a new name for the net."
+				event: event
+				formElements: [{
+					type: "text"
+					name: "New Name"
+					value: oldName
+					validation: (value) ->
+						return "The name can't contain \"" if value and value.replace("\"", "") isnt value
+						return "A net with this name already exists" if value and value isnt oldName and netStorageService.getNetByName(value)
+						return true
+				}]
+			})
+			.then (formElements) ->
+				if formElements
+					newName = formElements[0].value
+					netStorageService.renameNet(oldName, newName)
+					$state.go "editor", name: newName
 
 		# Delete all nets. Confirms the reset via dialog
 		@resetStorage = (event) ->

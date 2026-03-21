@@ -3,7 +3,12 @@
       <md-button hide-gt-sm class="md-icon-button" aria-label="Toggle Menu" ng-click="sn.toggleSideMenu()">
          <ng-md-icon icon="menu" style="fill: white" size="22" aria-label="Menu"></ng-md-icon>
       </md-button>
-      <h2>{{ net.name }}</h2>
+      <div class="topbar-title-group" layout="row" layout-align="start center">
+         <h2>{{ net.name }}</h2>
+         <md-button class="md-icon-button topbar-rename-button" aria-label="Rename Net" ng-click="tb.renameNet(net.name, $event)">
+            <ng-md-icon class="topbar-rename-icon" icon="edit" size="18" aria-label="Rename Net"></ng-md-icon>
+         </md-button>
+      </div>
       <span flex></span>
       <md-menu>
          <md-button ng-click="$mdMenu.open($event)" class="md-icon-button" aria-label="More">

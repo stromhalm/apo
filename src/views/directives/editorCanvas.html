@@ -1,51 +1,61 @@
-<div class="editor-canvas">
-   <svg ng-hide="error" ng-if="net"
+<div class="editor-canvas" ng-class="{ 'is-panning': isPanningCanvas }">
+   <svg class="canvas-surface" ng-class="{ 'is-panning': isPanningCanvas }" ng-hide="error" ng-if="net"
       ng-click="clickOnCanvas($event)"
       ng-dblclick="dblClickOnCanvas($event)"
       ng-mousedown="mouseDownOnCanvas($event)"
       ng-mousemove="mouseMoveOnCanvas($event)"
       ng-mouseup="mouseUpOnCanvas($event)"
       ng-mouseleave="mouseUpOnCanvas($event)">
-      <path class="edge dragline hidden"></path>
-      <g ng-if="net.edges">
-         <g ng-repeat="edge in net.edges track by (edge.id + '-' + (edge.renderVersion || 0))"
-            ng-attr-data-edge-id="{{ edge.id }}"
-            ng-click="clickOnEdge(edge, $event)"
-            ng-dblclick="dblClickOnEdge(edge, $event)"
-            ng-mousedown="mouseDownOnEdge(edge, $event)"
-            ng-mouseup="mouseUpOnEdge(edge, $event)">
-            <path class="edge"
-               ng-attr-id="{{ 'edge-path-' + edge.id + '-' + (edge.renderVersion || 0) }}"
-               ng-attr-d="{{ edge.getPath() }}"
-               ng-attr-marker-start="{{ edge.left > 0 ? 'url(#startArrow)' : undefined }}"
-               ng-attr-marker-end="{{ edge.right > 0 ? 'url(#endArrow)' : undefined }}">
-            </path>
-            <path class="edge-label-path"
-               ng-attr-id="{{ 'edge-label-path-' + edge.id + '-' + (edge.renderVersion || 0) }}"
-               ng-attr-d="{{ edge.getLabelPath() }}">
-            </path>
-            <text class="label edge-label">
-               <textPath startOffset="50%" class="text" xlink:href="{{ '#edge-label-path-' + edge.id + '-' + (edge.renderVersion || 0) }}">{{ edge.getLabelText() }}</textPath>
-            </text>
+      <g class="viewport" ng-attr-transform="{{ viewport.getTransform() }}">
+         <path class="edge dragline hidden"></path>
+         <g ng-if="net.edges">
+            <g ng-repeat="edge in net.edges track by (edge.id + '-' + (edge.renderVersion || 0))"
+               ng-attr-data-edge-id="{{ edge.id }}"
+               ng-click="clickOnEdge(edge, $event)"
+               ng-dblclick="dblClickOnEdge(edge, $event)"
+               ng-mousedown="mouseDownOnEdge(edge, $event)"
+               ng-mouseup="mouseUpOnEdge(edge, $event)">
+               <path class="edge"
+                  ng-attr-id="{{ 'edge-path-' + edge.id + '-' + (edge.renderVersion || 0) }}"
+                  ng-attr-d="{{ edge.getPath() }}"
+                  ng-attr-marker-start="{{ edge.left > 0 ? 'url(#startArrow)' : undefined }}"
+                  ng-attr-marker-end="{{ edge.right > 0 ? 'url(#endArrow)' : undefined }}">
+               </path>
+               <path class="edge-label-path"
+                  ng-attr-id="{{ 'edge-label-path-' + edge.id + '-' + (edge.renderVersion || 0) }}"
+                  ng-attr-d="{{ edge.getLabelPath() }}">
+               </path>
+               <text class="label edge-label">
+                  <textPath startOffset="50%" class="text" xlink:href="{{ '#edge-label-path-' + edge.id + '-' + (edge.renderVersion || 0) }}">{{ edge.getLabelText() }}</textPath>
+               </text>
+            </g>
          </g>
-      </g>
-      <g ng-if="net.nodes">
-         <g class="node-group" ng-class="{ 'connect-target': isSnapTarget(node) }" ng-repeat="node in net.nodes" draggable="node" net="net" ng-attr-data-node-id="{{ node.id }}" ng-attr-transform="translate({{ node.x }},{{ node.y }})"
-            ng-click="clickOnNode(node, $event)"
-            ng-dblclick="dblClickOnNode(node, $event)"
-            ng-mousedown="mouseDownOnNode(node, $event)"
-            ng-mouseup="mouseUpOnNode(node, $event)">
-            <circle ng-if="node.shape == 'circle'" class="{{ node.type }} node" ng-attr-r="{{ node.radius }}"></circle>
-            <rect ng-if="node.shape == 'rect'" class="{{ node.type }} node" ng-class="{firable: net.isFirable(node)}" ng-attr-width="{{ node.width }}" ng-attr-height="{{ node.height }}"></rect>
-            <text ng-attr-x="{{ node.labelXoffset }}" ng-attr-y="{{ node.labelYoffset }}" class="label nodeLabel">{{ node.getText() }}</text>
-            <text x="0" y="4" class="label token">{{ node.getTokenLabel() }}</text>
-            <path class="edge self-edge" id="self-edge-{{ node.id }}" d="" style="marker-end: url('#endArrow');"></path>
-            <text dy="-4" class="label self-edge-label">
-               <textPath startOffset="50%" class="text" xlink:href="{{ '#self-edge-' + node.id }}">{{ node.getSelfEdgeText() }}</textPath>
-            </text>
+         <g ng-if="net.nodes">
+            <g class="node-group" ng-class="{ 'connect-target': isSnapTarget(node) }" ng-repeat="node in net.nodes" draggable="node" net="net" viewport="viewport" ng-attr-data-node-id="{{ node.id }}" ng-attr-transform="translate({{ node.x }},{{ node.y }})"
+               ng-click="clickOnNode(node, $event)"
+               ng-dblclick="dblClickOnNode(node, $event)"
+               ng-mousedown="mouseDownOnNode(node, $event)"
+               ng-mouseup="mouseUpOnNode(node, $event)">
+               <circle ng-if="node.shape == 'circle'" class="{{ node.type }} node" ng-attr-r="{{ node.radius }}"></circle>
+               <rect ng-if="node.shape == 'rect'" class="{{ node.type }} node" ng-class="{firable: net.isFirable(node)}" ng-attr-width="{{ node.width }}" ng-attr-height="{{ node.height }}"></rect>
+               <text ng-attr-x="{{ node.labelXoffset }}" ng-attr-y="{{ node.labelYoffset }}" class="label nodeLabel">{{ node.getText() }}</text>
+               <text x="0" y="4" class="label token">{{ node.getTokenLabel() }}</text>
+               <path class="edge self-edge" id="self-edge-{{ node.id }}" d="" style="marker-end: url('#endArrow');"></path>
+               <text dy="-4" class="label self-edge-label">
+                  <textPath startOffset="50%" class="text" xlink:href="{{ '#self-edge-' + node.id }}">{{ node.getSelfEdgeText() }}</textPath>
+               </text>
+            </g>
          </g>
       </g>
    </svg>
+   <div class="canvas-zoom-controls" ng-if="net && !error">
+      <md-button class="md-icon-button zoom-button" aria-label="Zoom out" ng-click="zoomOut($event)">
+         <ng-md-icon icon="remove" size="18" aria-label="Zoom out"></ng-md-icon>
+      </md-button>
+      <md-button class="md-icon-button zoom-button" aria-label="Zoom in" ng-click="zoomIn($event)">
+         <ng-md-icon icon="add" size="18" aria-label="Zoom in"></ng-md-icon>
+      </md-button>
+   </div>
    <div class="error-canvas" ng-if="error" layout="row" layout-align="center center">
       <md-card class="error-card" flex>
          <md-card-title>

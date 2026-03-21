@@ -6,8 +6,15 @@ class EditorCanvasController extends Controller
 		linkStrength = 0.1
 		friction = 0.9
 		gravity = 0.1
+		zoomButtonFactor = 1.2
+		zoomAnimationDuration = 180
+		wheelZoomFactor = 1.004
+		panThreshold = 3
+		tapMoveThreshold = 10
+		lineWheelFactor = 16
+		wheelPanFactor = 1
 
-		# Delte net via the error card
+		# Delete net via the error card
 		$scope.deleteNet = () -> netStorageService.deleteNet($scope.net.name)
 
 		$scope.net = netStorageService.getNetByName(decodeURI($stateParams.name))
@@ -15,6 +22,9 @@ class EditorCanvasController extends Controller
 		if not $scope.net
 			$state.go "editor", name: netStorageService.nets[0].name
 			return
+
+		$scope.viewport = new EditorViewport()
+		$scope.isPanningCanvas = false
 
 		isFiniteNumber = (value) ->
 			isFinite(value)
@@ -29,6 +39,131 @@ class EditorCanvasController extends Controller
 			node.py = if isFiniteNumber(node.py) then node.py else node.y
 			node
 
+		getSvgElement = ->
+			document.querySelector('.editor-canvas svg')
+
+		getSvgRect = ->
+			getSvgElement()?.getBoundingClientRect()
+
+		getClientPoint = (event, touchIndex = 0) ->
+			touch = event.touches?[touchIndex] or event.changedTouches?[touchIndex]
+			return {x: touch.clientX, y: touch.clientY} if touch
+			return {x: event.clientX, y: event.clientY} if isFiniteNumber(event.clientX) and isFiniteNumber(event.clientY)
+
+			rect = getSvgRect()
+			left = rect?.left ? 0
+			top = rect?.top ? 0
+			{
+				x: if isFiniteNumber(event.offsetX) then left + event.offsetX else left
+				y: if isFiniteNumber(event.offsetY) then top + event.offsetY else top
+			}
+
+		getViewportCenterClientPoint = ->
+			rect = getSvgRect()
+			left = rect?.left ? 0
+			top = rect?.top ? 0
+			width = rect?.width ? 0
+			height = rect?.height ? 0
+			{
+				x: left + width / 2
+				y: top + height / 2
+			}
+
+		getPointFromClient = (clientX, clientY) ->
+			canvasPoint = $scope.viewport.getCanvasPoint(clientX, clientY, getSvgRect())
+			new Point({
+				x: canvasPoint.x
+				y: canvasPoint.y
+			})
+
+		getPoint = (event, touchIndex = 0) ->
+			clientPoint = getClientPoint(event, touchIndex)
+			getPointFromClient(clientPoint.x, clientPoint.y)
+
+		$scope.getCanvasPointFromClient = (clientX, clientY) ->
+			getPointFromClient(clientX, clientY)
+
+		getNodeById = (id) ->
+			return false if not isFiniteNumber(id)
+			return node for node in $scope.net.nodes when node.id is id
+			false
+
+		getEventNode = (eventTarget) ->
+			nodeElement = eventTarget?.closest?('.node-group')
+			nodeId = parseInt(nodeElement?.getAttribute('data-node-id'), 10)
+			getNodeById(nodeId)
+
+		getEventEdge = (eventTarget) ->
+			edgeElement = eventTarget?.closest?('[data-edge-id]')
+			edgeId = parseInt(edgeElement?.getAttribute('data-edge-id'), 10)
+			return false if not isFiniteNumber(edgeId)
+			return edge for edge in $scope.net.edges when edge.id is edgeId
+			false
+
+		getTouchTarget = (event, touchIndex = 0) ->
+			touch = event.changedTouches?[touchIndex] or event.touches?[touchIndex]
+			return document.elementFromPoint(touch.clientX, touch.clientY) if touch and document.elementFromPoint
+			event.target
+
+		getTouchClientPoint = (event, touchIndex = 0) ->
+			return null if not event.touches?[touchIndex] and not event.changedTouches?[touchIndex]
+			getClientPoint(event, touchIndex)
+
+		getTouchDistance = (event) ->
+			return 0 if event.touches?.length < 2
+			firstTouch = getTouchClientPoint(event, 0)
+			secondTouch = getTouchClientPoint(event, 1)
+			return 0 if not firstTouch or not secondTouch
+			deltaX = secondTouch.x - firstTouch.x
+			deltaY = secondTouch.y - firstTouch.y
+			Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+
+		getTouchMidpoint = (event) ->
+			return null if event.touches?.length < 2
+			firstTouch = getTouchClientPoint(event, 0)
+			secondTouch = getTouchClientPoint(event, 1)
+			return null if not firstTouch or not secondTouch
+			{
+				x: (firstTouch.x + secondTouch.x) / 2
+				y: (firstTouch.y + secondTouch.y) / 2
+			}
+
+		getPointerTarget = (event) ->
+			return getTouchTarget(event) if event.touches or event.changedTouches
+			event.target
+
+		isZoomControlTarget = (eventTarget) ->
+			!!eventTarget?.closest?('.canvas-zoom-controls')
+
+		isBackgroundTarget = (eventTarget) ->
+			return false if isZoomControlTarget(eventTarget)
+			not getEventNode(eventTarget) and not getEventEdge(eventTarget)
+
+		panState =
+			active: false
+			startClientPoint: null
+			lastClientPoint: null
+			moved: false
+
+		pinchState = null
+		mouseDownNode = null
+		mouseDownEdge = null
+		snapTargetNode = null
+		dragLine = null
+		touchCanvas = null
+		touchStartHandler = null
+		touchMoveHandler = null
+		touchEndHandler = null
+		wheelHandler = null
+		zoomAnimationFrame = null
+		lastTouchTapNode = null
+		lastTouchTapAt = 0
+		touchTapCandidateNode = null
+		touchTapStartPoint = null
+		touchTapMoved = false
+		suppressCanvasClick = false
+		suppressCanvasDoubleClick = false
+
 		# Adjust SVG canvas on window resize
 		resize = ->
 			return if not isForceSimulation($scope.net.simulation)
@@ -36,7 +171,8 @@ class EditorCanvasController extends Controller
 				if window.innerWidth > 960 then window.innerWidth - 245 else window.innerWidth
 				$scope.height = window.innerHeight - 146
 			]).resume()
-		window.onresize = resize
+
+		window.addEventListener('resize', resize)
 
 		# Initialize d3 force layout
 		$scope.net.refresh = ->
@@ -57,71 +193,110 @@ class EditorCanvasController extends Controller
 		# Refresh layout when the number of nodes/edges changes
 		$scope.$watchGroup ['net.nodes.length', 'net.edges.length'], $scope.net.refresh
 
-		mouseDownNode = null
-		mouseDownEdge = null
-		snapTargetNode = null
-		dragLine = null
-		touchCanvas = null
-		touchStartHandler = null
-		touchMoveHandler = null
-		touchEndHandler = null
-		lastTouchTapNode = null
-		lastTouchTapAt = 0
-		touchTapCandidateNode = null
-		touchTapStartPoint = null
-		touchTapMoved = false
-
 		getDragLine = ->
 			dragLine = d3.select('.editor-canvas .dragline')
+
+		clearDragLine = ->
+			getDragLine().classed('hidden', true).style('marker-start', '').style('marker-end', '')
 
 		resetMouseVars = ->
 			mouseDownNode = null
 			mouseDownEdge = null
 			snapTargetNode = null
 
+		cancelArrowPreview = ->
+			return if not mouseDownNode
+			clearDragLine()
+			resetMouseVars()
+
 		restart = ->
 			$scope.$evalAsync()
 
-		getPoint = (event) ->
-			svgElement = document.querySelector('.editor-canvas svg')
-			rect = svgElement?.getBoundingClientRect()
-			touch = event.touches?[0] or event.changedTouches?[0]
-			clientX = touch?.clientX ? event.clientX
-			clientY = touch?.clientY ? event.clientY
-			left = rect?.left ? 0
-			top = rect?.top ? 0
+		cancelZoomAnimation = ->
+			return if not zoomAnimationFrame
+			window.cancelAnimationFrame?(zoomAnimationFrame)
+			window.clearTimeout?(zoomAnimationFrame)
+			zoomAnimationFrame = null
 
-			x = if isFiniteNumber(clientX) then clientX - left else event.offsetX
-			y = if isFiniteNumber(clientY) then clientY - top else event.offsetY
+		requestAnimationFrameCompat = (callback) ->
+			if window.requestAnimationFrame
+				window.requestAnimationFrame(callback)
+			else
+				window.setTimeout((-> callback(Date.now())), 16)
 
-			new Point({
-				x: if isFiniteNumber(x) then x else 0
-				y: if isFiniteNumber(y) then y else 0
-			})
+		applyZoom = (nextScale, clientPoint = getViewportCenterClientPoint()) ->
+			return if not clientPoint
+			$scope.viewport.zoomAroundClientPoint(nextScale, clientPoint.x, clientPoint.y, getSvgRect())
 
-		getNodeById = (id) ->
-			return false if not isFiniteNumber(id)
-			return node for node in $scope.net.nodes when node.id is id
-			false
+		zoomByFactor = (factor, clientPoint = getViewportCenterClientPoint()) ->
+			applyZoom($scope.viewport.scale * factor, clientPoint)
 
-		getEventNode = (eventTarget) ->
-			nodeElement = eventTarget?.closest?('.node-group')
-			nodeId = parseInt(nodeElement?.getAttribute('data-node-id'), 10)
-			getNodeById(nodeId)
+		animateZoomByFactor = (factor, clientPoint = getViewportCenterClientPoint()) ->
+			return if not clientPoint
+			cancelZoomAnimation()
 
-		getTouchTarget = (event) ->
-			touch = event.changedTouches?[0] or event.touches?[0]
-			return document.elementFromPoint(touch.clientX, touch.clientY) if touch and document.elementFromPoint
-			event.target
+			startScale = $scope.viewport.scale
+			targetScale = EditorViewport.clampScale(startScale * factor)
+			return if targetScale is startScale
 
-		getTouchClientPoint = (event) ->
-			touch = event.touches?[0] or event.changedTouches?[0]
-			return null if not touch
-			{x: touch.clientX, y: touch.clientY}
+			startedAt = null
+			step = (timestamp) ->
+				startedAt = timestamp if not startedAt
+				progress = Math.min((timestamp - startedAt) / zoomAnimationDuration, 1)
+				easedProgress = 1 - Math.pow(1 - progress, 3)
+				currentScale = startScale + (targetScale - startScale) * easedProgress
+				applyZoom(currentScale, clientPoint)
 
-		getPointerTarget = (event) ->
-			return getTouchTarget(event) if event.touches or event.changedTouches
-			event.target
+				if progress < 1
+					zoomAnimationFrame = requestAnimationFrameCompat(step)
+					$scope.$evalAsync()
+				else
+					zoomAnimationFrame = null
+					$scope.$evalAsync()
+
+			zoomAnimationFrame = requestAnimationFrameCompat(step)
+
+		startPan = (clientPoint) ->
+			return if not clientPoint
+			panState.active = true
+			panState.startClientPoint = clientPoint
+			panState.lastClientPoint = clientPoint
+			panState.moved = false
+			$scope.isPanningCanvas = true
+
+		updatePan = (clientPoint) ->
+			return if not panState.active or not clientPoint
+			deltaX = clientPoint.x - panState.lastClientPoint.x
+			deltaY = clientPoint.y - panState.lastClientPoint.y
+			$scope.viewport.panBy(deltaX, deltaY)
+			panState.lastClientPoint = clientPoint
+
+			totalX = clientPoint.x - panState.startClientPoint.x
+			totalY = clientPoint.y - panState.startClientPoint.y
+			panState.moved = true if Math.sqrt(totalX * totalX + totalY * totalY) > panThreshold
+
+		finishPan = ->
+			return false if not panState.active
+			didMove = panState.moved
+			panState.active = false
+			panState.startClientPoint = null
+			panState.lastClientPoint = null
+			panState.moved = false
+			$scope.isPanningCanvas = false
+
+			if didMove
+				suppressCanvasClick = true
+				suppressCanvasDoubleClick = true
+
+			didMove
+
+		normalizeWheelValue = (value, event, factor = 1) ->
+			multiplier = 1
+			if event.deltaMode is 1
+				multiplier = lineWheelFactor
+			else if event.deltaMode is 2
+				multiplier = getSvgRect()?.height ? window.innerHeight
+			value * multiplier * factor
 
 		getSnapTarget = (node) ->
 			return null if not mouseDownNode
@@ -185,14 +360,46 @@ class EditorCanvasController extends Controller
 				.style('marker-end', if markers.end then 'url(#endArrow)' else '')
 				.attr('d', path)
 
+		beginPinch = (event) ->
+			return if event.touches?.length < 2
+			cancelArrowPreview() if $scope.net.getActiveTool().name is "Arrows"
+			finishPan() if panState.active
+			pinchState =
+				distance: getTouchDistance(event)
+				scale: $scope.viewport.scale
+
+		updatePinch = (event) ->
+			return if not pinchState or event.touches?.length < 2
+			midpoint = getTouchMidpoint(event)
+			distance = getTouchDistance(event)
+			return if not midpoint or distance is 0 or pinchState.distance is 0
+			applyZoom(pinchState.scale * distance / pinchState.distance, midpoint)
+			suppressCanvasClick = true
+			suppressCanvasDoubleClick = true
+
+		resetTouchTap = ->
+			touchTapCandidateNode = null
+			touchTapStartPoint = null
+			touchTapMoved = false
+
 		installTouchHandlers = ->
-			touchCanvas = document.querySelector('.editor-canvas svg')
+			touchCanvas = getSvgElement()
 			return if not touchCanvas
 
 			touchStartHandler = (event) ->
+				if event.touches?.length >= 2
+					event.preventDefault()
+					$scope.$evalAsync(-> beginPinch(event))
+					resetTouchTap()
+					return
+
 				touchTapCandidateNode = getEventNode(event.target)
 				touchTapStartPoint = getTouchClientPoint(event)
 				touchTapMoved = false
+
+				if isBackgroundTarget(event.target)
+					$scope.$evalAsync(-> startPan(touchTapStartPoint))
+					return
 
 				return if $scope.net.getActiveTool().name isnt "Arrows"
 				node = getEventNode(event.target)
@@ -201,11 +408,23 @@ class EditorCanvasController extends Controller
 				$scope.$evalAsync(-> $scope.mouseDownOnNode(node, event))
 
 			touchMoveHandler = (event) ->
+				if event.touches?.length >= 2 or pinchState
+					event.preventDefault()
+					$scope.$evalAsync ->
+						beginPinch(event) if not pinchState
+						updatePinch(event)
+					return
+
 				currentPoint = getTouchClientPoint(event)
 				if touchTapStartPoint and currentPoint
 					deltaX = currentPoint.x - touchTapStartPoint.x
 					deltaY = currentPoint.y - touchTapStartPoint.y
-					touchTapMoved = true if Math.sqrt(deltaX * deltaX + deltaY * deltaY) > 10
+					touchTapMoved = true if Math.sqrt(deltaX * deltaX + deltaY * deltaY) > tapMoveThreshold
+
+				if panState.active
+					event.preventDefault()
+					$scope.$evalAsync(-> updatePan(currentPoint))
+					return
 
 				return if $scope.net.getActiveTool().name isnt "Arrows"
 				return if not mouseDownNode
@@ -213,8 +432,18 @@ class EditorCanvasController extends Controller
 				$scope.$evalAsync(-> $scope.mouseMoveOnCanvas(event))
 
 			touchEndHandler = (event) ->
+				if pinchState
+					if event.touches?.length >= 2
+						event.preventDefault()
+						$scope.$evalAsync(-> updatePinch(event))
+						return
+					pinchState = null
+					resetTouchTap()
+					return
+
 				targetNode = getEventNode(getTouchTarget(event))
 				activeTool = $scope.net.getActiveTool()
+
 				if activeTool.name is "Arrows" and mouseDownNode
 					event.preventDefault()
 					$scope.$evalAsync ->
@@ -222,9 +451,14 @@ class EditorCanvasController extends Controller
 							$scope.mouseUpOnNode(targetNode, event)
 						else
 							$scope.mouseUpOnCanvas(event)
-					touchTapCandidateNode = null
-					touchTapStartPoint = null
-					touchTapMoved = false
+					resetTouchTap()
+					return
+
+				if panState.active
+					event.preventDefault() if finishPan()
+					lastTouchTapNode = null
+					lastTouchTapAt = 0
+					resetTouchTap()
 					return
 
 				if not touchTapMoved and targetNode and targetNode is touchTapCandidateNode
@@ -241,43 +475,84 @@ class EditorCanvasController extends Controller
 					lastTouchTapNode = null
 					lastTouchTapAt = 0
 
-				touchTapCandidateNode = null
-				touchTapStartPoint = null
-				touchTapMoved = false
+				resetTouchTap()
 
 			touchCanvas.addEventListener('touchstart', touchStartHandler, {passive: false})
 			touchCanvas.addEventListener('touchmove', touchMoveHandler, {passive: false})
 			touchCanvas.addEventListener('touchend', touchEndHandler, {passive: false})
 			touchCanvas.addEventListener('touchcancel', touchEndHandler, {passive: false})
 
+		installWheelHandler = ->
+			touchCanvas = getSvgElement()
+			return if not touchCanvas
+
+			wheelHandler = (event) ->
+				return if isZoomControlTarget(event.target)
+				deltaX = normalizeWheelValue(event.deltaX ? 0, event, wheelPanFactor)
+				deltaY = normalizeWheelValue(event.deltaY ? 0, event, wheelPanFactor)
+				clientPoint = {x: event.clientX, y: event.clientY}
+
+				event.preventDefault()
+				$scope.$evalAsync ->
+					if event.ctrlKey
+						zoomFactor = Math.pow(wheelZoomFactor, -(event.deltaY ? 0))
+						applyZoom($scope.viewport.scale * zoomFactor, clientPoint)
+					else
+						$scope.viewport.panBy(-deltaX, -deltaY)
+
+			touchCanvas.addEventListener('wheel', wheelHandler, {passive: false})
+
 		stopEvent = (event) ->
 			return if not event
 			event.preventDefault()
 			event.stopPropagation()
 
+		$scope.zoomIn = (event) ->
+			stopEvent(event)
+			animateZoomByFactor(zoomButtonFactor)
+
+		$scope.zoomOut = (event) ->
+			stopEvent(event)
+			animateZoomByFactor(1 / zoomButtonFactor)
+
 		$scope.clickOnCanvas = (event) ->
+			if suppressCanvasClick
+				suppressCanvasClick = false
+				return
 			return if mouseDownNode or mouseDownEdge
 			$scope.net.getActiveTool().clickOnCanvas($scope.net, getPoint(event), getDragLine(), formDialogService, restart, converterService)
 
 		$scope.dblClickOnCanvas = (event) ->
+			if suppressCanvasDoubleClick
+				suppressCanvasDoubleClick = false
+				return
 			return if mouseDownNode or mouseDownEdge
 			$scope.net.getActiveTool().dblClickOnCanvas($scope.net, getPoint(event), getDragLine(), formDialogService, restart, converterService)
 
 		$scope.mouseDownOnCanvas = (event) ->
 			return if mouseDownNode or mouseDownEdge
+			if isBackgroundTarget(event.target)
+				startPan(getClientPoint(event))
+				return
 			$scope.net.getActiveTool().mouseDownOnCanvas($scope.net, getPoint(event), getDragLine(), formDialogService, restart, converterService)
 
 		$scope.mouseMoveOnCanvas = (event) ->
+			if panState.active
+				updatePan(getClientPoint(event))
+				return
 			return if not mouseDownNode
 			point = getDragTargetPoint(event)
 			renderDragPreview(point, snapTargetNode)
 
 		$scope.mouseUpOnCanvas = (event) ->
+			if panState.active
+				finishPan()
+				return
 			activeTool = $scope.net.getActiveTool()
 			if mouseDownNode and snapTargetNode and activeTool.name is "Arrows"
 				activeTool.mouseUpOnNode($scope.net, snapTargetNode, mouseDownNode, getDragLine(), formDialogService, restart, converterService)
 			else if mouseDownNode
-				getDragLine().classed('hidden', true).style('marker-start', '').style('marker-end', '')
+				clearDragLine()
 			resetMouseVars()
 
 		$scope.clickOnNode = (node, event) ->
@@ -331,13 +606,18 @@ class EditorCanvasController extends Controller
 			snapTargetNode is node
 
 		$timeout(installTouchHandlers)
+		$timeout(installWheelHandler)
 
 		$scope.$on '$destroy', ->
+			window.removeEventListener('resize', resize)
+			cancelZoomAnimation()
+
 			return if not touchCanvas
 			touchCanvas.removeEventListener('touchstart', touchStartHandler, {passive: false}) if touchStartHandler
 			touchCanvas.removeEventListener('touchmove', touchMoveHandler, {passive: false}) if touchMoveHandler
 			touchCanvas.removeEventListener('touchend', touchEndHandler, {passive: false}) if touchEndHandler
 			touchCanvas.removeEventListener('touchcancel', touchEndHandler, {passive: false}) if touchEndHandler
+			touchCanvas.removeEventListener('wheel', wheelHandler, {passive: false}) if wheelHandler
 
 
 class EditorCanvas extends Directive

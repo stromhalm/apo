@@ -8,7 +8,8 @@ class EditorCanvasController extends Controller
 		gravity = 0.1
 		zoomButtonFactor = 1.2
 		zoomAnimationDuration = 180
-		wheelZoomFactor = 1.004
+		trackpadZoomFactor = 1.004
+		mouseWheelZoomFactor = 1.06
 		panThreshold = 3
 		tapMoveThreshold = 10
 		lineWheelFactor = 16
@@ -298,6 +299,27 @@ class EditorCanvasController extends Controller
 				multiplier = getSvgRect()?.height ? window.innerHeight
 			value * multiplier * factor
 
+		isLikelyTrackpadWheel = (event) ->
+			return true if event.ctrlKey
+			return false if event.deltaMode and event.deltaMode isnt 0
+
+			deltaX = Math.abs(event.deltaX ? 0)
+			deltaY = Math.abs(event.deltaY ? 0)
+			wheelDeltaY = Math.abs(event.wheelDeltaY ? event.wheelDelta ? 0)
+			hasFractionalDelta = deltaX % 1 isnt 0 or deltaY % 1 isnt 0
+
+			return false if wheelDeltaY and wheelDeltaY % 120 is 0 and deltaX is 0
+			return true if deltaX > 0
+			return true if hasFractionalDelta
+			false
+
+		getMouseWheelZoomSteps = (event) ->
+			deltaY = event.deltaY ? 0
+			switch event.deltaMode
+				when 1 then deltaY
+				when 2 then deltaY / 6
+				else deltaY / 40
+
 		getSnapTarget = (node) ->
 			return null if not mouseDownNode
 			return null if $scope.net.getActiveTool().name isnt "Arrows"
@@ -364,16 +386,24 @@ class EditorCanvasController extends Controller
 			return if event.touches?.length < 2
 			cancelArrowPreview() if $scope.net.getActiveTool().name is "Arrows"
 			finishPan() if panState.active
+			midpoint = getTouchMidpoint(event)
 			pinchState =
 				distance: getTouchDistance(event)
 				scale: $scope.viewport.scale
+				anchorPoint: if midpoint then $scope.viewport.getCanvasPoint(midpoint.x, midpoint.y, getSvgRect()) else null
 
 		updatePinch = (event) ->
 			return if not pinchState or event.touches?.length < 2
 			midpoint = getTouchMidpoint(event)
 			distance = getTouchDistance(event)
-			return if not midpoint or distance is 0 or pinchState.distance is 0
-			applyZoom(pinchState.scale * distance / pinchState.distance, midpoint)
+			return if not midpoint or distance is 0 or pinchState.distance is 0 or not pinchState.anchorPoint
+			rect = getSvgRect()
+			nextScale = EditorViewport.clampScale(pinchState.scale * distance / pinchState.distance)
+			left = rect?.left ? 0
+			top = rect?.top ? 0
+			$scope.viewport.scale = nextScale
+			$scope.viewport.translateX = midpoint.x - left - pinchState.anchorPoint.x * nextScale
+			$scope.viewport.translateY = midpoint.y - top - pinchState.anchorPoint.y * nextScale
 			suppressCanvasClick = true
 			suppressCanvasDoubleClick = true
 
@@ -495,10 +525,14 @@ class EditorCanvasController extends Controller
 				event.preventDefault()
 				$scope.$evalAsync ->
 					if event.ctrlKey
-						zoomFactor = Math.pow(wheelZoomFactor, -(event.deltaY ? 0))
+						zoomFactor = Math.pow(trackpadZoomFactor, -(event.deltaY ? 0))
 						applyZoom($scope.viewport.scale * zoomFactor, clientPoint)
-					else
+					else if isLikelyTrackpadWheel(event)
 						$scope.viewport.panBy(-deltaX, -deltaY)
+					else
+						zoomSteps = getMouseWheelZoomSteps(event)
+						zoomFactor = Math.pow(mouseWheelZoomFactor, -zoomSteps)
+						applyZoom($scope.viewport.scale * zoomFactor, clientPoint)
 
 			touchCanvas.addEventListener('wheel', wheelHandler, {passive: false})
 
